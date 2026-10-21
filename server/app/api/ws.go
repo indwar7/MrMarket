@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/unfluke/mrmarket-api/internal/auth"
+	"github.com/unfluke/mrmarket-api/app/auth"
 )
 
 var upgrader = websocket.Upgrader{

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/unfluke/mrmarket-api/internal/auth"
-	"github.com/unfluke/mrmarket-api/internal/store"
+	"github.com/unfluke/mrmarket-api/app/auth"
+	"github.com/unfluke/mrmarket-api/app/store"
 )
 
 type credentials struct {

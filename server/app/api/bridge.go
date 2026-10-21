@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/unfluke/mrmarket-api/internal/store"
+	"github.com/unfluke/mrmarket-api/app/store"
 )
 
 type bridgeKey struct{}

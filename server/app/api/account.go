@@ -11,8 +11,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/unfluke/mrmarket-api/internal/auth"
-	"github.com/unfluke/mrmarket-api/internal/store"
+	"github.com/unfluke/mrmarket-api/app/auth"
+	"github.com/unfluke/mrmarket-api/app/store"
 )
 
 type accountView struct {

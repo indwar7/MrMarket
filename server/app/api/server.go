@@ -13,10 +13,10 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 
-	"github.com/unfluke/mrmarket-api/internal/auth"
-	"github.com/unfluke/mrmarket-api/internal/payments"
-	"github.com/unfluke/mrmarket-api/internal/store"
-	"github.com/unfluke/mrmarket-api/internal/ws"
+	"github.com/unfluke/mrmarket-api/app/auth"
+	"github.com/unfluke/mrmarket-api/app/payments"
+	"github.com/unfluke/mrmarket-api/app/store"
+	"github.com/unfluke/mrmarket-api/app/ws"
 )
 
 type Server struct {

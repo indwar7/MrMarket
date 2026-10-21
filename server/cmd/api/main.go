@@ -10,12 +10,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/unfluke/mrmarket-api/internal/api"
-	"github.com/unfluke/mrmarket-api/internal/auth"
-	"github.com/unfluke/mrmarket-api/internal/config"
-	"github.com/unfluke/mrmarket-api/internal/payments"
-	"github.com/unfluke/mrmarket-api/internal/store"
-	"github.com/unfluke/mrmarket-api/internal/ws"
+	"github.com/unfluke/mrmarket-api/app/api"
+	"github.com/unfluke/mrmarket-api/app/auth"
+	"github.com/unfluke/mrmarket-api/app/config"
+	"github.com/unfluke/mrmarket-api/app/payments"
+	"github.com/unfluke/mrmarket-api/app/store"
+	"github.com/unfluke/mrmarket-api/app/ws"
 )
 
 func main() {

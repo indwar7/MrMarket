@@ -1,3 +1,4 @@
 mrmarket.db*
 bin/
 .env
+.vercel

@@ -76,12 +76,12 @@ The sender is either an MQL5 Expert Advisor using `WebRequest` on a timer, or a 
 
 ```
 cmd/api            main: config, db, seed, http server
-internal/api       routes + handlers (auth, catalog, account, algo, bridge, ws)
-internal/store     SQLite schema, models, queries, seed
-internal/auth      bcrypt + JWT + middleware
-internal/payments  Provider interface; Demo approves everything. Drop Stripe/Razorpay here.
-internal/ws        per-user websocket hub
-internal/curve     seeded random walk shared with the frontend charts
+app/api       routes + handlers (auth, catalog, account, algo, bridge, ws)
+app/store     SQLite schema, models, queries, seed
+app/auth      bcrypt + JWT + middleware
+app/payments  Provider interface; Demo approves everything. Drop Stripe/Razorpay here.
+app/ws        per-user websocket hub
+app/curve     seeded random walk shared with the frontend charts
 ```
 
 ## Deploy
