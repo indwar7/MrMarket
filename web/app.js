@@ -1,5 +1,41 @@
 
 const view = document.getElementById("view");
+
+/* ---------------- API ---------------- */
+const API = ["localhost", "127.0.0.1"].includes(location.hostname) ? "http://localhost:8080" : "https://mrmarket-api.vercel.app";
+const token = () => { try { return localStorage.getItem("mm_token"); } catch { return null; } };
+const me = () => { try { return JSON.parse(localStorage.getItem("mm_user")) ?? {}; } catch { return {}; } };
+const initials = (name = "") => name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "MM";
+async function api(path, { method = "GET", body } = {}) {
+  const headers = { "Content-Type": "application/json" };
+  if (token()) headers.Authorization = `Bearer ${token()}`;
+  const res = await fetch(API + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  let data = null; try { data = await res.json(); } catch { /* no body */ }
+  if (res.status === 401 && token()) { setAuthed(false); acct = emptyAccount(); }
+  if (!res.ok) throw Object.assign(new Error(data?.error || `Request failed (${res.status})`), { status: res.status });
+  return data;
+}
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function fmtDate(iso = "", monthYear = false) {
+  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return iso;
+  return monthYear ? `${MONTHS[+m[2] - 1]} ${m[1]}` : `${+m[3]} ${MONTHS[+m[2] - 1]} ${m[1]}`;
+}
+const fmtTime = (iso = "") => (String(iso).match(/\d{2}:\d{2}(:\d{2})?/) || [""])[0];
+const loadingHTML = `<div class="empty" style="margin:80px auto"><b style="color:var(--text)">Loading…</b></div>`;
+const errorHTML = (e) => `<div class="empty" style="margin:80px auto"><b style="color:var(--text)">Could not load</b>${esc(e.message)}<button class="btn btn-small" onclick="location.reload()">Retry</button></div>`;
+
+/* catalog comes from the API; the literals below are the offline fallback */
+async function loadCatalog() {
+  const [courses, live, inds, strats, brokers, mentors] = await Promise.all(
+    ["courses", "live", "indicators", "strategies", "brokers", "mentors"].map((k) => api(`/api/catalog/${k}`)));
+  COURSES = courses.map((c) => ({ id: c.id, t: c.title, by: c.author, lvl: c.level, lessons: c.lessons, dur: c.duration, price: c.price, rating: c.rating, students: c.students, hue: c.hue }));
+  LIVE = live.map((l) => ({ id: l.id, d: l.day, m: l.month, t: l.title, by: l.author, time: l.time, len: l.length, seats: l.seats, kind: l.kind, live: l.is_live }));
+  INDICATORS = inds.map((x) => ({ id: x.id, t: x.title, cat: x.category, plat: x.platform, desc: x.description, price: x.price, rating: x.rating, subs: x.subs, kind: x.kind }));
+  STRATS = strats.map((s) => ({ id: s.id, t: s.title, sym: s.symbol, tf: s.timeframe, style: s.style, risk: s.risk, ret: s.return_12m, dd: s.max_drawdown, win: s.win_rate, pf: s.profit_factor, trades: s.trades, min: s.min_capital, price: s.price, subs: s.subs, seed: s.seed, by: s.author }));
+  BROKERS = brokers.map((b) => ({ id: b.id, n: b.name, c: b.color, reg: b.regulation, spread: b.spread, min: b.min_deposit }));
+  MENTORS = mentors.map((m) => ({ id: m.id, n: m.name, r: m.role, i: m.initials }));
+}
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const money = (v, sign = false) => `${sign && v > 0 ? "+" : v < 0 ? "−" : ""}$${Math.abs(v).toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 const pct = (v, sign = true) => `${sign && v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}%`;
@@ -42,7 +78,7 @@ function chartSVG(data, { h = 300, labels = [], prefix = "$" } = {}) {
 }
 
 /* ---------------- data ---------------- */
-const COURSES = [
+let COURSES = [
   { id: "price-action", t: "Price Action Mastery", by: "Aseem Singhal", lvl: "Beginner", lessons: 42, dur: "9h 20m", price: 49, rating: 4.9, students: 12840, prog: 64, hue: 24 },
   { id: "mt5-basics", t: "MT5 from Zero to Live", by: "Rohit Mehra", lvl: "Beginner", lessons: 28, dur: "5h 10m", price: 0, rating: 4.8, students: 20113, prog: 100, hue: 210 },
   { id: "risk", t: "Risk Management & Position Sizing", by: "Aseem Singhal", lvl: "Intermediate", lessons: 18, dur: "3h 45m", price: 39, rating: 4.9, students: 8402, prog: 20, hue: 150 },
@@ -50,13 +86,13 @@ const COURSES = [
   { id: "algo-mql5", t: "Build Your First EA in MQL5", by: "Neel Shah", lvl: "Advanced", lessons: 51, dur: "12h 30m", price: 129, rating: 4.8, students: 3390, prog: 0, hue: 340 },
   { id: "psychology", t: "Trading Psychology", by: "Dr. Meera Rao", lvl: "All levels", lessons: 14, dur: "2h 50m", price: 29, rating: 4.9, students: 9870, prog: 0, hue: 45 },
 ];
-const LIVE = [
-  { d: 4, m: "Oct", t: "Gold (XAUUSD) Live Market Session", by: "Aseem Singhal", time: "7:00 PM IST", len: "90 min", seats: 38, kind: "Live trading", live: true },
-  { d: 7, m: "Oct", t: "Q&A: Fixing Your Strategy Drawdown", by: "Neel Shah", time: "8:30 PM IST", len: "60 min", seats: 112, kind: "Webinar" },
-  { d: 12, m: "Oct", t: "6-Week Forex Bootcamp, Cohort 14", by: "Kavya Iyer", time: "Sat & Sun, 10 AM", len: "6 weeks", seats: 9, kind: "Cohort" },
-  { d: 18, m: "Oct", t: "Reading the Economic Calendar", by: "Rohit Mehra", time: "6:00 PM IST", len: "75 min", seats: 64, kind: "Webinar" },
+let LIVE = [
+  { id: 1, d: 4, m: "Oct", t: "Gold (XAUUSD) Live Market Session", by: "Aseem Singhal", time: "7:00 PM IST", len: "90 min", seats: 38, kind: "Live trading", live: true },
+  { id: 2, d: 7, m: "Oct", t: "Q&A: Fixing Your Strategy Drawdown", by: "Neel Shah", time: "8:30 PM IST", len: "60 min", seats: 112, kind: "Webinar" },
+  { id: 3, d: 12, m: "Oct", t: "6-Week Forex Bootcamp, Cohort 14", by: "Kavya Iyer", time: "Sat & Sun, 10 AM", len: "6 weeks", seats: 9, kind: "Cohort" },
+  { id: 4, d: 18, m: "Oct", t: "Reading the Economic Calendar", by: "Rohit Mehra", time: "6:00 PM IST", len: "75 min", seats: 64, kind: "Webinar" },
 ];
-const INDICATORS = [
+let INDICATORS = [
   { id: "trend-matrix", t: "Trend Matrix Pro", cat: "Trend", plat: "MT5", desc: "Multi-timeframe trend dashboard that colours bias from M5 to D1 in one panel.", price: 19, rating: 4.8, subs: 4210, kind: "ribbon" },
   { id: "smart-sr", t: "Smart S/R Zones", cat: "Levels", plat: "MT5", desc: "Auto-draws supply and demand zones and fades them as price tests them.", price: 15, rating: 4.7, subs: 3880, kind: "zones" },
   { id: "volume-delta", t: "Volume Delta Histogram", cat: "Volume", plat: "MT5", desc: "Buying versus selling pressure per candle, with divergence alerts.", price: 12, rating: 4.6, subs: 2105, kind: "hist" },
@@ -64,7 +100,7 @@ const INDICATORS = [
   { id: "rsi-div", t: "RSI Divergence Scanner", cat: "Oscillator", plat: "MT5", desc: "Scans 28 pairs for regular and hidden divergence and sends push alerts.", price: 14, rating: 4.5, subs: 1970, kind: "osc" },
   { id: "atr-stop", t: "ATR Trailing Stop", cat: "Trend", plat: "MT5", desc: "Volatility-adjusted stop line that flips colour on trend change.", price: 9, rating: 4.7, subs: 3312, kind: "ribbon" },
 ];
-const STRATS = [
+let STRATS = [
   { id: "gold-breakout", t: "Gold London Breakout", sym: "XAUUSD", tf: "M15", style: "Breakout", risk: "Medium", ret: 38.4, dd: 9.8, win: 58, pf: 1.92, trades: 412, min: 1000, price: 49, subs: 1840, seed: 7, by: "Aseem Singhal" },
   { id: "euro-mean", t: "EURUSD Mean Reversion", sym: "EURUSD", tf: "H1", style: "Mean reversion", risk: "Low", ret: 18.2, dd: 4.6, win: 66, pf: 1.71, trades: 688, min: 500, price: 29, subs: 2410, seed: 11, by: "Neel Shah" },
   { id: "nas-momentum", t: "NAS100 Momentum Rider", sym: "NAS100", tf: "M30", style: "Momentum", risk: "High", ret: 61.7, dd: 17.3, win: 47, pf: 2.08, trades: 296, min: 2000, price: 79, subs: 960, seed: 23, by: "Kavya Iyer" },
@@ -72,7 +108,7 @@ const STRATS = [
   { id: "gbp-swing", t: "GBP Swing Trend", sym: "GBPUSD", tf: "H4", style: "Trend following", risk: "Low", ret: 22.5, dd: 6.2, win: 44, pf: 1.88, trades: 164, min: 1000, price: 29, subs: 870, seed: 31, by: "Aseem Singhal" },
   { id: "btc-range", t: "BTC Weekend Range", sym: "BTCUSD", tf: "H1", style: "Range", risk: "High", ret: 44.1, dd: 15.4, win: 55, pf: 1.67, trades: 238, min: 1500, price: 59, subs: 540, seed: 43, by: "Neel Shah" },
 ];
-const BROKERS = [
+let BROKERS = [
   { id: "exness", n: "Exness", c: "#1a1a1a", reg: "FSCA, CySEC", spread: "from 0.0 pips", min: "$10" },
   { id: "icmarkets", n: "IC Markets", c: "#1f6fd1", reg: "ASIC, CySEC", spread: "from 0.0 pips", min: "$200" },
   { id: "xm", n: "XM", c: "#c0392b", reg: "CySEC, ASIC", spread: "from 0.6 pips", min: "$5" },
@@ -82,29 +118,7 @@ const BROKERS = [
   { id: "octa", n: "Octa", c: "#6c3fc5", reg: "CySEC", spread: "from 0.6 pips", min: "$25" },
   { id: "tickmill", n: "Tickmill", c: "#d4650a", reg: "FCA, CySEC", spread: "from 0.0 pips", min: "$100" },
 ];
-const POSITIONS = [
-  { sym: "XAUUSD", side: "buy", lots: 0.5, open: 2652.4, now: 2667.9, strat: "Gold London Breakout" },
-  { sym: "EURUSD", side: "sell", lots: 1.2, open: 1.0912, now: 1.0897, strat: "EURUSD Mean Reversion" },
-  { sym: "NAS100", side: "buy", lots: 0.3, open: 20140, now: 20098, strat: "NAS100 Momentum Rider" },
-  { sym: "USDJPY", side: "buy", lots: 0.8, open: 149.32, now: 149.51, strat: "Asian Session Scalper" },
-  { sym: "GBPUSD", side: "sell", lots: 0.6, open: 1.3088, now: 1.3102, strat: "GBP Swing Trend" },
-];
-const ORDERS = [
-  { time: "14:32:08", sym: "XAUUSD", side: "buy", type: "Market", lots: 0.5, price: 2652.4, status: "Filled", strat: "Gold London Breakout" },
-  { time: "13:58:41", sym: "EURUSD", side: "sell", type: "Limit", lots: 1.2, price: 1.0912, status: "Filled", strat: "EURUSD Mean Reversion" },
-  { time: "13:15:02", sym: "NAS100", side: "buy", type: "Stop", lots: 0.3, price: 20140, status: "Filled", strat: "NAS100 Momentum Rider" },
-  { time: "12:47:19", sym: "XAUUSD", side: "sell", type: "Limit", lots: 0.5, price: 2689.0, status: "Pending", strat: "Gold London Breakout" },
-  { time: "11:20:55", sym: "USDJPY", side: "buy", type: "Market", lots: 0.8, price: 149.32, status: "Filled", strat: "Asian Session Scalper" },
-  { time: "10:02:13", sym: "GBPUSD", side: "buy", type: "Stop", lots: 0.6, price: 1.3150, status: "Cancelled", strat: "GBP Swing Trend" },
-];
-const HISTORY = [
-  { sym: "XAUUSD", side: "buy", lots: 0.5, open: 2631.2, close: 2644.8, pnl: 680, strat: "Gold London Breakout", when: "Yesterday 16:40" },
-  { sym: "EURUSD", side: "sell", lots: 1.2, open: 1.0951, close: 1.0930, pnl: 252, strat: "EURUSD Mean Reversion", when: "Yesterday 11:05" },
-  { sym: "NAS100", side: "buy", lots: 0.3, open: 20210, close: 20155, pnl: -165, strat: "NAS100 Momentum Rider", when: "29 Sep 19:22" },
-  { sym: "USDJPY", side: "sell", lots: 0.8, open: 149.90, close: 149.61, pnl: 155, strat: "Asian Session Scalper", when: "29 Sep 03:14" },
-  { sym: "GBPUSD", side: "buy", lots: 0.6, open: 1.3021, close: 1.3069, pnl: 288, strat: "GBP Swing Trend", when: "27 Sep 08:50" },
-];
-const MENTORS = [
+let MENTORS = [
   { n: "Aseem Singhal", r: "Founder, 15 yrs trading", i: "AS" },
   { n: "Kavya Iyer", r: "Forex & SMC mentor", i: "KI" },
   { n: "Neel Shah", r: "Algo & MQL5 mentor", i: "NS" },
@@ -112,42 +126,37 @@ const MENTORS = [
 
 const state = { broker: null };
 
-/* ---------------- account (purchases persist in this browser) ---------------- */
+/* ---------------- account (loaded from the API) ---------------- */
 const TODAY = "1 Oct 2026";
 const PLANS = { community: { name: "Community", price: 0 }, mentor: { name: "Mentor plan", price: 99 }, pro: { name: "Pro desk", price: 299 } };
 const BUCKET = { strategy: "subs", indicator: "inds", course: "courses", live: "live" };
 const emptyAccount = () => ({ subs: {}, inds: {}, courses: {}, live: {}, plan: null, bookings: [], orders: [] });
-function seedAccount() {
-  const a = emptyAccount();
-  const add = (kind, id, title, price, date, extra = {}) => {
-    a[BUCKET[kind]][id] = { since: date, price, plan: "Monthly", ...extra };
-    a.orders.push({ date, item: title, kind, amount: price, period: price && kind !== "course" ? "/month" : "" });
-  };
-  add("strategy", "gold-breakout", "Gold London Breakout", 49, "14 Sep 2026");
-  add("strategy", "gbp-swing", "GBP Swing Trend", 29, "10 Sep 2026");
-  add("strategy", "carry-grid", "Asian Session Scalper", 39, "2 Sep 2026");
-  add("strategy", "nas-momentum", "NAS100 Momentum Rider", 79, "28 Aug 2026");
-  add("strategy", "euro-mean", "EURUSD Mean Reversion", 29, "20 Aug 2026");
-  add("indicator", "session-box", "Session Range Box", 0, "18 Aug 2026");
-  add("course", "risk", "Risk Management & Position Sizing", 39, "12 Aug 2026", { prog: 20 });
-  add("course", "price-action", "Price Action Mastery", 49, "5 Aug 2026", { prog: 64 });
-  add("course", "mt5-basics", "MT5 from Zero to Live", 0, "1 Aug 2026", { prog: 100 });
-  return a;
-}
 let acct = emptyAccount();
-function loadAccount() {
+async function loadAccount() {
   if (!authed()) { acct = emptyAccount(); return; }
-  try { acct = JSON.parse(localStorage.getItem("mm_account")) ?? seedAccount(); } catch { acct = seedAccount(); }
-  saveAccount();
+  try {
+    const a = await api("/api/account");
+    const next = emptyAccount();
+    for (const x of a.subscriptions) next[x.kind === "strategy" ? "subs" : "inds"][x.item_id] = { since: fmtDate(x.since), price: x.price, plan: x.plan };
+    for (const e of a.courses) next.courses[e.course.id] = { since: fmtDate(e.since), price: e.course.price, prog: e.progress };
+    for (const l of a.live) next.live[l.id] = { since: "" };
+    if (a.plan) next.plan = { id: a.plan.item_id, name: a.plan.title, price: a.plan.price, since: fmtDate(a.plan.since) };
+    next.bookings = a.bookings.map((b) => ({ when: b.scheduled_at, what: b.what, booked: fmtDate(b.created_at) }));
+    next.orders = a.orders.map((o) => ({ date: fmtDate(o.created_at), item: o.item, kind: o.kind, amount: o.amount, period: o.period }));
+    try { localStorage.setItem("mm_user", JSON.stringify(a.user)); } catch { /* private mode */ }
+    acct = next;
+  } catch (e) {
+    if (e.status !== 401) toast(e.message);
+  }
 }
-function saveAccount() { try { if (authed()) localStorage.setItem("mm_account", JSON.stringify(acct)); } catch { /* private mode */ } }
+function saveAccount() { /* state lives on the server now */ }
 const owns = (kind, id) => kind === "plan" ? acct.plan?.id === id : Boolean(acct[BUCKET[kind]]?.[id]);
 
 function itemFor(kind, id) {
   if (kind === "strategy") { const s = STRATS.find((x) => x.id === id); return { title: s.t, price: s.price, period: "/month" }; }
   if (kind === "indicator") { const x = INDICATORS.find((i) => i.id === id); return { title: x.t, price: x.price, period: "/month" }; }
   if (kind === "course") { const c = COURSES.find((x) => x.id === id); return { title: c.t, price: c.price, period: "" }; }
-  if (kind === "live") { const l = LIVE[id]; return { title: l.t, price: 0, period: "" }; }
+  if (kind === "live") { const l = LIVE.find((x) => x.id === Number(id)); return { title: l.t, price: 0, period: "" }; }
   if (kind === "plan") { const p = PLANS[id]; return { title: p.name, price: p.price, period: "/month" }; }
 }
 
@@ -194,10 +203,9 @@ async function purchase(kind, id, plan = "Monthly", priceOverride) {
   const price = priceOverride ?? it.price;
   const period = plan === "Quarterly" ? "/quarter" : plan === "Yearly" ? "/year" : it.period;
   if (price > 0 && !(await checkout(it.title, price, period))) return false;
-  if (kind === "plan") acct.plan = { id, name: it.title, price, since: TODAY };
-  else acct[BUCKET[kind]][id] = { since: TODAY, price, plan, prog: 0 };
-  acct.orders.unshift({ date: TODAY, item: it.title, kind, amount: price, period: price ? period : "" });
-  saveAccount();
+  try { await api("/api/purchase", { method: "POST", body: { kind, id: String(id), plan } }); }
+  catch (e) { toast(e.message); return false; }
+  await loadAccount();
   return true;
 }
 
@@ -379,12 +387,12 @@ function learnScreen() {
     <div class="cards cards-3" id="courses"></div>
   </div>
   <div data-pane="live" hidden>
-    <ul>${LIVE.map((s, i) => `<li class="live">
+    <ul>${LIVE.map((s) => `<li class="live">
       <div class="date"><b>${s.d}</b><span>${s.m}</span></div>
       <div><div class="tags" style="margin-bottom:8px">${s.live ? `<span class="tag tag-live">Tomorrow</span>` : ""}<span class="tag tag-amber">${s.kind}</span></div>
         <h3 class="h3">${esc(s.t)}</h3>
         <div class="live-meta"><span>with ${esc(s.by)}</span><span>${s.time}</span><span>${s.len}</span><span>${s.seats} seats left</span></div></div>
-      ${buyBtn("live", i, "Reserve seat", "Seat reserved ✓", "btn-small")}
+      ${buyBtn("live", s.id, "Reserve seat", "Seat reserved ✓", "btn-small")}
     </li>`).join("")}</ul>
   </div>
   ${footer()}`;
@@ -631,31 +639,44 @@ function posPnl(p) {
 const fmtPx = (sym, v) => v.toFixed(sym === "XAUUSD" ? 2 : sym === "NAS100" ? 0 : sym === "USDJPY" ? 2 : 4);
 
 function algoScreen() {
-  const running = STRATS.filter((s) => owns("strategy", s.id));
-  const eq = curve(77, 90, 55, 160).map((v) => v + 24500);
-  const openPnl = POSITIONS.reduce((a, p) => a + posPnl(p), 0);
-  const r = rng(5);
-  const cal = Array.from({ length: 30 }, (_, i) => (i % 7 >= 5 ? null : Math.round((r() - 0.38) * 900)));
-  const stratPnl = (s) => Math.round((s.ret * 31 + s.seed * 13) % 2400 - (s.risk === "High" ? 300 : 0));
+  view.innerHTML = loadingHTML;
+  api("/api/algo").then(drawAlgo).catch((e) => { view.innerHTML = errorHTML(e); });
+}
+function drawAlgo(d) {
+  const stratName = (id) => STRATS.find((x) => x.id === id)?.t ?? id;
+  const running = d.strategies.map((x) => ({ ...(STRATS.find((s) => s.id === x.strategy.id) ?? { id: x.strategy.id, t: x.strategy.title, sym: x.strategy.symbol, seed: x.strategy.seed }), on: x.running, lot: x.lot_size, monthPnl: x.month_pnl, tradesToday: x.trades_today }));
+  const POSITIONS = d.positions.map((p) => ({ sym: p.symbol, side: p.side, lots: p.lots, open: p.open_price, now: p.current_price, pnl: p.pnl, strat: stratName(p.strategy_id) }));
+  const ORDERS = d.orders.map((o) => ({ time: fmtTime(o.placed_at), sym: o.symbol, side: o.side, type: o.type, lots: o.lots, price: o.price, status: o.status, strat: stratName(o.strategy_id) }));
+  const HISTORY = d.history.map((h) => ({ sym: h.symbol, side: h.side, lots: h.lots, open: h.open_price, close: h.close_price, pnl: h.pnl, strat: stratName(h.strategy_id), when: `${fmtDate(h.closed_at)} ${fmtTime(h.closed_at).slice(0, 5)}` }));
+  const eq = d.summary.equity_curve;
+  const openPnl = d.summary.open_pnl;
+  const byDay = Object.fromEntries(d.calendar.map((x) => [x.day, x.pnl]));
+  const today = new Date(); const todayKey = today.toISOString().slice(0, 10);
+  const cal = Array.from({ length: 30 }, (_, i) => { const dt = new Date(today); dt.setDate(today.getDate() - 29 + i); const k = dt.toISOString().slice(0, 10); const wd = dt.getDay(); return { day: dt.getDate(), v: wd === 0 || wd === 6 ? null : (byDay[k] ?? 0) }; });
+  const todayPnl = byDay[todayKey] ?? 0;
+  const monthPnl = d.summary.month_pnl;
+  const stratPnl = (s) => s.monthPnl;
+  const nRunning = running.filter((s) => s.on).length;
+  const broker = d.broker ? `MT5 ${d.broker.status} · ${esc(d.broker.mt5_server || d.broker.broker_id)} · #${esc(d.broker.mt5_login)}` : `MT5 not linked · <a href="#/execute">set up your broker</a>`;
   view.innerHTML = `
   <div class="dash-head">
-    <div style="display:grid;gap:8px"><span class="dot-live">MT5 connected · Exness-MT5Real · #81234567</span>
+    <div style="display:grid;gap:8px"><span class="dot-live">${broker}</span>
       <h1 class="title" style="font-size:clamp(34px,4vw,54px)">Algo <em class="inline">dashboard</em></h1></div>
     <div class="acct">
       <div class="tabs"><button aria-selected="true">Today</button><button aria-selected="false">Week</button><button aria-selected="false">Month</button><button aria-selected="false">All</button></div>
-      <button class="btn btn-small btn-quiet" id="kill">Pause all</button>
+      <button class="btn btn-small btn-quiet" id="kill">${nRunning ? "Pause all" : "Resume all"}</button>
     </div>
   </div>
   <dl class="kpis">
-    <div class="kpi hero-kpi"><dt>Account equity</dt><dd>$${Math.round(eq.at(-1)).toLocaleString()}</dd><span class="delta" style="color:#7be0a4">+4.8% this month</span></div>
-    <div class="kpi"><dt>Today's P&amp;L</dt><dd class="up">+$1,284</dd><span class="delta up">+2.6%</span></div>
+    <div class="kpi hero-kpi"><dt>Account equity</dt><dd>$${Math.round(d.summary.equity || eq.at(-1)).toLocaleString()}</dd><span class="delta" style="color:${monthPnl >= 0 ? "#7be0a4" : "#ff8a8a"}">${money(Math.round(monthPnl), true)} this month</span></div>
+    <div class="kpi"><dt>Today's P&amp;L</dt><dd class="${cls(todayPnl)}">${money(Math.round(todayPnl), true)}</dd><span class="delta ${cls(todayPnl)}">${d.summary.equity ? pct(todayPnl / d.summary.equity * 100) : "–"}</span></div>
     <div class="kpi"><dt>Open P&amp;L</dt><dd class="${cls(openPnl)}">${money(Math.round(openPnl), true)}</dd><span class="delta muted">${POSITIONS.length} positions</span></div>
-    <div class="kpi"><dt>Running strategies</dt><dd>${running.length}</dd><span class="delta muted">of ${running.length} subscribed</span></div>
-    <div class="kpi"><dt>Margin level</dt><dd>1,842%</dd><span class="delta muted">Free margin $22,910</span></div>
+    <div class="kpi"><dt>Running strategies</dt><dd>${nRunning}</dd><span class="delta muted">of ${running.length} subscribed</span></div>
+    <div class="kpi"><dt>Balance</dt><dd>$${Math.round(d.summary.balance).toLocaleString()}</dd><span class="delta muted">Closed trades: ${HISTORY.length}</span></div>
   </dl>
   <div class="dash-grid">
     <div class="panel"><div class="panel-head"><h2 class="h3">Equity</h2><span class="tag tag-up">+${pct((eq.at(-1) / eq[0] - 1) * 100, false)} in 90 days</span></div>
-      ${chartSVG(eq, { h: 260, labels: ["Jul 3", "Jul 31", "Aug 28", "Sep 30"] })}</div>
+      ${chartSVG(eq, { h: 260, labels: ["90d ago", "60d", "30d", "Today"] })}</div>
     <div class="panel"><div class="panel-head"><h2 class="h3">P&amp;L by strategy</h2><span class="small muted">This month</span></div>
       <div class="alloc">${running.map((s) => { const v = stratPnl(s); return `<div class="alloc-row"><span>${esc(s.t)}</span><b class="${cls(v)}">${money(v, true)}</b><div class="bar-t"><i style="--v:${Math.min(100, Math.abs(v) / 24)}%;--c:${v >= 0 ? "var(--up)" : "var(--down)"}"></i></div></div>`; }).join("")}</div></div>
   </div>
@@ -667,13 +688,13 @@ function algoScreen() {
     </div>
     <div data-pane="strats"><div class="table-wrap"><table>
       <thead><tr><th>Strategy</th><th>Symbol</th><th>Status</th><th class="num">Lot size</th><th class="num">Trades today</th><th class="num">Month P&amp;L</th><th>Last 30 days</th><th>Run</th></tr></thead>
-      <tbody>${running.map((s, i) => { const v = stratPnl(s); const on = i !== 3; return `<tr>
+      <tbody>${running.map((s) => { const v = stratPnl(s); const on = s.on; return `<tr>
         <td><b><a href="#/strategy/${s.id}" style="text-decoration:none">${esc(s.t)}</a></b></td><td>${s.sym}</td>
         <td><span class="tag ${on ? "tag-up" : ""}" data-status>${on ? "Running" : "Paused"}</span></td>
-        <td class="num">${(0.2 + (s.seed % 5) * 0.2).toFixed(1)}</td><td class="num">${s.seed % 6}</td>
+        <td class="num">${s.lot.toFixed(1)}</td><td class="num">${s.tradesToday}</td>
         <td class="num ${cls(v)}"><b>${money(v, true)}</b></td>
         <td style="width:140px">${sparkSVG(curve(s.seed + 1, 30, v / 300, 3), { h: 30, fill: false })}</td>
-        <td><label class="switch"><input type="checkbox" ${on ? "checked" : ""} data-run aria-label="Run ${esc(s.t)}"><i></i></label></td></tr>`; }).join("")
+        <td><label class="switch"><input type="checkbox" ${on ? "checked" : ""} data-run data-id="${s.id}" aria-label="Run ${esc(s.t)}"><i></i></label></td></tr>`; }).join("")
         || `<tr><td colspan="8" class="muted">No strategies yet. <a href="#/strategies">Subscribe to one</a>.</td></tr>`}</tbody></table></div></div>
     <div data-pane="pos" hidden><div class="table-wrap"><table>
       <thead><tr><th>Symbol</th><th>Side</th><th class="num">Lots</th><th class="num">Open</th><th class="num">Current</th><th class="num">P&amp;L</th><th>Strategy</th><th></th></tr></thead>
@@ -687,31 +708,27 @@ function algoScreen() {
   </div>
 
   <div class="dash-grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-    <div class="panel"><div class="panel-head"><h2 class="h3">Daily P&amp;L, September</h2><span class="small muted">Weekends closed</span></div>
+    <div class="panel"><div class="panel-head"><h2 class="h3">Daily P&amp;L, last 30 days</h2><span class="small muted">Weekends closed</span></div>
       <div class="cal">${["M", "T", "W", "T", "F", "S", "S"].map((d) => `<span class="h">${d}</span>`).join("")}
-        ${cal.map((v, i) => v === null ? `<span style="background:#f6f6f6">${i + 1}</span>` : `<span title="${money(v, true)}" style="background:${v >= 0 ? `rgba(31,157,85,${0.15 + Math.min(.7, v / 900)})` : `rgba(214,60,60,${0.15 + Math.min(.7, -v / 600)})`}">${i + 1}</span>`).join("")}</div></div>
+        ${cal.map(({ day, v }) => v === null ? `<span style="background:#f6f6f6">${day}</span>` : `<span title="${money(v, true)}" style="background:${v >= 0 ? `rgba(31,157,85,${0.15 + Math.min(.7, v / 900)})` : `rgba(214,60,60,${0.15 + Math.min(.7, -v / 600)})`}">${day}</span>`).join("")}</div></div>
     <div class="panel"><div class="panel-head"><h2 class="h3">Activity</h2><span class="dot-live">Live</span></div>
-      <ul class="feed">
-        <li><span class="side buy">BUY</span><span>Gold London Breakout opened 0.5 lots XAUUSD @ 2652.40</span><time>14:32</time></li>
-        <li><span class="side sell">SELL</span><span>EURUSD Mean Reversion limit filled @ 1.0912</span><time>13:58</time></li>
-        <li><span class="tag tag-amber">NEWS</span><span>Strategies paused 15 min around US jobless claims</span><time>13:30</time></li>
-        <li><span class="side buy">BUY</span><span>NAS100 Momentum Rider stop triggered @ 20140</span><time>13:15</time></li>
-        <li><span class="tag tag-up">TP</span><span>Asian Session Scalper closed USDJPY, +$155</span><time>03:14</time></li>
+      <ul class="feed">${d.activity.map((a) => { const t = a.tag.toLowerCase(); const badge = t === "buy" || t === "sell" ? `<span class="side ${t}">${esc(a.tag)}</span>` : `<span class="tag ${t === "tp" || t === "run" || t === "sub" ? "tag-up" : t === "pause" ? "tag-down" : "tag-amber"}">${esc(a.tag)}</span>`; return `<li>${badge}<span>${esc(a.text)}</span><time>${fmtTime(a.at).slice(0, 5)}</time></li>`; }).join("") || `<li><span class="tag">—</span><span>No activity yet</span></li>`}
       </ul></div>
   </div>
   ${footer()}`;
   wireTabs();
   view.querySelectorAll(".dash-head .tabs button").forEach((b) => b.addEventListener("click", () => b.parentElement.querySelectorAll("button").forEach((x) => x.setAttribute("aria-selected", String(x === b)))));
+  const paint = (c) => { const tag = c.closest("tr").querySelector("[data-status]"); tag.textContent = c.checked ? "Running" : "Paused"; tag.classList.toggle("tag-up", c.checked); };
   view.querySelectorAll("[data-run]").forEach((c) => c.addEventListener("change", () => {
-    const tag = c.closest("tr").querySelector("[data-status]");
-    tag.textContent = c.checked ? "Running" : "Paused"; tag.classList.toggle("tag-up", c.checked);
-    toast(c.checked ? "Strategy started" : "Strategy paused. Open positions kept.");
+    paint(c);
+    api(`/api/algo/strategies/${c.dataset.id}`, { method: "PUT", body: { running: c.checked } })
+      .then((r) => toast(r.message)).catch((e) => { c.checked = !c.checked; paint(c); toast(e.message); });
   }));
   view.querySelector("#kill").addEventListener("click", (e) => {
     const pause = e.target.textContent === "Pause all";
-    view.querySelectorAll("[data-run]").forEach((c) => { c.checked = !pause; c.dispatchEvent(new Event("change")); });
-    e.target.textContent = pause ? "Resume all" : "Pause all";
-    toast(pause ? "All strategies paused" : "All strategies resumed");
+    e.target.disabled = true;
+    api(`/api/algo/${pause ? "pause-all" : "resume-all"}`, { method: "POST" })
+      .then((r) => { toast(r.message); api("/api/algo").then(drawAlgo); }).catch((err) => { toast(err.message); e.target.disabled = false; });
   });
 }
 
@@ -767,9 +784,9 @@ function supportScreen() {
     const d = view.querySelector('[data-day][aria-pressed="true"]')?.dataset.day, s = view.querySelector('[data-slot][aria-pressed="true"]')?.dataset.slot;
     if (!s) { toast("Pick a time first"); return; }
     if (needLogin()) return;
-    acct.bookings.unshift({ when: `${d} Oct 2026, ${s} IST`, what: "Onboarding call (30 min)", booked: TODAY });
-    saveAccount();
-    toast(`Booked for ${d} Oct at ${s} IST. See My account.`);
+    api("/api/bookings", { method: "POST", body: { mentor_id: "", scheduled_at: `${d} Oct 2026, ${s} IST`, note: "" } })
+      .then(() => loadAccount()).then(() => toast(`Booked for ${d} Oct at ${s} IST. See My account.`))
+      .catch((e) => toast(e.message));
   });
 }
 
@@ -782,12 +799,12 @@ function accountScreen() {
   const monthly = (v) => v.plan === "Quarterly" ? v.price / 3 : v.plan === "Yearly" ? v.price / 12 : v.price;
   const spend = subs.reduce((a, v) => a + monthly(v), 0) + (acct.plan?.price ?? 0);
   const courses = Object.entries(acct.courses).map(([id, v]) => ({ c: COURSES.find((x) => x.id === id), ...v })).filter((x) => x.c);
-  const lives = Object.keys(acct.live).map((i) => LIVE[i]).filter(Boolean);
+  const lives = Object.keys(acct.live).map((i) => LIVE.find((l) => l.id === Number(i))).filter(Boolean);
   const upcoming = lives.length + acct.bookings.length;
   view.innerHTML = `
   <div class="dash-head">
-    <div class="mentor"><span class="avatar" style="width:64px;height:64px;font-size:20px">DT</span>
-      <div><h1 class="title" style="font-size:clamp(32px,4vw,52px)">My <em class="inline">account</em></h1><p class="muted small">${DEMO.name} · ${DEMO.email} · Member since Aug 2026</p></div></div>
+    <div class="mentor"><span class="avatar" style="width:64px;height:64px;font-size:20px">${initials(me().name)}</span>
+      <div><h1 class="title" style="font-size:clamp(32px,4vw,52px)">My <em class="inline">account</em></h1><p class="muted small">${esc(me().name ?? "")} · ${esc(me().email ?? "")} · Member since ${fmtDate(me().created_at, true)}</p></div></div>
     <div class="btn-row"><a class="btn btn-small btn-quiet" href="#/algo">Algo dashboard</a><button class="btn btn-small btn-quiet" data-logout>Log out</button></div>
   </div>
   <dl class="kpis">
@@ -842,15 +859,21 @@ function accountScreen() {
   wireTabs();
   view.querySelectorAll("[data-cancel]").forEach((b) => b.addEventListener("click", () => {
     const [kind, id] = b.dataset.cancel.split(":");
-    if (kind === "plan") acct.plan = null; else delete acct[BUCKET[kind]][id];
-    saveAccount(); toast("Subscription cancelled"); accountScreen();
+    b.disabled = true;
+    api(`/api/subscriptions/${kind}/${id}`, { method: "DELETE" }).then(() => loadAccount())
+      .then(() => { toast("Subscription cancelled"); accountScreen(); }).catch((e) => { toast(e.message); b.disabled = false; });
   }));
 }
 
 /* ---------------- login ---------------- */
 const DEMO = { email: "demo@mrmarket.com", pass: "demo1234", name: "Demo Trader" };
-const authed = () => { try { return localStorage.getItem("mm_user") === DEMO.email; } catch { return false; } };
-function setAuthed(on) { try { on ? localStorage.setItem("mm_user", DEMO.email) : localStorage.removeItem("mm_user"); } catch { /* private mode */ } }
+const authed = () => Boolean(token());
+function setAuthed(on, tok, user) {
+  try {
+    if (on) { localStorage.setItem("mm_token", tok); localStorage.setItem("mm_user", JSON.stringify(user)); }
+    else { localStorage.removeItem("mm_token"); localStorage.removeItem("mm_user"); }
+  } catch { /* private mode */ }
+}
 
 function loginScreen() {
   const next = new URLSearchParams(location.hash.split("?")[1] ?? "").get("next") || "algo";
@@ -886,12 +909,18 @@ function loginScreen() {
   view.querySelector("#toggle-pw").addEventListener("click", (e) => {
     const show = pass.type === "password"; pass.type = show ? "text" : "password"; e.target.textContent = show ? "Hide" : "Show";
   });
-  view.querySelector("form").addEventListener("submit", (e) => {
+  view.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (email.value.trim().toLowerCase() === DEMO.email && pass.value === DEMO.pass) {
-      setAuthed(true); loadAccount(); toast(`Welcome back, ${DEMO.name}`); location.hash = `#/${next}`;
-    } else {
-      err.textContent = "Email or password is incorrect. Use the demo account above."; err.hidden = false;
+    const btn = e.currentTarget.querySelector('[type="submit"]');
+    btn.disabled = true; btn.textContent = "Logging in…"; err.hidden = true;
+    try {
+      const r = await api("/api/auth/login", { method: "POST", body: { email: email.value.trim().toLowerCase(), password: pass.value } });
+      setAuthed(true, r.token, r.user);
+      await loadAccount();
+      toast(`Welcome back, ${r.user.name}`); location.hash = `#/${next}`;
+    } catch (ex) {
+      err.textContent = ex.status === 401 ? "Email or password is incorrect. Use the demo account above." : ex.message; err.hidden = false;
+      btn.disabled = false; btn.textContent = "Log in";
     }
   });
 }
@@ -917,7 +946,7 @@ function renderHeader(nav) {
   el.classList.remove("open");
   document.getElementById("bar-right").innerHTML = authed()
     ? `<a class="btn btn-quiet btn-small hide-sm" href="#/algo">Dashboard</a>
-       <a class="user" href="#/account" title="My account"><span class="avatar">DT</span><span class="user-name">My account</span></a>`
+       <a class="user" href="#/account" title="My account"><span class="avatar">${initials(me().name)}</span><span class="user-name">My account</span></a>`
     : `<a class="btn btn-small" href="#/login">Log in</a>`;
 
   document.getElementById("menu-btn").setAttribute("aria-expanded", "false");
@@ -1002,5 +1031,8 @@ function drawBgChart() {
   document.getElementById("bg-chart").innerHTML = `<div class="bg-track">${svg}${svg}</div>`;
 }
 drawBgChart();
-loadAccount();
-route();
+view.innerHTML = loadingHTML;
+Promise.allSettled([loadCatalog(), loadAccount()]).then(([cat]) => {
+  if (cat.status === "rejected") toast("Showing offline catalog: " + cat.reason.message);
+  route();
+});
