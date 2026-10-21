@@ -1,1 +1,7 @@
 .vercel
+*.db
+*.db-wal
+*.db-shm
+server/bin/
+.env
+.DS_Store

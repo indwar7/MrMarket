@@ -1,0 +1,51 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  name TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS courses (id TEXT PRIMARY KEY, title TEXT NOT NULL, author TEXT NOT NULL, level TEXT NOT NULL, lessons INTEGER NOT NULL, duration TEXT NOT NULL, price INTEGER NOT NULL, rating REAL NOT NULL, students INTEGER NOT NULL, hue INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS live_sessions (id INTEGER PRIMARY KEY, day INTEGER NOT NULL, month TEXT NOT NULL, title TEXT NOT NULL, author TEXT NOT NULL, time TEXT NOT NULL, length TEXT NOT NULL, seats INTEGER NOT NULL, kind TEXT NOT NULL, is_live INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS indicators (id TEXT PRIMARY KEY, title TEXT NOT NULL, category TEXT NOT NULL, platform TEXT NOT NULL, description TEXT NOT NULL, price INTEGER NOT NULL, rating REAL NOT NULL, subs INTEGER NOT NULL, kind TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS strategies (id TEXT PRIMARY KEY, title TEXT NOT NULL, symbol TEXT NOT NULL, timeframe TEXT NOT NULL, style TEXT NOT NULL, risk TEXT NOT NULL, ret REAL NOT NULL, dd REAL NOT NULL, win INTEGER NOT NULL, pf REAL NOT NULL, trades INTEGER NOT NULL, min_capital INTEGER NOT NULL, price INTEGER NOT NULL, subs INTEGER NOT NULL, seed INTEGER NOT NULL, author TEXT NOT NULL, description TEXT NOT NULL DEFAULT '');
+CREATE TABLE IF NOT EXISTS brokers (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL, regulation TEXT NOT NULL, spread TEXT NOT NULL, min_deposit TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS plans (id TEXT PRIMARY KEY, name TEXT NOT NULL, price INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS mentors (id TEXT PRIMARY KEY, name TEXT NOT NULL, role TEXT NOT NULL, initials TEXT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS subscriptions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  kind TEXT NOT NULL CHECK (kind IN ('strategy','indicator','plan')),
+  item_id TEXT NOT NULL,
+  plan TEXT NOT NULL DEFAULT 'Monthly',
+  price INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active',
+  since TEXT NOT NULL DEFAULT (datetime('now')),
+  cancelled_at TEXT
+);
+CREATE UNIQUE INDEX IF NOT EXISTS subs_active ON subscriptions(user_id, kind, item_id) WHERE status = 'active';
+CREATE TABLE IF NOT EXISTS enrollments (user_id INTEGER NOT NULL REFERENCES users(id), course_id TEXT NOT NULL REFERENCES courses(id), progress INTEGER NOT NULL DEFAULT 0, since TEXT NOT NULL DEFAULT (datetime('now')), PRIMARY KEY (user_id, course_id));
+CREATE TABLE IF NOT EXISTS reservations (user_id INTEGER NOT NULL REFERENCES users(id), live_id INTEGER NOT NULL REFERENCES live_sessions(id), since TEXT NOT NULL DEFAULT (datetime('now')), PRIMARY KEY (user_id, live_id));
+CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), mentor_id TEXT NOT NULL DEFAULT '', scheduled_at TEXT NOT NULL, what TEXT NOT NULL DEFAULT 'Onboarding call (30 min)', note TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), kind TEXT NOT NULL, item_id TEXT NOT NULL, item TEXT NOT NULL, amount INTEGER NOT NULL, period TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'paid', payment_ref TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), subject TEXT NOT NULL, body TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open', created_at TEXT NOT NULL DEFAULT (datetime('now')));
+
+CREATE TABLE IF NOT EXISTS broker_accounts (
+  user_id INTEGER PRIMARY KEY REFERENCES users(id),
+  broker_id TEXT NOT NULL,
+  mt5_login TEXT NOT NULL DEFAULT '',
+  mt5_server TEXT NOT NULL DEFAULT '',
+  bridge_token TEXT NOT NULL UNIQUE,
+  status TEXT NOT NULL DEFAULT 'pending',
+  equity REAL NOT NULL DEFAULT 0,
+  balance REAL NOT NULL DEFAULT 0,
+  last_seen TEXT
+);
+CREATE TABLE IF NOT EXISTS strategy_runs (user_id INTEGER NOT NULL REFERENCES users(id), strategy_id TEXT NOT NULL REFERENCES strategies(id), running INTEGER NOT NULL DEFAULT 1, lot_size REAL NOT NULL DEFAULT 0.2, updated_at TEXT NOT NULL DEFAULT (datetime('now')), PRIMARY KEY (user_id, strategy_id));
+CREATE TABLE IF NOT EXISTS positions (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), ticket TEXT NOT NULL, symbol TEXT NOT NULL, side TEXT NOT NULL, lots REAL NOT NULL, open_price REAL NOT NULL, current_price REAL NOT NULL, strategy_id TEXT NOT NULL DEFAULT '', opened_at TEXT NOT NULL DEFAULT (datetime('now')), UNIQUE (user_id, ticket));
+CREATE TABLE IF NOT EXISTS trade_orders (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), ticket TEXT NOT NULL, placed_at TEXT NOT NULL, symbol TEXT NOT NULL, side TEXT NOT NULL, type TEXT NOT NULL, lots REAL NOT NULL, price REAL NOT NULL, status TEXT NOT NULL, strategy_id TEXT NOT NULL DEFAULT '', UNIQUE (user_id, ticket));
+CREATE TABLE IF NOT EXISTS trade_history (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), ticket TEXT NOT NULL, symbol TEXT NOT NULL, side TEXT NOT NULL, lots REAL NOT NULL, open_price REAL NOT NULL, close_price REAL NOT NULL, pnl REAL NOT NULL, strategy_id TEXT NOT NULL DEFAULT '', closed_at TEXT NOT NULL, UNIQUE (user_id, ticket));
+CREATE TABLE IF NOT EXISTS daily_pnl (user_id INTEGER NOT NULL REFERENCES users(id), day TEXT NOT NULL, pnl REAL NOT NULL, PRIMARY KEY (user_id, day));
+CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id), tag TEXT NOT NULL, text TEXT NOT NULL, at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE INDEX IF NOT EXISTS activity_user ON activity(user_id, at DESC);
