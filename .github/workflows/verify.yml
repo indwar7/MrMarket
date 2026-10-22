@@ -1,0 +1,14 @@
+name: Verify production
+on: [workflow_dispatch]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -sf https://mrmarket-api.vercel.app/healthz
+          echo; echo "strategies: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/strategies | python3 -c 'import sys,json;d=json.load(sys.stdin);print(len(d), d[4]["title"], d[4]["timeframes"])')"
+          echo "indicators: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/indicators | python3 -c 'import sys,json;print(len(json.load(sys.stdin)))')"
+          echo "scripts: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/scripts | python3 -c 'import sys,json;print(len(json.load(sys.stdin)))')"
+          echo "course lessons: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/courses/price-action | python3 -c 'import sys,json;print(len(json.load(sys.stdin)["lessons"]))')"
+          echo "web has scripts page: $(curl -sf https://mrmarket-portal.vercel.app/app.js | grep -c scriptsScreen)"
+          echo "web has course player: $(curl -sf https://mrmarket-portal.vercel.app/app.js | grep -c drawCourse)"
