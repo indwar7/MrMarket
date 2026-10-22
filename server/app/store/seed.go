@@ -122,8 +122,8 @@ func (s *Store) SeedCatalog(ctx context.Context) error {
 		return fmt.Errorf("mt5 catalog: %w", err)
 	}
 	CommonInputs, _ = json.Marshal(cat.CommonInputs)
-	var lessons map[string][]string
-	if err := json.Unmarshal(lessonsJSON, &lessons); err != nil {
+	lessons, err := parseLessons(lessonsJSON)
+	if err != nil {
 		return fmt.Errorf("lessons: %w", err)
 	}
 	var scripts []Script
@@ -142,19 +142,28 @@ func (s *Store) SeedCatalog(ctx context.Context) error {
 		}
 	}
 
+	const candlesDesc = "A clear, step-by-step way to read price charts: from your first candle to a complete trade plan, with real examples on Emaar, Emirates NBD and Apple. Follow along in TradingView with the practice workbook."
+	const candlesDisclaimer = "This course is for education only and is not investment, financial or trading advice. Nothing here is a recommendation to buy or sell any stock, currency or other instrument. The charts and companies shown (such as Emaar Properties, Emirates NBD and Apple) are illustrations of candlestick patterns, not opinions on those companies. Examples include trades that did not work out; past patterns do not predict future results. Trading involves risk, including the loss of your capital. Practise on a demo account first and consider speaking to a licensed adviser before trading real money."
 	for _, c := range []Course{
-		{"price-action", "Price Action Mastery", "Aseem Singhal", "Beginner", 42, "9h 20m", 49, 4.9, 12840, 24},
-		{"mt5-basics", "MT5 from Zero to Live", "Rohit Mehra", "Beginner", 28, "5h 10m", 0, 4.8, 20113, 210},
-		{"risk", "Risk Management & Position Sizing", "Aseem Singhal", "Intermediate", 18, "3h 45m", 39, 4.9, 8402, 150},
-		{"smc", "Smart Money Concepts", "Kavya Iyer", "Intermediate", 36, "8h 05m", 79, 4.7, 6120, 280},
-		{"algo-mql5", "Build Your First EA in MQL5", "Neel Shah", "Advanced", 51, "12h 30m", 129, 4.8, 3390, 340},
-		{"psychology", "Trading Psychology", "Dr. Meera Rao", "All levels", 14, "2h 50m", 29, 4.9, 9870, 45},
+		{"candlesticks", "Basics of Candlesticks", "MrMarket", "Beginner", 33, "Video course", 0, 4.9, 0, 30, candlesDesc, candlesDisclaimer},
+		{"price-action", "Price Action Mastery", "Aseem Singhal", "Beginner", 42, "9h 20m", 49, 4.9, 12840, 24, "", ""},
+		{"mt5-basics", "MT5 from Zero to Live", "Rohit Mehra", "Beginner", 28, "5h 10m", 0, 4.8, 20113, 210, "", ""},
+		{"risk", "Risk Management & Position Sizing", "Aseem Singhal", "Intermediate", 18, "3h 45m", 39, 4.9, 8402, 150, "", ""},
+		{"smc", "Smart Money Concepts", "Kavya Iyer", "Intermediate", 36, "8h 05m", 79, 4.7, 6120, 280, "", ""},
+		{"algo-mql5", "Build Your First EA in MQL5", "Neel Shah", "Advanced", 51, "12h 30m", 129, 4.8, 3390, 340, "", ""},
+		{"psychology", "Trading Psychology", "Dr. Meera Rao", "All levels", 14, "2h 50m", 29, 4.9, 9870, 45, "", ""},
 	} {
-		exec(`INSERT INTO courses VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title, author=excluded.author, level=excluded.level, lessons=excluded.lessons, duration=excluded.duration, price=excluded.price, rating=excluded.rating, students=excluded.students, hue=excluded.hue`,
-			c.ID, c.Title, c.Author, c.Level, c.Lessons, c.Duration, c.Price, c.Rating, c.Students, c.Hue)
-		for i, title := range lessons[c.ID] {
-			exec(`INSERT INTO lessons(course_id,idx,title,duration,free_preview) VALUES(?,?,?,?,?) ON CONFLICT(course_id,idx) DO UPDATE SET title=excluded.title`,
-				c.ID, i+1, title, fmt.Sprintf("%d min", 8+(i*7)%11), i == 0)
+		exec(`INSERT INTO courses(id,title,author,level,lessons,duration,price,rating,students,hue,description,disclaimer) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title, author=excluded.author, level=excluded.level, lessons=excluded.lessons, duration=excluded.duration, price=excluded.price, rating=excluded.rating, students=excluded.students, hue=excluded.hue, description=excluded.description, disclaimer=excluded.disclaimer`,
+			c.ID, c.Title, c.Author, c.Level, c.Lessons, c.Duration, c.Price, c.Rating, c.Students, c.Hue, c.Description, c.Disclaimer)
+		for i, l := range lessons[c.ID] {
+			dur := l.Duration
+			if dur == "" {
+				dur = fmt.Sprintf("%d min", 8+(i*7)%11)
+			}
+			exec(`INSERT INTO lessons(course_id,idx,title,duration,video_url,free_preview,module,summary) VALUES(?,?,?,?,?,?,?,?)
+			      ON CONFLICT(course_id,idx) DO UPDATE SET title=excluded.title, duration=excluded.duration, free_preview=excluded.free_preview, module=excluded.module, summary=excluded.summary,
+			        video_url=CASE WHEN excluded.video_url<>'' THEN excluded.video_url ELSE lessons.video_url END`,
+				c.ID, i+1, l.Title, dur, l.Video, l.FreePreview || i == 0, l.Module, l.Summary)
 		}
 		exec(`UPDATE courses SET lessons=(SELECT COUNT(*) FROM lessons WHERE course_id=?) WHERE id=? AND EXISTS (SELECT 1 FROM lessons WHERE course_id=?)`, c.ID, c.ID, c.ID)
 	}
@@ -343,4 +352,36 @@ func seededRNG(seed uint32) func() float64 {
 		s = s*1664525 + 1013904223
 		return float64(s) / 4294967296
 	}
+}
+
+type seedLesson struct {
+	Module      string `json:"module"`
+	Title       string `json:"title"`
+	Duration    string `json:"duration"`
+	Summary     string `json:"summary"`
+	Video       string `json:"video"`
+	FreePreview bool   `json:"free_preview"`
+}
+
+// parseLessons accepts either a list of titles or a list of lesson objects per course.
+func parseLessons(b []byte) (map[string][]seedLesson, error) {
+	var raw map[string][]json.RawMessage
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return nil, err
+	}
+	out := map[string][]seedLesson{}
+	for course, items := range raw {
+		for _, it := range items {
+			var l seedLesson
+			if err := json.Unmarshal(it, &l); err != nil {
+				var title string
+				if err2 := json.Unmarshal(it, &title); err2 != nil {
+					return nil, err
+				}
+				l = seedLesson{Title: title}
+			}
+			out[course] = append(out[course], l)
+		}
+	}
+	return out, nil
 }

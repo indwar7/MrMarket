@@ -34,7 +34,7 @@ async function loadCatalog() {
   const [courses, live, inds, strats, brokers, mentors, scripts] = await Promise.all(
     ["courses", "live", "indicators", "strategies", "brokers", "mentors", "scripts"].map((k) => api(`/api/catalog/${k}`)));
   SCRIPTS = scripts.map((x) => ({ id: x.id, t: x.title, cat: x.category, status: x.status, price: x.price, ver: x.version, desc: x.description, req: x.requirements, tags: x.tags ?? [] }));
-  COURSES = courses.map((c) => ({ id: c.id, t: c.title, by: c.author, lvl: c.level, lessons: c.lessons, dur: c.duration, price: c.price, rating: c.rating, students: c.students, hue: c.hue }));
+  COURSES = courses.map((c) => ({ id: c.id, t: c.title, by: c.author, lvl: c.level, lessons: c.lessons, dur: c.duration, price: c.price, rating: c.rating, students: c.students, hue: c.hue, desc: c.description, disclaimer: c.disclaimer }));
   LIVE = live.map((l) => ({ id: l.id, d: l.day, m: l.month, t: l.title, by: l.author, time: l.time, len: l.length, seats: l.seats, kind: l.kind, live: l.is_live }));
   INDICATORS = inds.map((x) => ({ id: x.id, t: x.title, cat: x.category, plat: x.platform, desc: x.description, price: x.price, rating: x.rating, subs: x.subs, kind: x.kind, n: x.number, ver: x.version, plots: x.plots ?? [], inputs: x.inputs ?? [], pair: x.pair_strategy_id }));
   STRATS = strats.map((s) => ({ id: s.id, t: s.title, sym: s.symbol, tf: s.timeframes || s.timeframe, style: s.style, risk: s.risk, ret: s.return_12m, dd: s.max_drawdown, win: s.win_rate, pf: s.profit_factor, trades: s.trades, min: s.min_capital, price: s.price, subs: s.subs, seed: s.seed, by: s.author, n: s.number, ver: s.version, cat: s.category || s.style, desc: s.description, inputs: s.inputs ?? [], pair: s.pair_indicator_id }));
@@ -371,7 +371,7 @@ function courseCard(c, i) {
   return `<article class="card hover">
     <div class="thumb">${thumbSVG(c.hue, i + 3)}<span class="lvl tag">${c.lvl}</span><span class="play" aria-hidden="true"></span><span class="dur">${c.dur}</span></div>
     <h3 class="h3">${esc(c.t)}</h3>
-    <p class="muted small">${esc(c.by)} · ${c.lessons} lessons · <span class="rating"><b>★ ${c.rating}</b> (${c.students.toLocaleString()})</span></p>
+    <p class="muted small">${esc(c.by)} · ${c.lessons} lessons · ${c.students ? `<span class="rating"><b>★ ${c.rating}</b> (${c.students.toLocaleString()})</span>` : `<span class="tag tag-amber">New</span>`}</p>
     ${enrolled ? `<div class="progress" style="--v:${prog}%"><i></i></div><p class="small muted">${prog === 100 ? "Completed" : prog ? `${prog}% complete` : "Enrolled · not started"}</p>` : ""}
     <div class="card-foot"><span class="price">${c.price ? `$${c.price}` : "Free"}</span>
       <span class="btn-row">${enrolled ? `<a class="btn btn-small" href="#/course/${c.id}">${prog === 100 ? "Review" : prog ? "Continue" : "Start course"}</a>` : `<a class="btn btn-small btn-quiet" href="#/course/${c.id}">Preview</a>${buyBtn("course", c.id, c.price ? "Buy course" : "Enroll free", "Enrolled ✓", "btn-small")}`}</span></div>
@@ -642,14 +642,16 @@ function courseScreen(m) {
   api(`/api/catalog/courses/${m[1]}`).then((d) => drawCourse(d, null)).catch((e) => { view.innerHTML = errorHTML(e); });
 }
 function drawCourse(d, currentId) {
-  const c = COURSES.find((x) => x.id === d.id) ?? { id: d.id, t: d.title, by: d.author, lvl: d.level, dur: d.duration, price: d.price, hue: d.hue };
+  const c = COURSES.find((x) => x.id === d.id) ?? { id: d.id, t: d.title, by: d.author, lvl: d.level, dur: d.duration, price: d.price, hue: d.hue, desc: d.description, disclaimer: d.disclaimer };
+  const desc = d.description || c.desc || "", disclaimer = d.disclaimer || c.disclaimer || "";
   const lessons = d.lessons;
+  const modules = [...new Set(lessons.map((l) => l.module || ""))];
   const cur = lessons.find((l) => l.id === currentId) ?? lessons.find((l) => !l.done && !l.locked) ?? lessons[0];
   const done = lessons.filter((l) => l.done).length;
   const playerBody = !cur ? `<div class="player-msg"><b>No lessons yet</b></div>`
     : cur.locked ? `<div class="player-msg"><span class="tag tag-amber">Members only</span><b>Enroll to watch “${esc(cur.title)}”</b><p class="muted small">Lesson 1 is a free preview. The full course unlocks every lesson and tracks your progress.</p>${buyBtn("course", c.id, c.price ? `Buy course · $${c.price}` : "Enroll free", "Enrolled ✓")}</div>`
     : cur.video_url ? videoEmbed(cur.video_url)
-    : `<div class="player-msg"><span class="tag">Coming soon</span><b>“${esc(cur.title)}” is being recorded</b><p class="muted small">Videos are uploaded in order. You will see them here as soon as they are live.</p></div>`;
+    : `<div class="player-msg"><span class="tag">Video coming soon</span><b>“${esc(cur.title)}”</b><p class="muted small">This lesson's video is on its way and will play right here. Read the lesson outline below while you wait.</p></div>`;
   view.innerHTML = `
   <section class="page-head" style="padding-bottom:22px">
     <a class="small muted" href="#/learn">← All courses</a>
@@ -661,14 +663,17 @@ function drawCourse(d, currentId) {
       <div class="player" id="player">${playerBody}</div>
       ${cur ? `<div class="panel" style="display:grid;gap:12px"><div class="panel-head"><div><span class="kicker">Lesson ${cur.idx}</span><h2 class="h3">${esc(cur.title)}</h2></div>
         ${d.enrolled && !cur.locked ? `<button class="btn btn-small ${cur.done ? "btn-quiet" : ""}" id="done-btn" data-id="${cur.id}" data-done="${cur.done}">${cur.done ? "Mark as not done" : "Mark as complete"}</button>` : ""}</div>
+        ${cur.summary ? `<p class="muted" style="max-width:70ch">${esc(cur.summary)}</p>` : ""}
         ${d.enrolled ? `<div class="progress" style="--v:${d.progress}%"><i></i></div><p class="small muted">${done} of ${lessons.length} lessons complete</p>` : `<p class="small muted">Preview mode. <a href="#/learn">Enroll</a> to track progress and unlock every lesson.</p>`}</div>` : ""}
+      ${desc ? `<div class="panel" style="gap:8px"><h2 class="h3">About this course</h2><p class="muted">${esc(desc)}</p></div>` : ""}
+      ${disclaimer ? `<div class="panel disclaimer" style="gap:8px"><div class="panel-head"><h2 class="h3">Disclaimer</h2><span class="tag tag-amber">Please read</span></div><p class="small muted">${esc(disclaimer)}</p></div>` : ""}
     </div>
     <aside class="panel lesson-list">
       <div class="panel-head"><h2 class="h3">Lessons</h2><span class="small muted">${esc(c.dur)}</span></div>
-      <ol>${lessons.map((l) => `<li><button class="lesson ${l.id === cur?.id ? "is-cur" : ""} ${l.done ? "is-done" : ""}" data-lesson="${l.id}">
+      <ol>${modules.map((mod) => `${mod ? `<li class="module"><span>${esc(mod)}</span><span class="small muted">${lessons.filter((l) => (l.module || "") === mod).length}</span></li>` : ""}${lessons.filter((l) => (l.module || "") === mod).map((l) => `<li><button class="lesson ${l.id === cur?.id ? "is-cur" : ""} ${l.done ? "is-done" : ""}" data-lesson="${l.id}">
         <span class="n">${l.done ? "✓" : l.idx}</span>
         <span class="body"><b>${esc(l.title)}</b><span class="small muted">${esc(l.duration)}${l.free_preview ? " · Free preview" : ""}${l.locked ? " · Locked" : ""}${!l.locked && !l.video_url ? " · Coming soon" : ""}</span></span>
-        ${l.locked ? `<span class="lock" aria-hidden="true"></span>` : ""}</button></li>`).join("")}</ol>
+        ${l.locked ? `<span class="lock" aria-hidden="true"></span>` : ""}</button></li>`).join("")}`).join("")}</ol>
       ${d.enrolled ? "" : `<div style="padding:16px 18px 18px;display:grid;gap:10px"><span class="price">${c.price ? `$${c.price}` : "Free"}</span>${buyBtn("course", c.id, c.price ? "Buy course" : "Enroll free", "Enrolled ✓")}</div>`}
     </aside>
   </div>

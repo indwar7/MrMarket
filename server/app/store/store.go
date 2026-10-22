@@ -52,6 +52,8 @@ func Open(url string) (*Store, error) {
 		{"strategies", "inputs", "TEXT NOT NULL DEFAULT '[]'"}, {"strategies", "pair_id", "TEXT NOT NULL DEFAULT ''"}, {"strategies", "timeframes", "TEXT NOT NULL DEFAULT 'Any'"}, {"strategies", "size_kb", "INTEGER NOT NULL DEFAULT 0"},
 		{"indicators", "number", "INTEGER NOT NULL DEFAULT 0"}, {"indicators", "version", "TEXT NOT NULL DEFAULT ''"}, {"indicators", "inputs", "TEXT NOT NULL DEFAULT '[]'"}, {"indicators", "plots", "TEXT NOT NULL DEFAULT '[]'"},
 		{"indicators", "window", "TEXT NOT NULL DEFAULT 'chart'"}, {"indicators", "pair_id", "TEXT NOT NULL DEFAULT ''"}, {"indicators", "size_kb", "INTEGER NOT NULL DEFAULT 0"},
+		{"lessons", "module", "TEXT NOT NULL DEFAULT ''"}, {"lessons", "summary", "TEXT NOT NULL DEFAULT ''"},
+		{"courses", "description", "TEXT NOT NULL DEFAULT ''"}, {"courses", "disclaimer", "TEXT NOT NULL DEFAULT ''"},
 	} {
 		if err := st.ensureColumn(c.table, c.col, c.def); err != nil {
 			return nil, err
@@ -118,7 +120,7 @@ func (s *Store) UserByID(ctx context.Context, id int64) (User, error) {
 // ---- catalog ----
 
 func (s *Store) Courses(ctx context.Context) ([]Course, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id,title,author,level,lessons,duration,price,rating,students,hue FROM courses ORDER BY rowid`)
+	rows, err := s.db.QueryContext(ctx, `SELECT id,title,author,level,lessons,duration,price,rating,students,hue,description,disclaimer FROM courses ORDER BY rowid`)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +128,7 @@ func (s *Store) Courses(ctx context.Context) ([]Course, error) {
 	out := []Course{}
 	for rows.Next() {
 		var c Course
-		if err := rows.Scan(&c.ID, &c.Title, &c.Author, &c.Level, &c.Lessons, &c.Duration, &c.Price, &c.Rating, &c.Students, &c.Hue); err != nil {
+		if err := rows.Scan(&c.ID, &c.Title, &c.Author, &c.Level, &c.Lessons, &c.Duration, &c.Price, &c.Rating, &c.Students, &c.Hue, &c.Description, &c.Disclaimer); err != nil {
 			return nil, err
 		}
 		out = append(out, c)
@@ -136,8 +138,8 @@ func (s *Store) Courses(ctx context.Context) ([]Course, error) {
 
 func (s *Store) Course(ctx context.Context, id string) (Course, error) {
 	var c Course
-	err := s.db.QueryRowContext(ctx, `SELECT id,title,author,level,lessons,duration,price,rating,students,hue FROM courses WHERE id=?`, id).
-		Scan(&c.ID, &c.Title, &c.Author, &c.Level, &c.Lessons, &c.Duration, &c.Price, &c.Rating, &c.Students, &c.Hue)
+	err := s.db.QueryRowContext(ctx, `SELECT id,title,author,level,lessons,duration,price,rating,students,hue,description,disclaimer FROM courses WHERE id=?`, id).
+		Scan(&c.ID, &c.Title, &c.Author, &c.Level, &c.Lessons, &c.Duration, &c.Price, &c.Rating, &c.Students, &c.Hue, &c.Description, &c.Disclaimer)
 	if errors.Is(err, sql.ErrNoRows) {
 		return c, ErrNotFound
 	}
@@ -305,7 +307,7 @@ func (s *Store) Mentors(ctx context.Context) ([]Mentor, error) {
 // ---- lessons (videos) ----
 
 func (s *Store) Lessons(ctx context.Context, courseID string) ([]Lesson, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id,course_id,idx,title,duration,video_url,free_preview FROM lessons WHERE course_id=? ORDER BY idx`, courseID)
+	rows, err := s.db.QueryContext(ctx, `SELECT id,course_id,idx,title,duration,video_url,free_preview,module,summary FROM lessons WHERE course_id=? ORDER BY idx`, courseID)
 	if err != nil {
 		return nil, err
 	}
@@ -313,7 +315,7 @@ func (s *Store) Lessons(ctx context.Context, courseID string) ([]Lesson, error) 
 	out := []Lesson{}
 	for rows.Next() {
 		var l Lesson
-		if err := rows.Scan(&l.ID, &l.CourseID, &l.Idx, &l.Title, &l.Duration, &l.VideoURL, &l.FreePreview); err != nil {
+		if err := rows.Scan(&l.ID, &l.CourseID, &l.Idx, &l.Title, &l.Duration, &l.VideoURL, &l.FreePreview, &l.Module, &l.Summary); err != nil {
 			return nil, err
 		}
 		out = append(out, l)

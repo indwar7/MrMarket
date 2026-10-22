@@ -11,16 +11,18 @@ type User struct {
 }
 
 type Course struct {
-	ID       string  `json:"id"`
-	Title    string  `json:"title"`
-	Author   string  `json:"author"`
-	Level    string  `json:"level"`
-	Lessons  int     `json:"lessons"`
-	Duration string  `json:"duration"`
-	Price    int     `json:"price"`
-	Rating   float64 `json:"rating"`
-	Students int     `json:"students"`
-	Hue      int     `json:"hue"`
+	ID          string  `json:"id"`
+	Title       string  `json:"title"`
+	Author      string  `json:"author"`
+	Level       string  `json:"level"`
+	Lessons     int     `json:"lessons"`
+	Duration    string  `json:"duration"`
+	Price       int     `json:"price"`
+	Rating      float64 `json:"rating"`
+	Students    int     `json:"students"`
+	Hue         int     `json:"hue"`
+	Description string  `json:"description"`
+	Disclaimer  string  `json:"disclaimer"`
 }
 
 type LiveSession struct {
@@ -90,6 +92,8 @@ type Lesson struct {
 	Duration    string `json:"duration"`
 	VideoURL    string `json:"video_url"`
 	FreePreview bool   `json:"free_preview"`
+	Module      string `json:"module"`
+	Summary     string `json:"summary"`
 	Locked      bool   `json:"locked"`
 	Done        bool   `json:"done"`
 }

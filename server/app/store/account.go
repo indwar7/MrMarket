@@ -87,7 +87,7 @@ func (s *Store) CancelSubscription(ctx context.Context, uid int64, kind, itemID 
 
 func (s *Store) Enrollments(ctx context.Context, uid int64) ([]Enrollment, error) {
 	rows, err := s.db.QueryContext(ctx, `
-		SELECT c.id,c.title,c.author,c.level,c.lessons,c.duration,c.price,c.rating,c.students,c.hue, e.progress, e.since
+		SELECT c.id,c.title,c.author,c.level,c.lessons,c.duration,c.price,c.rating,c.students,c.hue,c.description,c.disclaimer, e.progress, e.since
 		FROM enrollments e JOIN courses c ON c.id=e.course_id WHERE e.user_id=? ORDER BY e.since DESC`, uid)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (s *Store) Enrollments(ctx context.Context, uid int64) ([]Enrollment, error
 	for rows.Next() {
 		var e Enrollment
 		c := &e.Course
-		if err := rows.Scan(&c.ID, &c.Title, &c.Author, &c.Level, &c.Lessons, &c.Duration, &c.Price, &c.Rating, &c.Students, &c.Hue, &e.Progress, &e.Since); err != nil {
+		if err := rows.Scan(&c.ID, &c.Title, &c.Author, &c.Level, &c.Lessons, &c.Duration, &c.Price, &c.Rating, &c.Students, &c.Hue, &c.Description, &c.Disclaimer, &e.Progress, &e.Since); err != nil {
 			return nil, err
 		}
 		out = append(out, e)
