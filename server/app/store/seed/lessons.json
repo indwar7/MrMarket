@@ -1,0 +1,8 @@
+{
+  "price-action": ["Welcome and how to use this course", "Candles, bodies and wicks", "Support and resistance that actually holds", "Trend structure: higher highs, higher lows", "Breakouts versus fakeouts", "Pin bars and engulfing candles in context", "Multi-timeframe confirmation", "Building your first price action plan"],
+  "mt5-basics": ["Installing MetaTrader 5", "Logging in to your broker server", "Reading the chart window", "Placing market and pending orders", "Stop loss, take profit and partial close", "Attaching an indicator from Navigator", "Attaching an Expert Advisor and allowing algo trading", "Running MT5 on a VPS 24/5"],
+  "risk": ["Why position sizing beats entries", "Risk per trade and the 1% rule", "Calculating lots from stop distance", "R multiples and expectancy", "Drawdown math and recovery", "Correlated positions and total exposure", "Scaling up safely"],
+  "smc": ["Liquidity: where the stops are", "Market structure shifts", "Order blocks and breaker blocks", "Fair value gaps", "Premium and discount zones", "Session liquidity sweeps", "Putting it together on EURUSD", "SMC with the MrMarket Smart Money EA"],
+  "algo-mql5": ["MQL5 basics and the MetaEditor", "Variables, inputs and OnTick", "Reading indicator buffers", "Placing trades with CTrade", "Stop loss, take profit and trailing", "Risk-based lot sizing", "Filters: spread, sessions, news", "Backtesting in the Strategy Tester", "Optimising inputs without curve fitting", "Packaging and protecting your EA"],
+  "psychology": ["Why good strategies lose money", "Revenge trading and the tilt loop", "Process goals versus outcome goals", "Pre-trade and post-trade routines", "Handling drawdowns while running algos", "Journaling that changes behaviour"]
+}

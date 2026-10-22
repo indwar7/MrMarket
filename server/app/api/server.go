@@ -52,10 +52,13 @@ func (s *Server) Router(origins []string) http.Handler {
 
 		r.Route("/catalog", func(r chi.Router) {
 			r.Get("/courses", s.courses)
+			r.Get("/courses/{id}", s.course)
 			r.Get("/live", s.live)
 			r.Get("/indicators", s.indicators)
+			r.Get("/indicators/{id}", s.indicator)
 			r.Get("/strategies", s.strategies)
 			r.Get("/strategies/{id}", s.strategy)
+			r.Get("/scripts", s.scripts)
 			r.Get("/brokers", s.brokers)
 			r.Get("/plans", s.plans)
 			r.Get("/mentors", s.mentors)
@@ -71,6 +74,8 @@ func (s *Server) Router(origins []string) http.Handler {
 			r.Post("/purchase", s.purchase)
 			r.Delete("/subscriptions/{kind}/{id}", s.cancelSubscription)
 			r.Put("/courses/{id}/progress", s.setProgress)
+			r.Post("/courses/{id}/lessons/{lid}/complete", s.completeLesson)
+			r.Post("/waitlist", s.waitlist)
 			r.Get("/bookings", s.bookings)
 			r.Post("/bookings", s.createBooking)
 			r.Get("/tickets", s.tickets)

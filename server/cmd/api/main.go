@@ -31,7 +31,11 @@ func main() {
 
 	if cfg.Seed {
 		hash, _ := auth.HashPassword("demo1234")
-		if err := st.Seed(context.Background(), hash); err != nil {
+		if err := st.SeedCatalog(context.Background()); err != nil {
+			log.Error("seed catalog", "err", err)
+			os.Exit(1)
+		}
+		if err := st.SeedDemo(context.Background(), hash); err != nil {
 			log.Error("seed", "err", err)
 			os.Exit(1)
 		}

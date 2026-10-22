@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"math"
 	"net/http"
 	"sort"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/unfluke/mrmarket-api/app/auth"
 	"github.com/unfluke/mrmarket-api/app/curve"
 	"github.com/unfluke/mrmarket-api/app/store"
 )
@@ -59,10 +61,10 @@ func (s *Server) strategies(w http.ResponseWriter, r *http.Request) {
 		fail(w, err)
 		return
 	}
-	risk, sortBy := r.URL.Query().Get("risk"), r.URL.Query().Get("sort")
+	risk, cat, q, sortBy := r.URL.Query().Get("risk"), r.URL.Query().Get("category"), lower(r.URL.Query().Get("q")), r.URL.Query().Get("sort")
 	out := list[:0]
 	for _, t := range list {
-		if risk == "" || risk == "All" || strings.EqualFold(t.Risk, risk) {
+		if (risk == "" || risk == "All" || strings.EqualFold(t.Risk, risk)) && (cat == "" || cat == "All" || strings.EqualFold(t.Category, cat)) && strings.Contains(strings.ToLower(t.Title+" "+t.Description), q) {
 			out = append(out, t)
 		}
 	}
@@ -79,11 +81,15 @@ func (s *Server) strategies(w http.ResponseWriter, r *http.Request) {
 
 type strategyDetail struct {
 	store.Strategy
-	Equity  []float64       `json:"equity_curve"`
-	Monthly []monthlyReturn `json:"monthly_returns"`
-	Spark   []float64       `json:"spark"`
-	Plans   map[string]int  `json:"plans"`
-	Rules   []string        `json:"rules"`
+	HasTrackRecord bool             `json:"has_track_record"`
+	Equity         []float64        `json:"equity_curve,omitempty"`
+	Monthly        []monthlyReturn  `json:"monthly_returns,omitempty"`
+	Spark          []float64        `json:"spark,omitempty"`
+	Plans          map[string]int   `json:"plans"`
+	Rules          []string         `json:"rules"`
+	CommonInputs   json.RawMessage  `json:"common_inputs"`
+	PairIndicator  *store.Indicator `json:"pair_indicator"`
+	Included       []string         `json:"included"`
 }
 
 type monthlyReturn struct {
@@ -99,24 +105,114 @@ func (s *Server) strategy(w http.ResponseWriter, r *http.Request) {
 		fail(w, err)
 		return
 	}
-	seed := uint32(t.Seed)
-	eq := curve.Curve(seed, 120, t.Return/120, 2.2)
-	for i := range eq {
-		eq[i] = math.Round(eq[i]*100*100) / 100
+	d := strategyDetail{
+		Strategy:       t,
+		HasTrackRecord: t.Trades > 0,
+		Plans:          map[string]int{"Monthly": t.Price, "Quarterly": int(math.Round(float64(t.Price) * 3 * 0.85)), "Yearly": int(math.Round(float64(t.Price) * 12 * 0.7))},
+		Rules:          []string{"ATR-sized stop loss on every trade", "Risk per trade as % of equity (default 1%)", "Break-even, trailing stop and partial close built in", "Spread, session and higher-timeframe filters", "Works on any MT5 broker, hedging or netting"},
+		CommonInputs:   store.CommonInputs,
+		Included:       []string{"Compiled Expert Advisor (.ex5) for MetaTrader 5", "On-chart signal indicator embedded in the EA", "Default settings file and install guide", "Updates for the life of the subscription"},
 	}
-	rnd := curve.RNG(seed + 9)
-	monthly := make([]monthlyReturn, 0, 12)
-	for _, m := range months {
-		monthly = append(monthly, monthlyReturn{m, math.Round((rnd()-0.25)*t.Return/4*10) / 10})
+	if d.HasTrackRecord {
+		seed := uint32(t.Seed)
+		eq := curve.Curve(seed, 120, t.Return/120, 2.2)
+		for i := range eq {
+			eq[i] = math.Round(eq[i]*100*100) / 100
+		}
+		rnd := curve.RNG(seed + 9)
+		for _, m := range months {
+			d.Monthly = append(d.Monthly, monthlyReturn{m, math.Round((rnd()-0.25)*t.Return/4*10) / 10})
+		}
+		d.Equity, d.Spark = eq, curve.Curve(seed, 60, t.Return/60, 2.5)
 	}
-	writeJSON(w, 200, strategyDetail{
-		Strategy: t,
-		Equity:   eq,
-		Monthly:  monthly,
-		Spark:    curve.Curve(seed, 60, t.Return/60, 2.5),
-		Plans:    map[string]int{"Monthly": t.Price, "Quarterly": int(math.Round(float64(t.Price) * 3 * 0.85)), "Yearly": int(math.Round(float64(t.Price) * 12 * 0.7))},
-		Rules:    []string{"Stop loss on every trade", "Max 1% account risk per trade by default", "Pauses during high-impact news", "Works on any MT5 broker"},
-	})
+	if t.PairID != "" {
+		if ind, err := s.store.Indicator(r.Context(), t.PairID); err == nil {
+			d.PairIndicator = &ind
+		}
+	}
+	writeJSON(w, 200, d)
+}
+
+type indicatorDetail struct {
+	store.Indicator
+	PairStrategy *store.Strategy `json:"pair_strategy"`
+	Included     []string        `json:"included"`
+}
+
+func (s *Server) indicator(w http.ResponseWriter, r *http.Request) {
+	i, err := s.store.Indicator(r.Context(), chi.URLParam(r, "id"))
+	if err != nil {
+		fail(w, err)
+		return
+	}
+	d := indicatorDetail{Indicator: i, Included: []string{"Compiled indicator (.ex5) for MetaTrader 5", "Same inputs as the matching EA, so chart and robot never disagree", "Install guide for Windows and macOS"}}
+	if i.PairID != "" {
+		if t, err := s.store.Strategy(r.Context(), i.PairID); err == nil {
+			d.PairStrategy = &t
+		}
+	}
+	writeJSON(w, 200, d)
+}
+
+type courseDetail struct {
+	store.Course
+	Lessons   []store.Lesson `json:"lessons"`
+	Enrolled  bool           `json:"enrolled"`
+	Progress  int            `json:"progress"`
+	Completed []int64        `json:"completed"`
+}
+
+// course returns the lesson list; video URLs are included only for free previews or enrolled users.
+func (s *Server) course(w http.ResponseWriter, r *http.Request) {
+	c, err := s.store.Course(r.Context(), chi.URLParam(r, "id"))
+	if err != nil {
+		fail(w, err)
+		return
+	}
+	lessons, err := s.store.Lessons(r.Context(), c.ID)
+	if err != nil {
+		fail(w, err)
+		return
+	}
+	d := courseDetail{Course: c, Lessons: lessons, Completed: []int64{}}
+	uid, _ := s.auth.Parse(auth.TokenFromRequest(r))
+	if uid != 0 {
+		for _, e := range mustEnrollments(s, r, uid) {
+			if e.Course.ID == c.ID {
+				d.Enrolled, d.Progress = true, e.Progress
+			}
+		}
+		if d.Enrolled {
+			d.Completed, _ = s.store.CompletedLessons(r.Context(), uid, c.ID)
+		}
+	}
+	done := map[int64]bool{}
+	for _, id := range d.Completed {
+		done[id] = true
+	}
+	for i := range d.Lessons {
+		l := &d.Lessons[i]
+		l.Done = done[l.ID]
+		l.Locked = !d.Enrolled && !l.FreePreview
+		if l.Locked {
+			l.VideoURL = ""
+		}
+	}
+	writeJSON(w, 200, d)
+}
+
+func mustEnrollments(s *Server, r *http.Request, uid int64) []store.Enrollment {
+	list, _ := s.store.Enrollments(r.Context(), uid)
+	return list
+}
+
+func (s *Server) scripts(w http.ResponseWriter, r *http.Request) {
+	list, err := s.store.Scripts(r.Context())
+	if err != nil {
+		fail(w, err)
+		return
+	}
+	writeJSON(w, 200, list)
 }
 
 func (s *Server) brokers(w http.ResponseWriter, r *http.Request) {

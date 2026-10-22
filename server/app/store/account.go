@@ -10,11 +10,12 @@ import (
 func (s *Store) Subscriptions(ctx context.Context, uid int64) ([]Subscription, error) {
 	rows, err := s.db.QueryContext(ctx, `
 		SELECT sub.id, sub.kind, sub.item_id, sub.plan, sub.price, sub.since,
-		       COALESCE(st.title, ind.title, pl.name, '') AS title
+		       COALESCE(st.title, ind.title, pl.name, sc.title, '') AS title
 		FROM subscriptions sub
 		LEFT JOIN strategies st ON sub.kind='strategy' AND st.id=sub.item_id
 		LEFT JOIN indicators ind ON sub.kind='indicator' AND ind.id=sub.item_id
 		LEFT JOIN plans pl ON sub.kind='plan' AND pl.id=sub.item_id
+		LEFT JOIN scripts sc ON sub.kind='script' AND sc.id=sub.item_id
 		WHERE sub.user_id=? AND sub.status='active' ORDER BY sub.since DESC, sub.id DESC`, uid)
 	if err != nil {
 		return nil, err

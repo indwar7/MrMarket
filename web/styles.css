@@ -461,3 +461,36 @@ html { background: var(--bg); }
 .modal-card .btn-row .btn { flex: 1; }
 a.user { text-decoration: none; }
 a.user:hover .user-name { color: var(--amber); }
+
+/* ---------- catalogue v2: parameters, course player, scripts ---------- */
+.clamp-2, .clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.clamp-2 { -webkit-line-clamp: 2; }
+.clamp-3 { -webkit-line-clamp: 3; }
+a.ind-art { display: block; }
+.params table td code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; background: #f4f4f4; padding: 2px 6px; border-radius: 5px; }
+.params tr.grp td { background: #fafafa; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding-top: 10px; padding-bottom: 8px; }
+details.sheet summary::-webkit-details-marker { display: none; }
+details.sheet summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+details.sheet summary::after { content: "+"; font-size: 26px; line-height: 1; color: var(--muted); }
+details.sheet[open] summary::after { content: "–"; }
+.course { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, .8fr); gap: 20px; align-items: start; }
+.player { position: relative; aspect-ratio: 16 / 9; background: #0e0e0e; border-radius: var(--radius); overflow: hidden; display: grid; place-items: center; color: #fff; }
+.player iframe, .player video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+.player-msg { display: grid; gap: 12px; justify-items: center; text-align: center; padding: 28px; max-width: 46ch; }
+.player-msg b { font-size: clamp(18px, 2.2vw, 24px); font-weight: 600; }
+.player-msg .muted { color: #b5b5b5; }
+.player-msg .tag { color: #fff; border-color: rgba(255, 255, 255, .25); }
+.lesson-list { padding: 0; overflow: hidden; position: sticky; top: 100px; }
+.lesson-list .panel-head { padding: 18px 18px 10px; }
+.lesson-list ol { display: grid; }
+.lesson { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 12px 18px; border: 0; border-top: 1px solid var(--line); background: #fff; cursor: pointer; font: inherit; color: inherit; transition: background 140ms; }
+.lesson:hover { background: #fafafa; }
+.lesson.is-cur { background: #fff7ef; box-shadow: inset 3px 0 0 var(--amber); }
+.lesson .n { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line-2); display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--muted); background: #fff; }
+.lesson.is-done .n { background: var(--up); border-color: var(--up); color: #fff; }
+.lesson .body { display: grid; gap: 2px; min-width: 0; }
+.lesson .body b { font-weight: 600; font-size: 15px; }
+.lesson .lock { width: 12px; height: 14px; border: 2px solid var(--line-2); border-radius: 3px; position: relative; }
+.lesson .lock::before { content: ""; position: absolute; left: 1px; top: -8px; width: 6px; height: 7px; border: 2px solid var(--line-2); border-bottom: 0; border-radius: 6px 6px 0 0; }
+.py-badge { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3572a5, #ffd43b); color: #fff; font-weight: 800; font-size: 14px; letter-spacing: .02em; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+@media (max-width: 980px) { .course { grid-template-columns: 1fr; } .lesson-list { position: static; } }

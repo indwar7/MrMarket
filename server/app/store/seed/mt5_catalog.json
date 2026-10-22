@@ -1,0 +1,3916 @@
+{
+ "common_inputs": [
+  {
+   "group": "Risk and exits",
+   "name": "InpRiskPct",
+   "type": "double",
+   "default": "1.0",
+   "label": "Risk per trade (% of equity)"
+  },
+  {
+   "group": "Risk and exits",
+   "name": "InpSLATRMult",
+   "type": "double",
+   "default": "1.5",
+   "label": "Stop loss (x ATR)"
+  },
+  {
+   "group": "Risk and exits",
+   "name": "InpRR",
+   "type": "double",
+   "default": "2.0",
+   "label": "Take profit as R multiple (0 = none)"
+  },
+  {
+   "group": "Risk and exits",
+   "name": "InpATRPeriod",
+   "type": "int",
+   "default": "14",
+   "label": "ATR period"
+  },
+  {
+   "group": "Risk and exits",
+   "name": "InpMaxRiskMult",
+   "type": "double",
+   "default": "2.0",
+   "label": "Skip trade if min lot risks more than this x target"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpUseBE",
+   "type": "bool",
+   "default": "true",
+   "label": "Move SL to break-even"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpBER",
+   "type": "double",
+   "default": "1.0",
+   "label": "Break-even trigger (R)"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpUseTrail",
+   "type": "bool",
+   "default": "true",
+   "label": "Trailing stop"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpTrailStartR",
+   "type": "double",
+   "default": "1.5",
+   "label": "Trailing starts at (R)"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpTrailDistR",
+   "type": "double",
+   "default": "1.0",
+   "label": "Trailing distance behind price (R)"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpUsePartial",
+   "type": "bool",
+   "default": "false",
+   "label": "Partial close"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpPartialR",
+   "type": "double",
+   "default": "1.0",
+   "label": "Partial close trigger (R)"
+  },
+  {
+   "group": "Trade management (in R = initial risk of each trade)",
+   "name": "InpPartialPct",
+   "type": "double",
+   "default": "50.0",
+   "label": "% of position to close"
+  },
+  {
+   "group": "Filters",
+   "name": "InpMaxSpreadPts",
+   "type": "int",
+   "default": "30",
+   "label": "Max spread (points)"
+  },
+  {
+   "group": "Filters",
+   "name": "InpUseSession",
+   "type": "bool",
+   "default": "false",
+   "label": "Trade only inside hours below"
+  },
+  {
+   "group": "Filters",
+   "name": "InpStartHour",
+   "type": "int",
+   "default": "7",
+   "label": "Session start (server hour)"
+  },
+  {
+   "group": "Filters",
+   "name": "InpEndHour",
+   "type": "int",
+   "default": "20",
+   "label": "Session end (server hour)"
+  },
+  {
+   "group": "Filters",
+   "name": "InpUseHTF",
+   "type": "bool",
+   "default": "false",
+   "label": "Higher timeframe trend filter"
+  },
+  {
+   "group": "Filters",
+   "name": "InpHTF",
+   "type": "ENUM_TIMEFRAMES",
+   "default": "PERIOD_H4",
+   "label": "Higher timeframe"
+  },
+  {
+   "group": "Filters",
+   "name": "InpHTFMAPeriod",
+   "type": "int",
+   "default": "100",
+   "label": "HTF EMA period"
+  }
+ ],
+ "items": [
+  {
+   "number": 1,
+   "key": "MA_Crossover",
+   "name": "MA Crossover",
+   "category": "Trend",
+   "ea": {
+    "id": "ea-01-ma-crossover",
+    "file": "EA_01_MA_Crossover",
+    "version": "1.00",
+    "description": "MA crossover trend EA",
+    "inputs": [
+     {
+      "group": "MA crossover",
+      "name": "InpFast",
+      "type": "int",
+      "default": "20",
+      "label": "Fast MA"
+     },
+     {
+      "group": "MA crossover",
+      "name": "InpSlow",
+      "type": "int",
+      "default": "50",
+      "label": "Slow MA"
+     },
+     {
+      "group": "MA crossover",
+      "name": "InpMethod",
+      "type": "ENUM_MA_METHOD",
+      "default": "MODE_EMA",
+      "label": "MA method"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-01-ma-crossover",
+    "file": "IND_01_MA_Crossover",
+    "version": "1.00",
+    "description": "shows the MAs and the crossover candles that make the EA buy or sell.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpFast",
+      "type": "int",
+      "default": "20",
+      "label": "Fast MA"
+     },
+     {
+      "group": null,
+      "name": "InpSlow",
+      "type": "int",
+      "default": "50",
+      "label": "Slow MA"
+     },
+     {
+      "group": null,
+      "name": "InpMethod",
+      "type": "ENUM_MA_METHOD",
+      "default": "MODE_EMA",
+      "label": "MA method"
+     }
+    ],
+    "plots": [
+     "Fast MA",
+     "Slow MA",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 2,
+   "key": "Donchian_Breakout",
+   "name": "Donchian Breakout",
+   "category": "Breakout",
+   "ea": {
+    "id": "ea-02-donchian-breakout",
+    "file": "EA_02_Donchian_Breakout",
+    "version": "1.01",
+    "description": "Donchian channel breakout EA",
+    "inputs": [
+     {
+      "group": "Donchian",
+      "name": "InpEntryLen",
+      "type": "int",
+      "default": "20",
+      "label": "Entry channel length"
+     },
+     {
+      "group": "Donchian",
+      "name": "InpExitLen",
+      "type": "int",
+      "default": "10",
+      "label": "Exit channel length"
+     },
+     {
+      "group": "Donchian",
+      "name": "InpUseExit",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit on opposite exit-channel break"
+     }
+    ],
+    "size_kb": 105
+   },
+   "indicator": {
+    "id": "ind-02-donchian-breakout",
+    "file": "IND_02_Donchian_Breakout",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpEntryLen",
+      "type": "int",
+      "default": "20",
+      "label": "Entry channel length"
+     },
+     {
+      "group": null,
+      "name": "InpExitLen",
+      "type": "int",
+      "default": "10",
+      "label": "Exit channel length"
+     },
+     {
+      "group": null,
+      "name": "InpUseExit",
+      "type": "bool",
+      "default": "true",
+      "label": "Show exit channel"
+     }
+    ],
+    "plots": [
+     "Entry high",
+     "Entry low",
+     "Exit high",
+     "Exit low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 3,
+   "key": "RSI_MeanReversion",
+   "name": "RSI Mean Reversion",
+   "category": "Mean reversion",
+   "ea": {
+    "id": "ea-03-rsi-meanreversion",
+    "file": "EA_03_RSI_MeanReversion",
+    "version": "1.01",
+    "description": "RSI mean reversion EA",
+    "inputs": [
+     {
+      "group": "RSI",
+      "name": "InpRSIPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "RSI period"
+     },
+     {
+      "group": "RSI",
+      "name": "InpOversold",
+      "type": "double",
+      "default": "30",
+      "label": "Oversold level"
+     },
+     {
+      "group": "RSI",
+      "name": "InpOverbought",
+      "type": "double",
+      "default": "70",
+      "label": "Overbought level"
+     },
+     {
+      "group": "RSI",
+      "name": "InpExitMid",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit when RSI returns to exit level"
+     },
+     {
+      "group": "RSI",
+      "name": "InpExitLevel",
+      "type": "double",
+      "default": "50",
+      "label": "RSI exit level"
+     }
+    ],
+    "size_kb": 104
+   },
+   "indicator": {
+    "id": "ind-03-rsi-meanreversion",
+    "file": "IND_03_RSI_MeanReversion",
+    "version": "1.00",
+    "description": "(RSI panel).",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpRSIPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpRSIPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpOversold",
+      "type": "double",
+      "default": "30",
+      "label": "InpOversold"
+     },
+     {
+      "group": null,
+      "name": "InpOverbought",
+      "type": "double",
+      "default": "70",
+      "label": "InpOverbought"
+     },
+     {
+      "group": null,
+      "name": "InpExitLevel",
+      "type": "double",
+      "default": "50",
+      "label": "InpExitLevel"
+     }
+    ],
+    "plots": [
+     "RSI",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "separate",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 4,
+   "key": "Bollinger_Reversion",
+   "name": "Bollinger Reversion",
+   "category": "Mean reversion",
+   "ea": {
+    "id": "ea-04-bollinger-reversion",
+    "file": "EA_04_Bollinger_Reversion",
+    "version": "1.01",
+    "description": "Bollinger Bands reversion EA",
+    "inputs": [
+     {
+      "group": "Bollinger",
+      "name": "InpBBPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "BB period"
+     },
+     {
+      "group": "Bollinger",
+      "name": "InpBBDev",
+      "type": "double",
+      "default": "2.0",
+      "label": "BB deviation"
+     },
+     {
+      "group": "Bollinger",
+      "name": "InpExitMid",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit at middle band"
+     }
+    ],
+    "size_kb": 106
+   },
+   "indicator": {
+    "id": "ind-04-bollinger-reversion",
+    "file": "IND_04_Bollinger_Reversion",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpBBPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "InpBBPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpBBDev",
+      "type": "double",
+      "default": "2.0",
+      "label": "InpBBDev"
+     }
+    ],
+    "plots": [
+     "Upper band",
+     "Middle band",
+     "Lower band",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 5,
+   "key": "ORB",
+   "name": "Opening Range Breakout",
+   "category": "Session",
+   "ea": {
+    "id": "ea-05-orb",
+    "file": "EA_05_ORB",
+    "version": "1.02",
+    "description": "Opening Range Breakout EA (use M1 to M15, server time)",
+    "inputs": [
+     {
+      "group": "Opening range",
+      "name": "InpRangeStartHour",
+      "type": "int",
+      "default": "9",
+      "label": "Range start hour (server time)"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpRangeStartMin",
+      "type": "int",
+      "default": "0",
+      "label": "Range start minute"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpRangeMinutes",
+      "type": "int",
+      "default": "15",
+      "label": "Range length (minutes)"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpEntryWindowMin",
+      "type": "int",
+      "default": "180",
+      "label": "Entry allowed this long after range ends (minutes)"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "Close all at this hour (24 = off)"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpMinRangeATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Min range (x ATR), 0 = off"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpMaxRangeATR",
+      "type": "double",
+      "default": "6.0",
+      "label": "Max range (x ATR), 0 = off"
+     },
+     {
+      "group": "Opening range",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     }
+    ],
+    "size_kb": 109
+   },
+   "indicator": {
+    "id": "ind-05-orb",
+    "file": "IND_05_ORB",
+    "version": "1.00",
+    "description": "opening range and breakout candle. Shows the raw signal. The EA may still skip it (spread, HTF filter, session, or a trade already taken that day).",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpRangeStartHour",
+      "type": "int",
+      "default": "9",
+      "label": "InpRangeStartHour"
+     },
+     {
+      "group": null,
+      "name": "InpRangeStartMin",
+      "type": "int",
+      "default": "0",
+      "label": "InpRangeStartMin"
+     },
+     {
+      "group": null,
+      "name": "InpRangeMinutes",
+      "type": "int",
+      "default": "15",
+      "label": "InpRangeMinutes"
+     },
+     {
+      "group": null,
+      "name": "InpEntryWindowMin",
+      "type": "int",
+      "default": "180",
+      "label": "InpEntryWindowMin"
+     },
+     {
+      "group": null,
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "InpCloseHour"
+     },
+     {
+      "group": null,
+      "name": "InpMinRangeATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "InpMinRangeATR"
+     },
+     {
+      "group": null,
+      "name": "InpMaxRangeATR",
+      "type": "double",
+      "default": "6.0",
+      "label": "InpMaxRangeATR"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "InpBufferPts"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Range high",
+     "Range low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 6,
+   "key": "Supertrend",
+   "name": "Supertrend",
+   "category": "Trend",
+   "ea": {
+    "id": "ea-06-supertrend",
+    "file": "EA_06_Supertrend",
+    "version": "1.00",
+    "description": "Supertrend trend-following EA",
+    "inputs": [
+     {
+      "group": "Supertrend",
+      "name": "InpSTPeriod",
+      "type": "int",
+      "default": "10",
+      "label": "ATR period"
+     },
+     {
+      "group": "Supertrend",
+      "name": "InpSTMult",
+      "type": "double",
+      "default": "3.0",
+      "label": "ATR multiplier"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-06-supertrend",
+    "file": "IND_06_Supertrend",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpSTPeriod",
+      "type": "int",
+      "default": "10",
+      "label": "ATR period"
+     },
+     {
+      "group": null,
+      "name": "InpSTMult",
+      "type": "double",
+      "default": "3.0",
+      "label": "ATR multiplier"
+     }
+    ],
+    "plots": [
+     "Supertrend up",
+     "Supertrend down",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 7,
+   "key": "Ichimoku",
+   "name": "Ichimoku Cloud",
+   "category": "Trend",
+   "ea": {
+    "id": "ea-07-ichimoku",
+    "file": "EA_07_Ichimoku",
+    "version": "1.00",
+    "description": "Ichimoku cloud breakout EA",
+    "inputs": [
+     {
+      "group": "Ichimoku",
+      "name": "InpTenkan",
+      "type": "int",
+      "default": "9",
+      "label": "Tenkan period"
+     },
+     {
+      "group": "Ichimoku",
+      "name": "InpKijun",
+      "type": "int",
+      "default": "26",
+      "label": "Kijun period"
+     },
+     {
+      "group": "Ichimoku",
+      "name": "InpSenkouB",
+      "type": "int",
+      "default": "52",
+      "label": "Senkou B period"
+     },
+     {
+      "group": "Ichimoku",
+      "name": "InpUseTK",
+      "type": "bool",
+      "default": "true",
+      "label": "Require Tenkan above/below Kijun"
+     },
+     {
+      "group": "Ichimoku",
+      "name": "InpExitKijun",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit when price closes back through Kijun"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-07-ichimoku",
+    "file": "IND_07_Ichimoku",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpTenkan",
+      "type": "int",
+      "default": "9",
+      "label": "InpTenkan"
+     },
+     {
+      "group": null,
+      "name": "InpKijun",
+      "type": "int",
+      "default": "26",
+      "label": "InpKijun"
+     },
+     {
+      "group": null,
+      "name": "InpSenkouB",
+      "type": "int",
+      "default": "52",
+      "label": "InpSenkouB"
+     },
+     {
+      "group": null,
+      "name": "InpUseTK",
+      "type": "bool",
+      "default": "true",
+      "label": "require Tenkan above/below Kijun"
+     }
+    ],
+    "plots": [
+     "Tenkan",
+     "Kijun",
+     "Cloud A;Cloud B",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 8,
+   "key": "Session_Breakout",
+   "name": "Session Breakout",
+   "category": "Session",
+   "ea": {
+    "id": "ea-08-session-breakout",
+    "file": "EA_08_Session_Breakout",
+    "version": "1.00",
+    "description": "Session range breakout EA (e.g. Asian range at the London open). Use M5 to H1, server time.",
+    "inputs": [
+     {
+      "group": "Session range (server time)",
+      "name": "InpRangeStartHour",
+      "type": "int",
+      "default": "0",
+      "label": "Range start hour"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpRangeStartMin",
+      "type": "int",
+      "default": "0",
+      "label": "Range start minute"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpRangeEndHour",
+      "type": "int",
+      "default": "7",
+      "label": "Range end hour (breakout window opens)"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpRangeEndMin",
+      "type": "int",
+      "default": "0",
+      "label": "Range end minute"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpTradeEndHour",
+      "type": "int",
+      "default": "12",
+      "label": "No new entries from this hour"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "20",
+      "label": "Close all at this hour (24 = off)"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpMinRangeDATR",
+      "type": "double",
+      "default": "0.15",
+      "label": "Min range (x yesterday's daily ATR), 0 = off"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpMaxRangeDATR",
+      "type": "double",
+      "default": "0.8",
+      "label": "Max range (x yesterday's daily ATR), 0 = off"
+     },
+     {
+      "group": "Session range (server time)",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     }
+    ],
+    "size_kb": 109
+   },
+   "indicator": {
+    "id": "ind-08-session-breakout",
+    "file": "IND_08_Session_Breakout",
+    "version": "1.00",
+    "description": "Shows the raw signal. The EA may still skip it (spread, HTF filter, session, or a trade already taken that day).",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpRangeStartHour",
+      "type": "int",
+      "default": "0",
+      "label": "InpRangeStartHour"
+     },
+     {
+      "group": null,
+      "name": "InpRangeStartMin",
+      "type": "int",
+      "default": "0",
+      "label": "InpRangeStartMin"
+     },
+     {
+      "group": null,
+      "name": "InpRangeEndHour",
+      "type": "int",
+      "default": "7",
+      "label": "InpRangeEndHour"
+     },
+     {
+      "group": null,
+      "name": "InpRangeEndMin",
+      "type": "int",
+      "default": "0",
+      "label": "InpRangeEndMin"
+     },
+     {
+      "group": null,
+      "name": "InpTradeEndHour",
+      "type": "int",
+      "default": "12",
+      "label": "InpTradeEndHour"
+     },
+     {
+      "group": null,
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "20",
+      "label": "InpCloseHour"
+     },
+     {
+      "group": null,
+      "name": "InpMinRangeDATR",
+      "type": "double",
+      "default": "0.15",
+      "label": "InpMinRangeDATR"
+     },
+     {
+      "group": null,
+      "name": "InpMaxRangeDATR",
+      "type": "double",
+      "default": "0.8",
+      "label": "InpMaxRangeDATR"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "InpBufferPts"
+     }
+    ],
+    "plots": [
+     "Range high",
+     "Range low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 9,
+   "key": "InsideBar_NR",
+   "name": "Inside Bar / Narrow Range",
+   "category": "Price action",
+   "ea": {
+    "id": "ea-09-insidebar-nr",
+    "file": "EA_09_InsideBar_NR",
+    "version": "1.00",
+    "description": "Inside bar / NR4 / NR7 breakout EA",
+    "inputs": [
+     {
+      "group": "Inside bar / NR",
+      "name": "InpPattern",
+      "type": "ENUM_PATTERN",
+      "default": "PAT_ANY",
+      "label": "Setup pattern (Inside bar, NR4, NR7 or any)"
+     },
+     {
+      "group": "Inside bar / NR",
+      "name": "InpValidBars",
+      "type": "int",
+      "default": "3",
+      "label": "Setup stays valid for this many candles"
+     },
+     {
+      "group": "Inside bar / NR",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     },
+     {
+      "group": "Inside bar / NR",
+      "name": "InpMinSLATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Minimum stop distance (x ATR)"
+     }
+    ],
+    "size_kb": 106
+   },
+   "indicator": {
+    "id": "ind-09-insidebar-nr",
+    "file": "IND_09_InsideBar_NR",
+    "version": "1.00",
+    "description": "Yellow dot = setup candle, arrow = breakout of its high/low.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPattern",
+      "type": "ENUM_PATTERN",
+      "default": "PAT_ANY",
+      "label": "InpPattern"
+     },
+     {
+      "group": null,
+      "name": "InpValidBars",
+      "type": "int",
+      "default": "3",
+      "label": "InpValidBars"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "InpBufferPts"
+     }
+    ],
+    "plots": [
+     "Setup candle",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 10,
+   "key": "MACD_Momentum",
+   "name": "MACD Momentum",
+   "category": "Momentum",
+   "ea": {
+    "id": "ea-10-macd-momentum",
+    "file": "EA_10_MACD_Momentum",
+    "version": "1.00",
+    "description": "MACD momentum EA (signal line or zero line cross)",
+    "inputs": [
+     {
+      "group": "MACD",
+      "name": "InpFast",
+      "type": "int",
+      "default": "12",
+      "label": "Fast EMA"
+     },
+     {
+      "group": "MACD",
+      "name": "InpSlow",
+      "type": "int",
+      "default": "26",
+      "label": "Slow EMA"
+     },
+     {
+      "group": "MACD",
+      "name": "InpSignal",
+      "type": "int",
+      "default": "9",
+      "label": "Signal SMA"
+     },
+     {
+      "group": "MACD",
+      "name": "InpMode",
+      "type": "ENUM_MACD_MODE",
+      "default": "MACD_SIGNAL",
+      "label": "Signal line cross or zero line cross"
+     },
+     {
+      "group": "MACD",
+      "name": "InpZeroFilter",
+      "type": "bool",
+      "default": "true",
+      "label": "Signal cross: buy only above zero, sell only below zero"
+     }
+    ],
+    "size_kb": 108
+   },
+   "indicator": {
+    "id": "ind-10-macd-momentum",
+    "file": "IND_10_MACD_Momentum",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpFast",
+      "type": "int",
+      "default": "12",
+      "label": "InpFast"
+     },
+     {
+      "group": null,
+      "name": "InpSlow",
+      "type": "int",
+      "default": "26",
+      "label": "InpSlow"
+     },
+     {
+      "group": null,
+      "name": "InpSignal",
+      "type": "int",
+      "default": "9",
+      "label": "InpSignal"
+     },
+     {
+      "group": null,
+      "name": "InpMode",
+      "type": "ENUM_MACD_MODE",
+      "default": "MACD_SIGNAL",
+      "label": "InpMode"
+     },
+     {
+      "group": null,
+      "name": "InpZeroFilter",
+      "type": "bool",
+      "default": "true",
+      "label": "InpZeroFilter"
+     }
+    ],
+    "plots": [
+     "Histogram",
+     "MACD",
+     "Signal",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "separate",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 11,
+   "key": "Squeeze_Breakout",
+   "name": "Squeeze Breakout",
+   "category": "Breakout",
+   "ea": {
+    "id": "ea-11-squeeze-breakout",
+    "file": "EA_11_Squeeze_Breakout",
+    "version": "1.00",
+    "description": "Squeeze breakout EA (Bollinger Bands inside Keltner Channel)",
+    "inputs": [
+     {
+      "group": "Squeeze",
+      "name": "InpBBPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "Bollinger period"
+     },
+     {
+      "group": "Squeeze",
+      "name": "InpBBDev",
+      "type": "double",
+      "default": "2.0",
+      "label": "Bollinger deviation"
+     },
+     {
+      "group": "Squeeze",
+      "name": "InpKCPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "Keltner EMA and ATR period"
+     },
+     {
+      "group": "Squeeze",
+      "name": "InpKCMult",
+      "type": "double",
+      "default": "1.5",
+      "label": "Keltner ATR multiplier"
+     },
+     {
+      "group": "Squeeze",
+      "name": "InpMinSqueeze",
+      "type": "int",
+      "default": "5",
+      "label": "Minimum candles in squeeze before the release"
+     },
+     {
+      "group": "Squeeze",
+      "name": "InpExitMid",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit when price closes back through the Bollinger middle line"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-11-squeeze-breakout",
+    "file": "IND_11_Squeeze_Breakout",
+    "version": "1.00",
+    "description": "Orange dots under candles = squeeze on (Bollinger inside Keltner)",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpBBPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "InpBBPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpBBDev",
+      "type": "double",
+      "default": "2.0",
+      "label": "InpBBDev"
+     },
+     {
+      "group": null,
+      "name": "InpKCPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "InpKCPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpKCMult",
+      "type": "double",
+      "default": "1.5",
+      "label": "InpKCMult"
+     },
+     {
+      "group": null,
+      "name": "InpMinSqueeze",
+      "type": "int",
+      "default": "5",
+      "label": "InpMinSqueeze"
+     }
+    ],
+    "plots": [
+     "Bollinger upper",
+     "Bollinger lower",
+     "Keltner upper",
+     "Keltner lower",
+     "Squeeze on",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 12,
+   "key": "ADX_Trend",
+   "name": "ADX Trend",
+   "category": "Trend",
+   "ea": {
+    "id": "ea-12-adx-trend",
+    "file": "EA_12_ADX_Trend",
+    "version": "1.00",
+    "description": "ADX / DMI trend strength EA (trades only when ADX is above the threshold)",
+    "inputs": [
+     {
+      "group": "ADX / DMI",
+      "name": "InpADXPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "ADX period"
+     },
+     {
+      "group": "ADX / DMI",
+      "name": "InpADXMin",
+      "type": "double",
+      "default": "25",
+      "label": "Minimum ADX to enter"
+     }
+    ],
+    "size_kb": 104
+   },
+   "indicator": {
+    "id": "ind-12-adx-trend",
+    "file": "IND_12_ADX_Trend",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpADXPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpADXPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpADXMin",
+      "type": "double",
+      "default": "25",
+      "label": "InpADXMin"
+     }
+    ],
+    "plots": [
+     "ADX",
+     "+DI",
+     "-DI",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "separate",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 13,
+   "key": "SAR_HeikinAshi",
+   "name": "Parabolic SAR + Heikin Ashi",
+   "category": "Trend",
+   "ea": {
+    "id": "ea-13-sar-heikinashi",
+    "file": "EA_13_SAR_HeikinAshi",
+    "version": "1.00",
+    "description": "Parabolic SAR + Heikin Ashi trend EA with SAR trailing stop",
+    "inputs": [
+     {
+      "group": "Parabolic SAR + Heikin Ashi",
+      "name": "InpSARStep",
+      "type": "double",
+      "default": "0.02",
+      "label": "SAR step"
+     },
+     {
+      "group": "Parabolic SAR + Heikin Ashi",
+      "name": "InpSARMax",
+      "type": "double",
+      "default": "0.2",
+      "label": "SAR maximum"
+     },
+     {
+      "group": "Parabolic SAR + Heikin Ashi",
+      "name": "InpUseHA",
+      "type": "bool",
+      "default": "true",
+      "label": "Require Heikin Ashi candle colour to agree with the SAR flip"
+     },
+     {
+      "group": "Parabolic SAR + Heikin Ashi",
+      "name": "InpSARTrail",
+      "type": "bool",
+      "default": "true",
+      "label": "Trail the stop loss along the SAR"
+     }
+    ],
+    "size_kb": 108
+   },
+   "indicator": {
+    "id": "ind-13-sar-heikinashi",
+    "file": "IND_13_SAR_HeikinAshi",
+    "version": "1.00",
+    "description": "SAR dots, and arrows where SAR flips (with Heikin Ashi colour confirmation if enabled).",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpSARStep",
+      "type": "double",
+      "default": "0.02",
+      "label": "InpSARStep"
+     },
+     {
+      "group": null,
+      "name": "InpSARMax",
+      "type": "double",
+      "default": "0.2",
+      "label": "InpSARMax"
+     },
+     {
+      "group": null,
+      "name": "InpUseHA",
+      "type": "bool",
+      "default": "true",
+      "label": "require Heikin Ashi candle colour to agree"
+     }
+    ],
+    "plots": [
+     "SAR up trend",
+     "SAR down trend",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 14,
+   "key": "Market_Structure",
+   "name": "Market Structure",
+   "category": "Price action",
+   "ea": {
+    "id": "ea-14-market-structure",
+    "file": "EA_14_Market_Structure",
+    "version": "1.00",
+    "description": "Market structure EA: HH+HL / LH+LL trend, entry on break of the last swing",
+    "inputs": [
+     {
+      "group": "Market structure",
+      "name": "InpSwingLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Market structure",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the swing stop is further than this (x ATR)"
+     },
+     {
+      "group": "Market structure",
+      "name": "InpMinSLATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Minimum stop distance (x ATR)"
+     },
+     {
+      "group": "Market structure",
+      "name": "InpExitBOS",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit on a break of structure (close beyond the opposite swing)"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-14-market-structure",
+    "file": "IND_14_Market_Structure",
+    "version": "1.00",
+    "description": "Red dot = swing high, green dot = swing low (shown once confirmed, SwingLen candles later). Arrow = structure breakout in the direction of the HH+HL or LH+LL trend.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpSwingLen",
+      "type": "int",
+      "default": "5",
+      "label": "InpSwingLen"
+     }
+    ],
+    "plots": [
+     "Swing high",
+     "Swing low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 15,
+   "key": "Gap_and_Go",
+   "name": "Gap and Go",
+   "category": "Gap",
+   "ea": {
+    "id": "ea-15-gap-and-go",
+    "file": "EA_15_Gap_and_Go",
+    "version": "1.00",
+    "description": "Gap and go EA: trades the opening range breakout in the direction of the gap. Use M1 to M15, server time.",
+    "inputs": [
+     {
+      "group": "Gap (server time)",
+      "name": "InpOpenHour",
+      "type": "int",
+      "default": "0",
+      "label": "Session start hour (the candle after the gap)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpOpenMin",
+      "type": "int",
+      "default": "0",
+      "label": "Session start minute"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpRangeMinutes",
+      "type": "int",
+      "default": "15",
+      "label": "Opening range length (minutes)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpEntryWindowMin",
+      "type": "int",
+      "default": "120",
+      "label": "Entry allowed this long after the range ends (minutes)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "Close all at this hour (24 = off)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpMinGapDATR",
+      "type": "double",
+      "default": "0.15",
+      "label": "Min gap (x yesterday's daily ATR), 0 = off"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpMaxGapDATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "Max gap (x yesterday's daily ATR), 0 = off"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpNoFill",
+      "type": "bool",
+      "default": "true",
+      "label": "Skip if the opening range already touched the previous close"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     }
+    ],
+    "size_kb": 108
+   },
+   "indicator": {
+    "id": "ind-15-gap-and-go",
+    "file": "IND_15_Gap_and_Go",
+    "version": "1.00",
+    "description": "Pink dotted line = previous close (the gap), gold = opening range. Shows the raw signal. The EA may still skip it (spread, HTF filter, or a trade already taken that day). Arrow is judged on the candle close.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpOpenHour",
+      "type": "int",
+      "default": "0",
+      "label": "session start hour (server time)"
+     },
+     {
+      "group": null,
+      "name": "InpOpenMin",
+      "type": "int",
+      "default": "0",
+      "label": "InpOpenMin"
+     },
+     {
+      "group": null,
+      "name": "InpRangeMinutes",
+      "type": "int",
+      "default": "15",
+      "label": "InpRangeMinutes"
+     },
+     {
+      "group": null,
+      "name": "InpEntryWindowMin",
+      "type": "int",
+      "default": "120",
+      "label": "InpEntryWindowMin"
+     },
+     {
+      "group": null,
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "InpCloseHour"
+     },
+     {
+      "group": null,
+      "name": "InpMinGapDATR",
+      "type": "double",
+      "default": "0.15",
+      "label": "InpMinGapDATR"
+     },
+     {
+      "group": null,
+      "name": "InpMaxGapDATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "InpMaxGapDATR"
+     },
+     {
+      "group": null,
+      "name": "InpNoFill",
+      "type": "bool",
+      "default": "true",
+      "label": "InpNoFill"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "InpBufferPts"
+     }
+    ],
+    "plots": [
+     "Previous close",
+     "Range high",
+     "Range low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 16,
+   "key": "Gap_Fill",
+   "name": "Gap Fill",
+   "category": "Gap",
+   "ea": {
+    "id": "ea-16-gap-fill",
+    "file": "EA_16_Gap_Fill",
+    "version": "1.00",
+    "description": "Gap fill EA: fades the gap when the opening range breaks against it, target = previous close. Use M1 to M15, server time.",
+    "inputs": [
+     {
+      "group": "Gap (server time)",
+      "name": "InpOpenHour",
+      "type": "int",
+      "default": "0",
+      "label": "Session start hour (the candle after the gap)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpOpenMin",
+      "type": "int",
+      "default": "0",
+      "label": "Session start minute"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpRangeMinutes",
+      "type": "int",
+      "default": "15",
+      "label": "Opening range length (minutes)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpEntryWindowMin",
+      "type": "int",
+      "default": "120",
+      "label": "Entry allowed this long after the range ends (minutes)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "Close all at this hour (24 = off)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpMinGapDATR",
+      "type": "double",
+      "default": "0.15",
+      "label": "Min gap (x yesterday's daily ATR), 0 = off"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpMaxGapDATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "Max gap (x yesterday's daily ATR), 0 = off"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpNoFill",
+      "type": "bool",
+      "default": "true",
+      "label": "Skip if the opening range already touched the previous close"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     },
+     {
+      "group": "Gap (server time)",
+      "name": "InpMinRR",
+      "type": "double",
+      "default": "1.0",
+      "label": "minimum reward to risk to the previous close"
+     }
+    ],
+    "size_kb": 109
+   },
+   "indicator": {
+    "id": "ind-16-gap-fill",
+    "file": "IND_16_Gap_Fill",
+    "version": "1.00",
+    "description": "Pink dotted line = previous close (the gap), gold = opening range. Shows the raw signal. The EA may still skip it (spread, HTF filter, or a trade already taken that day). Arrow is judged on the candle close.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpOpenHour",
+      "type": "int",
+      "default": "0",
+      "label": "session start hour (server time)"
+     },
+     {
+      "group": null,
+      "name": "InpOpenMin",
+      "type": "int",
+      "default": "0",
+      "label": "InpOpenMin"
+     },
+     {
+      "group": null,
+      "name": "InpRangeMinutes",
+      "type": "int",
+      "default": "15",
+      "label": "InpRangeMinutes"
+     },
+     {
+      "group": null,
+      "name": "InpEntryWindowMin",
+      "type": "int",
+      "default": "120",
+      "label": "InpEntryWindowMin"
+     },
+     {
+      "group": null,
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "InpCloseHour"
+     },
+     {
+      "group": null,
+      "name": "InpMinGapDATR",
+      "type": "double",
+      "default": "0.15",
+      "label": "InpMinGapDATR"
+     },
+     {
+      "group": null,
+      "name": "InpMaxGapDATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "InpMaxGapDATR"
+     },
+     {
+      "group": null,
+      "name": "InpNoFill",
+      "type": "bool",
+      "default": "true",
+      "label": "InpNoFill"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "InpBufferPts"
+     },
+     {
+      "group": null,
+      "name": "InpMinRR",
+      "type": "double",
+      "default": "1.0",
+      "label": "minimum reward to risk to the previous close"
+     }
+    ],
+    "plots": [
+     "Previous close",
+     "Range high",
+     "Range low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 17,
+   "key": "VWAP",
+   "name": "VWAP",
+   "category": "Volume",
+   "ea": {
+    "id": "ea-17-vwap",
+    "file": "EA_17_VWAP",
+    "version": "1.00",
+    "description": "Session VWAP EA: revert to VWAP, or trade the VWAP cross. Best on M1 to M15 intraday.",
+    "inputs": [
+     {
+      "group": "VWAP (tick volume, server time)",
+      "name": "InpMode",
+      "type": "ENUM_VWAP_MODE",
+      "default": "VWAP_REVERT",
+      "label": "Revert to VWAP, or trade the VWAP cross"
+     },
+     {
+      "group": "VWAP (tick volume, server time)",
+      "name": "InpResetHour",
+      "type": "int",
+      "default": "0",
+      "label": "VWAP restarts at this server hour"
+     },
+     {
+      "group": "VWAP (tick volume, server time)",
+      "name": "InpDevATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Revert mode: distance from VWAP (x ATR) to fade"
+     },
+     {
+      "group": "VWAP (tick volume, server time)",
+      "name": "InpMinBars",
+      "type": "int",
+      "default": "6",
+      "label": "Candles needed after the reset before trading"
+     },
+     {
+      "group": "VWAP (tick volume, server time)",
+      "name": "InpCloseHour",
+      "type": "int",
+      "default": "21",
+      "label": "Close all at this hour (24 = off)"
+     }
+    ],
+    "size_kb": 109
+   },
+   "indicator": {
+    "id": "ind-17-vwap",
+    "file": "IND_17_VWAP",
+    "version": "1.00",
+    "description": "Session VWAP (tick volume) with bands at +/- DevATR x ATR.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpMode",
+      "type": "ENUM_VWAP_MODE",
+      "default": "VWAP_REVERT",
+      "label": "InpMode"
+     },
+     {
+      "group": null,
+      "name": "InpResetHour",
+      "type": "int",
+      "default": "0",
+      "label": "VWAP restarts at this server hour"
+     },
+     {
+      "group": null,
+      "name": "InpDevATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "distance from VWAP (x ATR) for the revert mode"
+     },
+     {
+      "group": null,
+      "name": "InpMinBars",
+      "type": "int",
+      "default": "6",
+      "label": "candles needed after the reset before signals"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "VWAP",
+     "Upper band",
+     "Lower band",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 18,
+   "key": "Stoch_CCI",
+   "name": "Stochastic + CCI",
+   "category": "Momentum",
+   "ea": {
+    "id": "ea-18-stoch-cci",
+    "file": "EA_18_Stoch_CCI",
+    "version": "1.00",
+    "description": "Stochastic / CCI overbought-oversold reversal EA",
+    "inputs": [
+     {
+      "group": "Oscillator",
+      "name": "InpOsc",
+      "type": "ENUM_OSC",
+      "default": "OSC_STOCH",
+      "label": "Stochastic or CCI"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpKPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "Stochastic %K period"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpDPeriod",
+      "type": "int",
+      "default": "3",
+      "label": "Stochastic %D period"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpSlowing",
+      "type": "int",
+      "default": "3",
+      "label": "Stochastic slowing"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpOversold",
+      "type": "double",
+      "default": "20",
+      "label": "Stochastic oversold level"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpOverbought",
+      "type": "double",
+      "default": "80",
+      "label": "Stochastic overbought level"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpCCIPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "CCI period"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpCCILevel",
+      "type": "double",
+      "default": "100",
+      "label": "CCI level (+/-)"
+     },
+     {
+      "group": "Oscillator",
+      "name": "InpExitMid",
+      "type": "bool",
+      "default": "true",
+      "label": "Exit at the middle (Stochastic 50, CCI 0)"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-18-stoch-cci",
+    "file": "IND_18_Stoch_CCI",
+    "version": "1.00",
+    "description": "",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpOsc",
+      "type": "ENUM_OSC",
+      "default": "OSC_STOCH",
+      "label": "InpOsc"
+     },
+     {
+      "group": null,
+      "name": "InpKPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpKPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpDPeriod",
+      "type": "int",
+      "default": "3",
+      "label": "InpDPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpSlowing",
+      "type": "int",
+      "default": "3",
+      "label": "InpSlowing"
+     },
+     {
+      "group": null,
+      "name": "InpOversold",
+      "type": "double",
+      "default": "20",
+      "label": "InpOversold"
+     },
+     {
+      "group": null,
+      "name": "InpOverbought",
+      "type": "double",
+      "default": "80",
+      "label": "InpOverbought"
+     },
+     {
+      "group": null,
+      "name": "InpCCIPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "InpCCIPeriod"
+     },
+     {
+      "group": null,
+      "name": "InpCCILevel",
+      "type": "double",
+      "default": "100",
+      "label": "InpCCILevel"
+     }
+    ],
+    "plots": [
+     "%K / CCI",
+     "%D",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "separate",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 19,
+   "key": "Break_Retest",
+   "name": "Break and Retest",
+   "category": "Price action",
+   "ea": {
+    "id": "ea-19-break-retest",
+    "file": "EA_19_Break_Retest",
+    "version": "1.00",
+    "description": "Break and retest EA: enters when a broken swing level is retested and holds",
+    "inputs": [
+     {
+      "group": "Break and retest",
+      "name": "InpSwingLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Break and retest",
+      "name": "InpRetestBars",
+      "type": "int",
+      "default": "20",
+      "label": "Candles allowed for the retest after the break"
+     },
+     {
+      "group": "Break and retest",
+      "name": "InpTolATR",
+      "type": "double",
+      "default": "0.3",
+      "label": "Retest zone around the level (x ATR)"
+     },
+     {
+      "group": "Break and retest",
+      "name": "InpFailATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Closing this far back through the level cancels the setup (x ATR)"
+     },
+     {
+      "group": "Break and retest",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Break buffer (points)"
+     },
+     {
+      "group": "Break and retest",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Stop beyond the broken level (x ATR)"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-19-break-retest",
+    "file": "IND_19_Break_Retest",
+    "version": "1.00",
+    "description": "Yellow dot = a swing level was broken. Gold line = that level while waiting for the retest. Arrow = the retest entry.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpSwingLen",
+      "type": "int",
+      "default": "5",
+      "label": "swing lookback"
+     },
+     {
+      "group": null,
+      "name": "InpRetestBars",
+      "type": "int",
+      "default": "20",
+      "label": "candles allowed for the retest"
+     },
+     {
+      "group": null,
+      "name": "InpTolATR",
+      "type": "double",
+      "default": "0.3",
+      "label": "retest zone around the level (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpFailATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "close this far back through the level cancels the setup (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "InpBufferPts"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Broken level",
+     "Level broken",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 20,
+   "key": "Candle_Reversal",
+   "name": "Candle Reversal",
+   "category": "Price action",
+   "ea": {
+    "id": "ea-20-candle-reversal",
+    "file": "EA_20_Candle_Reversal",
+    "version": "1.00",
+    "description": "Candlestick reversal EA: engulfing, pin bar, morning/evening star at a key level",
+    "inputs": [
+     {
+      "group": "Candlestick reversal",
+      "name": "InpUseEngulf",
+      "type": "bool",
+      "default": "true",
+      "label": "Engulfing pattern"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpUsePin",
+      "type": "bool",
+      "default": "true",
+      "label": "Pin bar (hammer / shooting star)"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpUseStar",
+      "type": "bool",
+      "default": "true",
+      "label": "Morning / evening star"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpPinRatio",
+      "type": "double",
+      "default": "2.0",
+      "label": "Pin bar: wick must be this many times the body"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpLevelMode",
+      "type": "ENUM_LEVEL",
+      "default": "LEVEL_EITHER",
+      "label": "Key level: swing extreme, Bollinger extreme, or either"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpLevelBars",
+      "type": "int",
+      "default": "20",
+      "label": "Candles used to find the swing extreme"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpTolATR",
+      "type": "double",
+      "default": "0.3",
+      "label": "Distance allowed from the level (x ATR)"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpConfirm",
+      "type": "bool",
+      "default": "true",
+      "label": "Wait for the next candle to confirm"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpBBPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "Bollinger period"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpBBDev",
+      "type": "double",
+      "default": "2.0",
+      "label": "Bollinger deviation"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the pattern extreme (x ATR)"
+     },
+     {
+      "group": "Candlestick reversal",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "3.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 116
+   },
+   "indicator": {
+    "id": "ind-20-candle-reversal",
+    "file": "IND_20_Candle_Reversal",
+    "version": "1.00",
+    "description": "Yellow dot = pattern candle, arrow = the signal candle.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpUseEngulf",
+      "type": "bool",
+      "default": "true",
+      "label": "Engulfing pattern"
+     },
+     {
+      "group": null,
+      "name": "InpUsePin",
+      "type": "bool",
+      "default": "true",
+      "label": "Pin bar (hammer / shooting star)"
+     },
+     {
+      "group": null,
+      "name": "InpUseStar",
+      "type": "bool",
+      "default": "true",
+      "label": "Morning / evening star"
+     },
+     {
+      "group": null,
+      "name": "InpPinRatio",
+      "type": "double",
+      "default": "2.0",
+      "label": "Pin bar: wick must be this many times the body"
+     },
+     {
+      "group": null,
+      "name": "InpLevelMode",
+      "type": "ENUM_LEVEL",
+      "default": "LEVEL_EITHER",
+      "label": "Key level: swing extreme, Bollinger extreme, or either"
+     },
+     {
+      "group": null,
+      "name": "InpLevelBars",
+      "type": "int",
+      "default": "20",
+      "label": "Candles used to find the swing extreme"
+     },
+     {
+      "group": null,
+      "name": "InpTolATR",
+      "type": "double",
+      "default": "0.3",
+      "label": "Distance allowed from the level (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpConfirm",
+      "type": "bool",
+      "default": "true",
+      "label": "Wait for the next candle to confirm"
+     },
+     {
+      "group": null,
+      "name": "InpBBPeriod",
+      "type": "int",
+      "default": "20",
+      "label": "Bollinger period"
+     },
+     {
+      "group": null,
+      "name": "InpBBDev",
+      "type": "double",
+      "default": "2.0",
+      "label": "Bollinger deviation"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Pattern candle",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 17
+   }
+  },
+  {
+   "number": 21,
+   "key": "Divergence",
+   "name": "Divergence",
+   "category": "Momentum",
+   "ea": {
+    "id": "ea-21-divergence",
+    "file": "EA_21_Divergence",
+    "version": "1.00",
+    "description": "Divergence reversal EA: RSI or MACD divergence at swing highs and lows, confirmed by a candle",
+    "inputs": [
+     {
+      "group": "Divergence",
+      "name": "InpOsc",
+      "type": "ENUM_DIV_OSC",
+      "default": "DIV_RSI",
+      "label": "Oscillator for the divergence"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpRSIPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "RSI period"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpMacdFast",
+      "type": "int",
+      "default": "12",
+      "label": "MACD fast EMA"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpMacdSlow",
+      "type": "int",
+      "default": "26",
+      "label": "MACD slow EMA"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpMacdSignal",
+      "type": "int",
+      "default": "9",
+      "label": "MACD signal"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpSwingLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpMinSep",
+      "type": "int",
+      "default": "5",
+      "label": "Min candles between the two swings"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpMaxSep",
+      "type": "int",
+      "default": "60",
+      "label": "Max candles between the two swings"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpValidBars",
+      "type": "int",
+      "default": "3",
+      "label": "Candles allowed to get the confirmation candle"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpBullZone",
+      "type": "double",
+      "default": "45",
+      "label": "RSI only: bullish divergence only if RSI below this (100 = off)"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpBearZone",
+      "type": "double",
+      "default": "55",
+      "label": "RSI only: bearish divergence only if RSI above this (0 = off)"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the swing (x ATR)"
+     },
+     {
+      "group": "Divergence",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 112
+   },
+   "indicator": {
+    "id": "ind-21-divergence",
+    "file": "IND_21_Divergence",
+    "version": "1.00",
+    "description": "Yellow dot = swing where a divergence was found (shown when the swing is confirmed). Arrow = the confirmation candle entry.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpOsc",
+      "type": "ENUM_DIV_OSC",
+      "default": "DIV_RSI",
+      "label": "Oscillator for the divergence"
+     },
+     {
+      "group": null,
+      "name": "InpRSIPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "RSI period"
+     },
+     {
+      "group": null,
+      "name": "InpMacdFast",
+      "type": "int",
+      "default": "12",
+      "label": "MACD fast EMA"
+     },
+     {
+      "group": null,
+      "name": "InpMacdSlow",
+      "type": "int",
+      "default": "26",
+      "label": "MACD slow EMA"
+     },
+     {
+      "group": null,
+      "name": "InpMacdSignal",
+      "type": "int",
+      "default": "9",
+      "label": "MACD signal"
+     },
+     {
+      "group": null,
+      "name": "InpSwingLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": null,
+      "name": "InpMinSep",
+      "type": "int",
+      "default": "5",
+      "label": "Min candles between the two swings"
+     },
+     {
+      "group": null,
+      "name": "InpMaxSep",
+      "type": "int",
+      "default": "60",
+      "label": "Max candles between the two swings"
+     },
+     {
+      "group": null,
+      "name": "InpValidBars",
+      "type": "int",
+      "default": "3",
+      "label": "Candles allowed to get the confirmation candle"
+     },
+     {
+      "group": null,
+      "name": "InpBullZone",
+      "type": "double",
+      "default": "45",
+      "label": "RSI only: bullish divergence only if RSI below this (100 = off)"
+     },
+     {
+      "group": null,
+      "name": "InpBearZone",
+      "type": "double",
+      "default": "55",
+      "label": "RSI only: bearish divergence only if RSI above this (0 = off)"
+     }
+    ],
+    "plots": [
+     "Oscillator",
+     "Divergence swing",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "separate",
+    "size_kb": 15
+   }
+  },
+  {
+   "number": 22,
+   "key": "Wyckoff",
+   "name": "Wyckoff",
+   "category": "Smart money",
+   "ea": {
+    "id": "ea-22-wyckoff",
+    "file": "EA_22_Wyckoff",
+    "version": "1.00",
+    "description": "Wyckoff spring / upthrust EA: false break of a range, then a reclaim",
+    "inputs": [
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpRangeBars",
+      "type": "int",
+      "default": "30",
+      "label": "Candles that define the trading range"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpMaxBreakBars",
+      "type": "int",
+      "default": "3",
+      "label": "Candles allowed between the break and the reclaim"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpMinPenATR",
+      "type": "double",
+      "default": "0.1",
+      "label": "Minimum poke beyond the range edge (x ATR)"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpMaxPenATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Maximum poke (a deeper break is a real breakout, x ATR)"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpMinRangeATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "Smallest range accepted (x ATR)"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpMaxRangeATR",
+      "type": "double",
+      "default": "10.0",
+      "label": "Largest range accepted (x ATR)"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the spring / upthrust extreme (x ATR)"
+     },
+     {
+      "group": "Wyckoff spring / upthrust",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-22-wyckoff",
+    "file": "IND_22_Wyckoff",
+    "version": "1.00",
+    "description": "Gold lines = the trading range. Arrow = spring / upthrust reclaim candle.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpRangeBars",
+      "type": "int",
+      "default": "30",
+      "label": "Candles that define the trading range"
+     },
+     {
+      "group": null,
+      "name": "InpMaxBreakBars",
+      "type": "int",
+      "default": "3",
+      "label": "Candles allowed between the break and the reclaim"
+     },
+     {
+      "group": null,
+      "name": "InpMinPenATR",
+      "type": "double",
+      "default": "0.1",
+      "label": "Minimum poke beyond the range edge (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxPenATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Maximum poke (a deeper break is a real breakout, x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMinRangeATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "Smallest range accepted (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxRangeATR",
+      "type": "double",
+      "default": "10.0",
+      "label": "Largest range accepted (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Range high",
+     "Range low",
+     "Spring (buy)",
+     "Upthrust (sell)"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 23,
+   "key": "Triangle",
+   "name": "Triangle",
+   "category": "Pattern",
+   "ea": {
+    "id": "ea-23-triangle",
+    "file": "EA_23_Triangle",
+    "version": "1.00",
+    "description": "Triangle breakout EA: ascending, descending and symmetrical triangles from swing trendlines",
+    "inputs": [
+     {
+      "group": "Triangle breakout",
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "3",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpLookback",
+      "type": "int",
+      "default": "60",
+      "label": "How far back to look for the swings"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpMinSpan",
+      "type": "int",
+      "default": "5",
+      "label": "Min candles between the two swings of a trendline"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpFlatTol",
+      "type": "double",
+      "default": "0.02",
+      "label": "A line counts as flat up to this slope (x ATR per candle)"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpMinConv",
+      "type": "double",
+      "default": "0.03",
+      "label": "Minimum convergence of the two lines (x ATR per candle)"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpMinWidthATR",
+      "type": "double",
+      "default": "1.0",
+      "label": "Minimum triangle height at the breakout (x ATR)"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     },
+     {
+      "group": "Triangle breakout",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop (opposite trendline) is further than this (x ATR)"
+     }
+    ],
+    "size_kb": 106
+   },
+   "indicator": {
+    "id": "ind-23-triangle",
+    "file": "IND_23_Triangle",
+    "version": "1.00",
+    "description": "Blue/orange lines = the triangle trendlines. Arrow = breakout.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "3",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": null,
+      "name": "InpLookback",
+      "type": "int",
+      "default": "60",
+      "label": "How far back to look for the swings"
+     },
+     {
+      "group": null,
+      "name": "InpMinSpan",
+      "type": "int",
+      "default": "5",
+      "label": "Min candles between the two swings of a trendline"
+     },
+     {
+      "group": null,
+      "name": "InpFlatTol",
+      "type": "double",
+      "default": "0.02",
+      "label": "A line counts as flat up to this slope (x ATR per candle)"
+     },
+     {
+      "group": null,
+      "name": "InpMinConv",
+      "type": "double",
+      "default": "0.03",
+      "label": "Minimum convergence of the two lines (x ATR per candle)"
+     },
+     {
+      "group": null,
+      "name": "InpMinWidthATR",
+      "type": "double",
+      "default": "1.0",
+      "label": "Minimum triangle height at the breakout (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Upper trendline",
+     "Lower trendline",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 24,
+   "key": "Flag",
+   "name": "Flag",
+   "category": "Pattern",
+   "ea": {
+    "id": "ea-24-flag",
+    "file": "EA_24_Flag",
+    "version": "1.00",
+    "description": "Flag / pennant / channel breakout EA: a sharp move, a pause, then a break in the same direction",
+    "inputs": [
+     {
+      "group": "Flag breakout",
+      "name": "InpPoleBars",
+      "type": "int",
+      "default": "10",
+      "label": "Candles in the pole (the sharp move)"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpPoleATR",
+      "type": "double",
+      "default": "3.0",
+      "label": "Minimum pole size (x ATR)"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpFlagBars",
+      "type": "int",
+      "default": "8",
+      "label": "Candles in the flag (the pause)"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpMaxRetr",
+      "type": "double",
+      "default": "0.5",
+      "label": "Flag may give back at most this fraction of the pole"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpMaxFlagFrac",
+      "type": "double",
+      "default": "0.5",
+      "label": "Flag height at most this fraction of the pole height"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpTPPole",
+      "type": "bool",
+      "default": "true",
+      "label": "Take profit = the pole height (measured move) instead of the R multiple"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the opposite side of the flag (x ATR)"
+     },
+     {
+      "group": "Flag breakout",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 105
+   },
+   "indicator": {
+    "id": "ind-24-flag",
+    "file": "IND_24_Flag",
+    "version": "1.00",
+    "description": "Gold lines = the flag range after a sharp move. Arrow = breakout of the flag in the direction of the move.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPoleBars",
+      "type": "int",
+      "default": "10",
+      "label": "Candles in the pole (the sharp move)"
+     },
+     {
+      "group": null,
+      "name": "InpPoleATR",
+      "type": "double",
+      "default": "3.0",
+      "label": "Minimum pole size (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpFlagBars",
+      "type": "int",
+      "default": "8",
+      "label": "Candles in the flag (the pause)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxRetr",
+      "type": "double",
+      "default": "0.5",
+      "label": "Flag may give back at most this fraction of the pole"
+     },
+     {
+      "group": null,
+      "name": "InpMaxFlagFrac",
+      "type": "double",
+      "default": "0.5",
+      "label": "Flag height at most this fraction of the pole height"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Breakout buffer (points)"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Flag high",
+     "Flag low",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 11
+   }
+  },
+  {
+   "number": 25,
+   "key": "HS_DoubleTop",
+   "name": "Head & Shoulders / Double Top",
+   "category": "Pattern",
+   "ea": {
+    "id": "ea-25-hs-doubletop",
+    "file": "EA_25_HS_DoubleTop",
+    "version": "1.00",
+    "description": "Head and shoulders / double top-bottom EA: enters on the first close through the neckline",
+    "inputs": [
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpLookback",
+      "type": "int",
+      "default": "120",
+      "label": "How far back to look for the pattern's swings"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpMinSep",
+      "type": "int",
+      "default": "5",
+      "label": "Min candles between two swings of a pattern"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpMaxSep",
+      "type": "int",
+      "default": "60",
+      "label": "Max candles between two swings of a pattern"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpTolATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Two tops / two bottoms (and the shoulders) must match within this (x ATR)"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpMinDepthATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Minimum depth from the tops to the neckline (x ATR)"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpHeadATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "The head must stand out from each shoulder by this much (x ATR)"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpMaxAge",
+      "type": "int",
+      "default": "30",
+      "label": "The breakout must come within this many candles of the last swing"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Neckline break buffer (points)"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpTPMeasured",
+      "type": "bool",
+      "default": "true",
+      "label": "Take profit = the pattern height below / above the neckline"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the right shoulder / second top (x ATR)"
+     },
+     {
+      "group": "Head and shoulders / double top-bottom",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 112
+   },
+   "indicator": {
+    "id": "ind-25-hs-doubletop",
+    "file": "IND_25_HS_DoubleTop",
+    "version": "1.00",
+    "description": "Arrow = first close through the neckline. Gold dot = neckline.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": null,
+      "name": "InpLookback",
+      "type": "int",
+      "default": "120",
+      "label": "How far back to look for the pattern's swings"
+     },
+     {
+      "group": null,
+      "name": "InpMinSep",
+      "type": "int",
+      "default": "5",
+      "label": "Min candles between two swings of a pattern"
+     },
+     {
+      "group": null,
+      "name": "InpMaxSep",
+      "type": "int",
+      "default": "60",
+      "label": "Max candles between two swings of a pattern"
+     },
+     {
+      "group": null,
+      "name": "InpTolATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "Two tops / two bottoms (and the shoulders) must match within this (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMinDepthATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Minimum depth from the tops to the neckline (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpHeadATR",
+      "type": "double",
+      "default": "0.5",
+      "label": "The head must stand out from each shoulder by this much (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxAge",
+      "type": "int",
+      "default": "30",
+      "label": "The breakout must come within this many candles of the last swing"
+     },
+     {
+      "group": null,
+      "name": "InpBufferPts",
+      "type": "int",
+      "default": "0",
+      "label": "Neckline break buffer (points)"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Neckline",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 26,
+   "key": "Fibonacci",
+   "name": "Fibonacci",
+   "category": "Levels",
+   "ea": {
+    "id": "ea-26-fibonacci",
+    "file": "EA_26_Fibonacci",
+    "version": "1.00",
+    "description": "Fibonacci retracement EA: enters a pullback into the 50% to 61.8% zone of the last swing leg",
+    "inputs": [
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpMinLegATR",
+      "type": "double",
+      "default": "3.0",
+      "label": "Minimum size of the swing leg (x ATR)"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpMaxAge",
+      "type": "int",
+      "default": "60",
+      "label": "The retracement must happen within this many candles of the swing"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpFibLo",
+      "type": "double",
+      "default": "0.5",
+      "label": "Zone starts at this retracement"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpFibHi",
+      "type": "double",
+      "default": "0.618",
+      "label": "Zone ends at this retracement"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpFibInval",
+      "type": "double",
+      "default": "0.786",
+      "label": "A close beyond this retracement cancels the setup"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpTPSwing",
+      "type": "bool",
+      "default": "true",
+      "label": "Take profit = the swing high / low the leg ended at"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the invalidation level (x ATR)"
+     },
+     {
+      "group": "Fibonacci retracement",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "5.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 108
+   },
+   "indicator": {
+    "id": "ind-26-fibonacci",
+    "file": "IND_26_Fibonacci",
+    "version": "1.00",
+    "description": "Gold lines = the pullback zone of the latest swing leg. Arrow = first rejection candle inside the zone.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "5",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": null,
+      "name": "InpMinLegATR",
+      "type": "double",
+      "default": "3.0",
+      "label": "Minimum size of the swing leg (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxAge",
+      "type": "int",
+      "default": "60",
+      "label": "The retracement must happen within this many candles of the swing"
+     },
+     {
+      "group": null,
+      "name": "InpFibLo",
+      "type": "double",
+      "default": "0.5",
+      "label": "Zone starts at this retracement"
+     },
+     {
+      "group": null,
+      "name": "InpFibHi",
+      "type": "double",
+      "default": "0.618",
+      "label": "Zone ends at this retracement"
+     },
+     {
+      "group": null,
+      "name": "InpFibInval",
+      "type": "double",
+      "default": "0.786",
+      "label": "A close beyond this retracement cancels the setup"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Zone edge 1",
+     "Zone edge 2",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 27,
+   "key": "Supply_Demand",
+   "name": "Supply & Demand",
+   "category": "Smart money",
+   "ea": {
+    "id": "ea-27-supply-demand",
+    "file": "EA_27_Supply_Demand",
+    "version": "1.00",
+    "description": "Supply and demand EA: first return to a fresh zone formed by a base and an explosive candle",
+    "inputs": [
+     {
+      "group": "Supply and demand",
+      "name": "InpImpulseATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "The explosive candle must have a body of at least this (x ATR)"
+     },
+     {
+      "group": "Supply and demand",
+      "name": "InpBaseATR",
+      "type": "double",
+      "default": "0.7",
+      "label": "A base candle has a range of at most this (x ATR)"
+     },
+     {
+      "group": "Supply and demand",
+      "name": "InpBaseMax",
+      "type": "int",
+      "default": "3",
+      "label": "Maximum base candles in a zone"
+     },
+     {
+      "group": "Supply and demand",
+      "name": "InpMaxZoneATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Zones taller than this are ignored (x ATR)"
+     },
+     {
+      "group": "Supply and demand",
+      "name": "InpMaxAge",
+      "type": "int",
+      "default": "100",
+      "label": "Zones older than this many candles are ignored"
+     },
+     {
+      "group": "Supply and demand",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the zone (x ATR)"
+     },
+     {
+      "group": "Supply and demand",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 105
+   },
+   "indicator": {
+    "id": "ind-27-supply-demand",
+    "file": "IND_27_Supply_Demand",
+    "version": "1.00",
+    "description": "Green lines = nearest fresh demand zone, red = nearest fresh supply zone. Arrow = first rejection candle in a fresh zone.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpImpulseATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "The explosive candle must have a body of at least this (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpBaseATR",
+      "type": "double",
+      "default": "0.7",
+      "label": "A base candle has a range of at most this (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpBaseMax",
+      "type": "int",
+      "default": "3",
+      "label": "Maximum base candles in a zone"
+     },
+     {
+      "group": null,
+      "name": "InpMaxZoneATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Zones taller than this are ignored (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxAge",
+      "type": "int",
+      "default": "100",
+      "label": "Zones older than this many candles are ignored"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Demand top",
+     "Demand bottom",
+     "Supply top",
+     "Supply bottom",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 28,
+   "key": "Harmonic",
+   "name": "Harmonic Patterns",
+   "category": "Pattern",
+   "ea": {
+    "id": "ea-28-harmonic",
+    "file": "EA_28_Harmonic",
+    "version": "1.00",
+    "description": "Harmonic pattern EA: Gartley, Bat and Butterfly completed at point D",
+    "inputs": [
+     {
+      "group": "Harmonic patterns",
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "3",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpLookback",
+      "type": "int",
+      "default": "200",
+      "label": "How far back to look for the five swing points"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpTol",
+      "type": "double",
+      "default": "0.05",
+      "label": "Tolerance on the Fibonacci ratios"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpUseGartley",
+      "type": "bool",
+      "default": "true",
+      "label": "Gartley"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpUseBat",
+      "type": "bool",
+      "default": "true",
+      "label": "Bat"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpUseButterfly",
+      "type": "bool",
+      "default": "true",
+      "label": "Butterfly"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpMinLegATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "The X-A leg must be at least this big (x ATR)"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpMaxEntryATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Skip if price already ran this far from point D (x ATR)"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond point D (x ATR)"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpMinRR",
+      "type": "double",
+      "default": "1.0",
+      "label": "Minimum reward to risk to the target"
+     },
+     {
+      "group": "Harmonic patterns",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 110
+   },
+   "indicator": {
+    "id": "ind-28-harmonic",
+    "file": "IND_28_Harmonic",
+    "version": "1.00",
+    "description": "Yellow dot = point D (the swing the pattern completes at). Arrow = the candle that confirms D, where the EA enters.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "3",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": null,
+      "name": "InpLookback",
+      "type": "int",
+      "default": "200",
+      "label": "How far back to look for the five swing points"
+     },
+     {
+      "group": null,
+      "name": "InpTol",
+      "type": "double",
+      "default": "0.05",
+      "label": "Tolerance on the Fibonacci ratios"
+     },
+     {
+      "group": null,
+      "name": "InpUseGartley",
+      "type": "bool",
+      "default": "true",
+      "label": "Gartley"
+     },
+     {
+      "group": null,
+      "name": "InpUseBat",
+      "type": "bool",
+      "default": "true",
+      "label": "Bat"
+     },
+     {
+      "group": null,
+      "name": "InpUseButterfly",
+      "type": "bool",
+      "default": "true",
+      "label": "Butterfly"
+     },
+     {
+      "group": null,
+      "name": "InpMinLegATR",
+      "type": "double",
+      "default": "2.0",
+      "label": "The X-A leg must be at least this big (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpMaxEntryATR",
+      "type": "double",
+      "default": "1.5",
+      "label": "Skip if price already ran this far from point D (x ATR)"
+     },
+     {
+      "group": null,
+      "name": "InpATRPeriod",
+      "type": "int",
+      "default": "14",
+      "label": "InpATRPeriod"
+     }
+    ],
+    "plots": [
+     "Point D",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 14
+   }
+  },
+  {
+   "number": 29,
+   "key": "Time_Seasonality",
+   "name": "Time & Seasonality",
+   "category": "Time",
+   "ea": {
+    "id": "ea-29-time-seasonality",
+    "file": "EA_29_Time_Seasonality",
+    "version": "1.00",
+    "description": "Time and seasonality EA: a trade at a fixed time of day on chosen weekdays, closed at a fixed exit time",
+    "inputs": [
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpMode",
+      "type": "ENUM_TIME_MODE",
+      "default": "TIME_BUY",
+      "label": "Buy, Sell, Momentum (follow the lookback move) or Reversal (fade it)"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpEntryHour",
+      "type": "int",
+      "default": "7",
+      "label": "Entry time, server hour"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpEntryMin",
+      "type": "int",
+      "default": "0",
+      "label": "Entry time, server minute"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpExitHour",
+      "type": "int",
+      "default": "11",
+      "label": "Exit time, server hour"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpExitMin",
+      "type": "int",
+      "default": "0",
+      "label": "Exit time, server minute"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpLookbackBars",
+      "type": "int",
+      "default": "12",
+      "label": "Momentum / Reversal: candles used to measure the move before entry"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpMon",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Monday"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpTue",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Tuesday"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpWed",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Wednesday"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpThu",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Thursday"
+     },
+     {
+      "group": "Time and seasonality (server time)",
+      "name": "InpFri",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Friday"
+     }
+    ],
+    "size_kb": 108
+   },
+   "indicator": {
+    "id": "ind-29-time-seasonality",
+    "file": "IND_29_Time_Seasonality",
+    "version": "1.00",
+    "description": "Arrow = the candle where the EA enters. Yellow dot = the exit.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpMode",
+      "type": "ENUM_TIME_MODE",
+      "default": "TIME_BUY",
+      "label": "Buy, Sell, Momentum (follow the lookback move) or Reversal (fade it)"
+     },
+     {
+      "group": null,
+      "name": "InpEntryHour",
+      "type": "int",
+      "default": "7",
+      "label": "Entry time, server hour"
+     },
+     {
+      "group": null,
+      "name": "InpEntryMin",
+      "type": "int",
+      "default": "0",
+      "label": "Entry time, server minute"
+     },
+     {
+      "group": null,
+      "name": "InpExitHour",
+      "type": "int",
+      "default": "11",
+      "label": "Exit time, server hour"
+     },
+     {
+      "group": null,
+      "name": "InpExitMin",
+      "type": "int",
+      "default": "0",
+      "label": "Exit time, server minute"
+     },
+     {
+      "group": null,
+      "name": "InpLookbackBars",
+      "type": "int",
+      "default": "12",
+      "label": "Momentum / Reversal: candles used to measure the move before entry"
+     },
+     {
+      "group": null,
+      "name": "InpMon",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Monday"
+     },
+     {
+      "group": null,
+      "name": "InpTue",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Tuesday"
+     },
+     {
+      "group": null,
+      "name": "InpWed",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Wednesday"
+     },
+     {
+      "group": null,
+      "name": "InpThu",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Thursday"
+     },
+     {
+      "group": null,
+      "name": "InpFri",
+      "type": "bool",
+      "default": "true",
+      "label": "Trade on Friday"
+     }
+    ],
+    "plots": [
+     "Buy entry",
+     "Sell entry",
+     "Exit time"
+    ],
+    "window": "chart",
+    "size_kb": 12
+   }
+  },
+  {
+   "number": 30,
+   "key": "Smart_Money",
+   "name": "Smart Money Concepts",
+   "category": "Smart money",
+   "ea": {
+    "id": "ea-30-smart-money",
+    "file": "EA_30_Smart_Money",
+    "version": "1.00",
+    "description": "Smart money EA: liquidity sweep, market structure shift, then entry on the order block retest",
+    "inputs": [
+     {
+      "group": "Smart money concepts",
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "3",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": "Smart money concepts",
+      "name": "InpMSSBars",
+      "type": "int",
+      "default": "10",
+      "label": "Candles allowed after the sweep to break the last swing (market structure shift)"
+     },
+     {
+      "group": "Smart money concepts",
+      "name": "InpOBBars",
+      "type": "int",
+      "default": "20",
+      "label": "Candles allowed for price to come back to the order block"
+     },
+     {
+      "group": "Smart money concepts",
+      "name": "InpSLBufATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Stop beyond the sweep extreme (x ATR)"
+     },
+     {
+      "group": "Smart money concepts",
+      "name": "InpMaxSLATR",
+      "type": "double",
+      "default": "4.0",
+      "label": "Skip the trade if the stop would be further than this (x ATR)"
+     }
+    ],
+    "size_kb": 107
+   },
+   "indicator": {
+    "id": "ind-30-smart-money",
+    "file": "IND_30_Smart_Money",
+    "version": "1.00",
+    "description": "Yellow dot = liquidity sweep. Blue lines = the order block while waiting for the retest. Arrow = the entry candle.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpPivotLen",
+      "type": "int",
+      "default": "3",
+      "label": "Swing lookback (candles each side)"
+     },
+     {
+      "group": null,
+      "name": "InpMSSBars",
+      "type": "int",
+      "default": "10",
+      "label": "Candles allowed after the sweep to break the last swing (market structure shift)"
+     },
+     {
+      "group": null,
+      "name": "InpOBBars",
+      "type": "int",
+      "default": "20",
+      "label": "Candles allowed for price to come back to the order block"
+     }
+    ],
+    "plots": [
+     "Order block top",
+     "Order block bottom",
+     "Liquidity sweep",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 13
+   }
+  },
+  {
+   "number": 31,
+   "key": "Scalper",
+   "name": "Scalper",
+   "category": "Scalping",
+   "ea": {
+    "id": "ea-31-scalper",
+    "file": "EA_31_Scalper",
+    "version": "1.00",
+    "description": "Scalper EA: EMA pullback scalps on M1 to M5 with strict spread, cooldown and daily limits",
+    "inputs": [
+     {
+      "group": "Scalper",
+      "name": "InpFastEMA",
+      "type": "int",
+      "default": "9",
+      "label": "Fast EMA"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpSlowEMA",
+      "type": "int",
+      "default": "21",
+      "label": "Slow EMA"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpScalpSLATR",
+      "type": "double",
+      "default": "1.0",
+      "label": "Stop loss (x ATR), tighter than the other EAs"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpScalpRR",
+      "type": "double",
+      "default": "1.0",
+      "label": "Take profit as a multiple of the stop"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpMaxSpreadATR",
+      "type": "double",
+      "default": "0.25",
+      "label": "Skip when the spread is more than this fraction of ATR"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpMaxTradesDay",
+      "type": "int",
+      "default": "10",
+      "label": "Maximum trades per day"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpCooldownBars",
+      "type": "int",
+      "default": "3",
+      "label": "Candles to wait after a trade opens"
+     },
+     {
+      "group": "Scalper",
+      "name": "InpMaxHoldBars",
+      "type": "int",
+      "default": "15",
+      "label": "Close a trade that is still open after this many candles (0 = off)"
+     }
+    ],
+    "size_kb": 103
+   },
+   "indicator": {
+    "id": "ind-31-scalper",
+    "file": "IND_31_Scalper",
+    "version": "1.00",
+    "description": "Raw pullback signal. The EA also applies spread, cooldown and daily trade limits, so it can skip an arrow.",
+    "inputs": [
+     {
+      "group": null,
+      "name": "InpFastEMA",
+      "type": "int",
+      "default": "9",
+      "label": "Fast EMA"
+     },
+     {
+      "group": null,
+      "name": "InpSlowEMA",
+      "type": "int",
+      "default": "21",
+      "label": "Slow EMA"
+     }
+    ],
+    "plots": [
+     "Fast EMA",
+     "Slow EMA",
+     "Buy signal",
+     "Sell signal"
+    ],
+    "window": "chart",
+    "size_kb": 9
+   }
+  }
+ ]
+}

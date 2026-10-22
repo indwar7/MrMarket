@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 )
 
@@ -20,10 +21,13 @@ func (s *Store) StrategyRuns(ctx context.Context, uid int64) ([]StrategyRun, err
 	for rows.Next() {
 		var r StrategyRun
 		t := &r.Strategy
+		var inputs string
 		if err := rows.Scan(&t.ID, &t.Title, &t.Symbol, &t.Timeframe, &t.Style, &t.Risk, &t.Return, &t.Drawdown, &t.WinRate, &t.PF, &t.Trades, &t.MinCapital, &t.Price, &t.Subs, &t.Seed, &t.Author, &t.Description,
+			&t.Number, &t.Version, &t.Category, &inputs, &t.PairID, &t.Timeframes, &t.SizeKB,
 			&r.Running, &r.LotSize, &r.MonthPnL, &r.Trades); err != nil {
 			return nil, err
 		}
+		t.Inputs = json.RawMessage(inputs)
 		out = append(out, r)
 	}
 	return out, rows.Err()

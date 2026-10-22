@@ -72,6 +72,7 @@ func (s *Server) account(w http.ResponseWriter, r *http.Request) {
 			view.MonthlySpend += float64(x.Price) / 3
 		case "Yearly":
 			view.MonthlySpend += float64(x.Price) / 12
+		case "One-time":
 		default:
 			view.MonthlySpend += float64(x.Price)
 		}
@@ -213,15 +214,74 @@ func (s *Server) purchase(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		writeJSON(w, 201, map[string]any{"ok": true, "message": "Plan active. See My account."})
+	case "script":
+		x, err := s.store.Script(ctx, in.ID)
+		if err != nil {
+			fail(w, err)
+			return
+		}
+		if x.Status != "available" {
+			writeErr(w, 409, "this script is not released yet; join the waitlist")
+			return
+		}
+		if has, _ := s.store.HasSubscription(ctx, uid, "script", x.ID); has {
+			writeErr(w, 409, "already purchased")
+			return
+		}
+		ref, ok := charge(x.Price, x.Title)
+		if !ok {
+			return
+		}
+		if err := s.store.Subscribe(ctx, uid, "script", x.ID, x.Title, "One-time", x.Price, "", ref); err != nil {
+			fail(w, err)
+			return
+		}
+		writeJSON(w, 201, map[string]any{"ok": true, "message": "Purchased. Download it from My account."})
 	default:
-		writeErr(w, 400, "kind must be strategy, indicator, course, live or plan")
+		writeErr(w, 400, "kind must be strategy, indicator, course, live, plan or script")
 	}
+}
+
+// waitlist records interest in an item that is not released yet (scripts, upcoming videos).
+func (s *Server) waitlist(w http.ResponseWriter, r *http.Request) {
+	var in struct {
+		Kind string `json:"kind"`
+		ID   string `json:"id"`
+	}
+	if err := decode(r, &in); err != nil || in.Kind == "" || in.ID == "" {
+		writeErr(w, 400, "kind and id are required")
+		return
+	}
+	if _, err := s.store.CreateTicket(r.Context(), auth.UserID(r.Context()), "Waitlist: "+in.Kind+"/"+in.ID, "Notify me when this is released."); err != nil {
+		fail(w, err)
+		return
+	}
+	writeJSON(w, 201, map[string]any{"ok": true, "message": "You're on the list. We'll email you when it's live."})
+}
+
+func (s *Server) completeLesson(w http.ResponseWriter, r *http.Request) {
+	var in struct {
+		Done *bool `json:"done"`
+	}
+	_ = decode(r, &in)
+	done := in.Done == nil || *in.Done
+	lid, err := strconv.ParseInt(chi.URLParam(r, "lid"), 10, 64)
+	if err != nil {
+		writeErr(w, 400, "bad lesson id")
+		return
+	}
+	progress, err := s.store.CompleteLesson(r.Context(), auth.UserID(r.Context()), chi.URLParam(r, "id"), lid, done)
+	if err != nil {
+		fail(w, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true, "progress": progress})
 }
 
 func (s *Server) cancelSubscription(w http.ResponseWriter, r *http.Request) {
 	kind, id := chi.URLParam(r, "kind"), chi.URLParam(r, "id")
-	if kind != "strategy" && kind != "indicator" && kind != "plan" {
-		writeErr(w, 400, "kind must be strategy, indicator or plan")
+	if kind != "strategy" && kind != "indicator" && kind != "plan" && kind != "script" {
+		writeErr(w, 400, "kind must be strategy, indicator, plan or script")
 		return
 	}
 	if err := s.store.CancelSubscription(r.Context(), auth.UserID(r.Context()), kind, id); err != nil {

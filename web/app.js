@@ -27,12 +27,13 @@ const errorHTML = (e) => `<div class="empty" style="margin:80px auto"><b style="
 
 /* catalog comes from the API; the literals below are the offline fallback */
 async function loadCatalog() {
-  const [courses, live, inds, strats, brokers, mentors] = await Promise.all(
-    ["courses", "live", "indicators", "strategies", "brokers", "mentors"].map((k) => api(`/api/catalog/${k}`)));
+  const [courses, live, inds, strats, brokers, mentors, scripts] = await Promise.all(
+    ["courses", "live", "indicators", "strategies", "brokers", "mentors", "scripts"].map((k) => api(`/api/catalog/${k}`)));
+  SCRIPTS = scripts.map((x) => ({ id: x.id, t: x.title, cat: x.category, status: x.status, price: x.price, ver: x.version, desc: x.description, req: x.requirements, tags: x.tags ?? [] }));
   COURSES = courses.map((c) => ({ id: c.id, t: c.title, by: c.author, lvl: c.level, lessons: c.lessons, dur: c.duration, price: c.price, rating: c.rating, students: c.students, hue: c.hue }));
   LIVE = live.map((l) => ({ id: l.id, d: l.day, m: l.month, t: l.title, by: l.author, time: l.time, len: l.length, seats: l.seats, kind: l.kind, live: l.is_live }));
-  INDICATORS = inds.map((x) => ({ id: x.id, t: x.title, cat: x.category, plat: x.platform, desc: x.description, price: x.price, rating: x.rating, subs: x.subs, kind: x.kind }));
-  STRATS = strats.map((s) => ({ id: s.id, t: s.title, sym: s.symbol, tf: s.timeframe, style: s.style, risk: s.risk, ret: s.return_12m, dd: s.max_drawdown, win: s.win_rate, pf: s.profit_factor, trades: s.trades, min: s.min_capital, price: s.price, subs: s.subs, seed: s.seed, by: s.author }));
+  INDICATORS = inds.map((x) => ({ id: x.id, t: x.title, cat: x.category, plat: x.platform, desc: x.description, price: x.price, rating: x.rating, subs: x.subs, kind: x.kind, n: x.number, ver: x.version, plots: x.plots ?? [], inputs: x.inputs ?? [], pair: x.pair_strategy_id }));
+  STRATS = strats.map((s) => ({ id: s.id, t: s.title, sym: s.symbol, tf: s.timeframes || s.timeframe, style: s.style, risk: s.risk, ret: s.return_12m, dd: s.max_drawdown, win: s.win_rate, pf: s.profit_factor, trades: s.trades, min: s.min_capital, price: s.price, subs: s.subs, seed: s.seed, by: s.author, n: s.number, ver: s.version, cat: s.category || s.style, desc: s.description, inputs: s.inputs ?? [], pair: s.pair_indicator_id }));
   BROKERS = brokers.map((b) => ({ id: b.id, n: b.name, c: b.color, reg: b.regulation, spread: b.spread, min: b.min_deposit }));
   MENTORS = mentors.map((m) => ({ id: m.id, n: m.name, r: m.role, i: m.initials }));
 }
@@ -118,6 +119,7 @@ let BROKERS = [
   { id: "octa", n: "Octa", c: "#6c3fc5", reg: "CySEC", spread: "from 0.6 pips", min: "$25" },
   { id: "tickmill", n: "Tickmill", c: "#d4650a", reg: "FCA, CySEC", spread: "from 0.0 pips", min: "$100" },
 ];
+let SCRIPTS = [];
 let MENTORS = [
   { n: "Aseem Singhal", r: "Founder, 15 yrs trading", i: "AS" },
   { n: "Kavya Iyer", r: "Forex & SMC mentor", i: "KI" },
@@ -129,15 +131,15 @@ const state = { broker: null };
 /* ---------------- account (loaded from the API) ---------------- */
 const TODAY = "1 Oct 2026";
 const PLANS = { community: { name: "Community", price: 0 }, mentor: { name: "Mentor plan", price: 99 }, pro: { name: "Pro desk", price: 299 } };
-const BUCKET = { strategy: "subs", indicator: "inds", course: "courses", live: "live" };
-const emptyAccount = () => ({ subs: {}, inds: {}, courses: {}, live: {}, plan: null, bookings: [], orders: [] });
+const BUCKET = { strategy: "subs", indicator: "inds", course: "courses", live: "live", script: "scripts" };
+const emptyAccount = () => ({ subs: {}, inds: {}, courses: {}, live: {}, scripts: {}, plan: null, bookings: [], orders: [] });
 let acct = emptyAccount();
 async function loadAccount() {
   if (!authed()) { acct = emptyAccount(); return; }
   try {
     const a = await api("/api/account");
     const next = emptyAccount();
-    for (const x of a.subscriptions) next[x.kind === "strategy" ? "subs" : "inds"][x.item_id] = { since: fmtDate(x.since), price: x.price, plan: x.plan };
+    for (const x of a.subscriptions) next[BUCKET[x.kind] ?? "inds"][x.item_id] = { since: fmtDate(x.since), price: x.price, plan: x.plan, title: x.title };
     for (const e of a.courses) next.courses[e.course.id] = { since: fmtDate(e.since), price: e.course.price, prog: e.progress };
     for (const l of a.live) next.live[l.id] = { since: "" };
     if (a.plan) next.plan = { id: a.plan.item_id, name: a.plan.title, price: a.plan.price, since: fmtDate(a.plan.since) };
@@ -157,6 +159,7 @@ function itemFor(kind, id) {
   if (kind === "indicator") { const x = INDICATORS.find((i) => i.id === id); return { title: x.t, price: x.price, period: "/month" }; }
   if (kind === "course") { const c = COURSES.find((x) => x.id === id); return { title: c.t, price: c.price, period: "" }; }
   if (kind === "live") { const l = LIVE.find((x) => x.id === Number(id)); return { title: l.t, price: 0, period: "" }; }
+  if (kind === "script") { const x = SCRIPTS.find((i) => i.id === id); return { title: x.t, price: x.price, period: "" }; }
   if (kind === "plan") { const p = PLANS[id]; return { title: p.name, price: p.price, period: "/month" }; }
 }
 
@@ -209,7 +212,7 @@ async function purchase(kind, id, plan = "Monthly", priceOverride) {
   return true;
 }
 
-const BOUGHT_MSG = { strategy: "Subscribed. Switch it on in the Algo dashboard.", indicator: "Subscribed. Restart MT5 to see it in Navigator.", course: "Enrolled. Find it under My account → Courses.", live: "Seat reserved. Added to My account.", plan: "Plan active. See My account." };
+const BOUGHT_MSG = { strategy: "Subscribed. Switch it on in the Algo dashboard.", indicator: "Subscribed. Restart MT5 to see it in Navigator.", course: "Enrolled. Find it under My account → Courses.", live: "Seat reserved. Added to My account.", plan: "Plan active. See My account.", script: "Purchased. Download it from My account." };
 
 /* ---------------- shared bits ---------------- */
 function toast(msg) {
@@ -246,7 +249,7 @@ const SEARCH_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
 const footer = () => `
   <footer class="foot">
     <span class="brand"><span class="brand-dot" aria-hidden="true"></span>MrMarket</span>
-    <nav class="foot-links"><a href="#/learn">Learn</a><a href="#/indicators">Indicators</a><a href="#/strategies">Strategies</a><a href="#/execute">Execution</a><a href="#/algo">Algo</a><a href="#/support">Handholding</a></nav>
+    <nav class="foot-links"><a href="#/learn">Learn</a><a href="#/indicators">Indicators</a><a href="#/strategies">Strategies</a><a href="#/scripts">Scripts</a><a href="#/execute">Execution</a><a href="#/algo">Algo</a><a href="#/support">Handholding</a></nav>
     <p class="muted small">Trading carries risk. Past performance does not guarantee future results.</p>
   </footer>`;
 
@@ -367,7 +370,7 @@ function courseCard(c, i) {
     <p class="muted small">${esc(c.by)} · ${c.lessons} lessons · <span class="rating"><b>★ ${c.rating}</b> (${c.students.toLocaleString()})</span></p>
     ${enrolled ? `<div class="progress" style="--v:${prog}%"><i></i></div><p class="small muted">${prog === 100 ? "Completed" : prog ? `${prog}% complete` : "Enrolled · not started"}</p>` : ""}
     <div class="card-foot"><span class="price">${c.price ? `$${c.price}` : "Free"}</span>
-      ${enrolled ? `<button class="btn btn-small btn-quiet" data-toast="Opening ${esc(c.t)}">${prog === 100 ? "Review" : prog ? "Continue" : "Start course"}</button>` : buyBtn("course", c.id, c.price ? "Buy course" : "Enroll free", "Enrolled ✓", "btn-small")}</div>
+      <span class="btn-row">${enrolled ? `<a class="btn btn-small" href="#/course/${c.id}">${prog === 100 ? "Review" : prog ? "Continue" : "Start course"}</a>` : `<a class="btn btn-small btn-quiet" href="#/course/${c.id}">Preview</a>${buyBtn("course", c.id, c.price ? "Buy course" : "Enroll free", "Enrolled ✓", "btn-small")}`}</span></div>
   </article>`;
 }
 
@@ -441,12 +444,12 @@ function indicatorsScreen() {
     const list = INDICATORS.filter((x) => (cat === "All" || x.cat === cat) && x.t.toLowerCase().includes(q));
     box.innerHTML = list.length ? list.map((x, i) => {
       return `<article class="card hover">
-        <div class="ind-art">${indArt(x.kind, i * 7 + 2)}</div>
-        <div class="strat-head"><h3 class="h3">${esc(x.t)}</h3><span class="rating"><b>★ ${x.rating}</b></span></div>
-        <div class="tags"><span class="tag">${x.cat}</span><span class="tag">${x.plat}</span><span class="tag">${x.subs.toLocaleString()} users</span></div>
-        <p class="muted small">${esc(x.desc)}</p>
+        <a class="ind-art" href="#/indicator/${x.id}" aria-label="${esc(x.t)} details">${indArt(x.kind, (x.n ?? i) * 7 + 2)}</a>
+        <div class="strat-head"><h3 class="h3"><a href="#/indicator/${x.id}" style="text-decoration:none">${esc(x.t)}</a></h3>${x.n ? `<span class="small muted">#${String(x.n).padStart(2, "0")}</span>` : `<span class="rating"><b>★ ${x.rating}</b></span>`}</div>
+        <div class="tags"><span class="tag">${x.cat}</span><span class="tag">${x.plat}</span>${x.plots?.length ? `<span class="tag">${x.plots.length} plots</span>` : ""}${x.ver ? `<span class="tag">v${x.ver}</span>` : ""}</div>
+        <p class="muted small clamp-3">${esc(x.desc)}</p>
         <div class="card-foot"><span class="price">${x.price ? `$${x.price}<small> /month</small>` : "Free"}</span>
-          ${buyBtn("indicator", x.id, x.price ? "Subscribe" : "Get free", "Subscribed ✓", "btn-small")}</div>
+          <span class="btn-row"><a class="btn btn-small btn-quiet" href="#/indicator/${x.id}">Details</a>${buyBtn("indicator", x.id, x.price ? "Subscribe" : "Get free", "Subscribed ✓", "btn-small")}</span></div>
       </article>`;
     }).join("") : `<div class="empty" style="grid-column:1/-1">No indicators match.</div>`;
   };
@@ -458,40 +461,45 @@ function indicatorsScreen() {
 }
 
 /* ---------------- strategies ---------------- */
+const artKind = (cat = "") => ({ "Momentum": "osc", "Mean reversion": "osc", "Levels": "zones", "Smart money": "zones", "Session": "box", "Gap": "box", "Pattern": "box", "Price action": "box", "Volume": "hist" }[cat] ?? "ribbon");
 function stratCard(s) {
   const riskTag = s.risk === "Low" ? "tag-up" : s.risk === "High" ? "tag-down" : "tag-amber";
+  const live = s.trades > 0;
   return `<article class="card hover">
-    <div class="strat-head"><div><h3 class="h3"><a href="#/strategy/${s.id}" style="text-decoration:none">${esc(s.t)}</a></h3><p class="muted small">by ${esc(s.by)}</p></div><span class="rating"><b>★ 4.${(s.seed % 3) + 7}</b></span></div>
-    <div class="tags"><span class="tag">${s.sym}</span><span class="tag">${s.tf}</span><span class="tag">${s.style}</span><span class="tag ${riskTag}">${s.risk} risk</span></div>
-    <a href="#/strategy/${s.id}" aria-label="${esc(s.t)} details">${sparkSVG(curve(s.seed, 60, s.ret / 60, 2.5))}</a>
-    <dl class="mini-stats"><div><dt>12m return</dt><dd class="up">${pct(s.ret)}</dd></div><div><dt>Max DD</dt><dd class="down">${pct(-s.dd)}</dd></div><div><dt>Win rate</dt><dd>${s.win}%</dd></div></dl>
+    <div class="strat-head"><div><h3 class="h3"><a href="#/strategy/${s.id}" style="text-decoration:none">${esc(s.t)}</a></h3><p class="muted small">${s.n ? `EA #${String(s.n).padStart(2, "0")} · ` : ""}by ${esc(s.by)}</p></div>${live ? `<span class="rating"><b>★ 4.${(s.seed % 3) + 7}</b></span>` : `<span class="tag">v${s.ver || "1.00"}</span>`}</div>
+    <div class="tags"><span class="tag">${esc(s.cat || s.style)}</span><span class="tag">${esc(s.tf)}</span><span class="tag ${riskTag}">${s.risk} risk</span></div>
+    ${live ? `<a href="#/strategy/${s.id}" aria-label="${esc(s.t)} details">${sparkSVG(curve(s.seed, 60, s.ret / 60, 2.5))}</a>
+    <dl class="mini-stats"><div><dt>12m return</dt><dd class="up">${pct(s.ret)}</dd></div><div><dt>Max DD</dt><dd class="down">${pct(-s.dd)}</dd></div><div><dt>Win rate</dt><dd>${s.win}%</dd></div></dl>`
+    : `<a class="ind-art" href="#/strategy/${s.id}" aria-label="${esc(s.t)} details">${indArt(artKind(s.cat), s.seed)}</a>
+    <p class="muted small clamp-2">${esc(s.desc || "")}</p>
+    <dl class="mini-stats"><div><dt>Timeframe</dt><dd style="font-size:17px">${esc(s.tf)}</dd></div><div><dt>Parameters</dt><dd style="font-size:17px">${s.inputs.length} + risk</dd></div><div><dt>Stop</dt><dd style="font-size:17px">ATR</dd></div></dl>`}
     <div class="card-foot"><span class="price">$${s.price}<small> /month</small></span>
       <span class="btn-row"><a class="btn btn-small btn-quiet" href="#/strategy/${s.id}">Details</a>${buyBtn("strategy", s.id, "Subscribe", "Subscribed ✓", "btn-small")}</span></div>
   </article>`;
 }
 
 function strategiesScreen() {
-  const styles = ["All", ...new Set(STRATS.map((s) => s.risk + " risk"))];
+  const styles = ["All", ...new Set(STRATS.map((s) => s.cat || s.style))];
   view.innerHTML = `
   <section class="page-head">
     <p class="eyebrow rise"><i></i>Strategies</p>
     <h1 class="title split-me">Strategies with <em>a track record</em></h1>
-    <p class="lede rise" style="--d:400ms">Each strategy runs as an Expert Advisor on your MT5 account. Every number below is from live trading over the last 12 months.</p>
+    <p class="lede rise" style="--d:400ms">${STRATS.length} Expert Advisors for MetaTrader 5, each with its own on-chart signal indicator and the same risk engine: ATR stops, % risk sizing, break-even, trailing and news filters. Subscribe, install the compiled EA, switch it on.</p>
   </section>
   <div class="toolbar">
     <div class="cats">${styles.map((c, i) => `<button class="cat" aria-pressed="${i === 0}" data-f="${c}">${c}</button>`).join("")}</div>
-    <div class="tabs" role="group" aria-label="Sort"><button aria-selected="true" data-sort="ret">Top return</button><button aria-selected="false" data-sort="dd">Lowest drawdown</button><button aria-selected="false" data-sort="subs">Most popular</button></div>
+    <div class="tabs" role="group" aria-label="Sort"><button aria-selected="true" data-sort="n">Catalogue order</button><button aria-selected="false" data-sort="price">Price</button><button aria-selected="false" data-sort="name">Name</button></div>
   </div>
   <div class="cards cards-3" id="list"></div>
   ${footer()}`;
   splitWords(view.querySelector(".split-me"));
-  let f = "All", sort = "ret";
+  let f = "All", sort = "n";
   const box = view.querySelector("#list");
   const draw = () => {
-    const list = STRATS.filter((s) => f === "All" || `${s.risk} risk` === f)
-      .sort((a, b) => (sort === "dd" ? a.dd - b.dd : b[sort] - a[sort]));
-    box.innerHTML = list.map(stratCard).join("");
-    };
+    const list = STRATS.filter((s) => f === "All" || (s.cat || s.style) === f)
+      .sort((a, b) => sort === "price" ? a.price - b.price : sort === "name" ? a.t.localeCompare(b.t) : (a.n ?? 0) - (b.n ?? 0));
+    box.innerHTML = list.map(stratCard).join("") || `<div class="empty" style="grid-column:1/-1">No strategies match.</div>`;
+  };
   draw();
   view.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => {
     f = b.dataset.f; view.querySelectorAll("[data-f]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); draw();
@@ -501,54 +509,225 @@ function strategiesScreen() {
   }));
 }
 
+const paramsTable = (inputs, { showGroup = true } = {}) => {
+  const groups = [...new Set(inputs.map((i) => i.group || ""))];
+  return `<div class="table-wrap params"><table><thead><tr><th>Setting</th><th>Default</th><th class="hide-sm">Type</th></tr></thead><tbody>
+    ${groups.map((g) => `${showGroup && g ? `<tr class="grp"><td colspan="3">${esc(g)}</td></tr>` : ""}${inputs.filter((i) => (i.group || "") === g).map((i) => `<tr><td><b>${esc(i.label)}</b><span class="small muted hide-sm" style="display:block">${esc(i.name)}</span></td><td class="num"><code>${esc(i.default)}</code></td><td class="hide-sm muted">${esc(i.type.replace(/^ENUM_/, "").toLowerCase())}</td></tr>`).join("")}`).join("")}
+  </tbody></table></div>`;
+};
+const includedList = (items) => `<ul class="checklist">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
+
 function strategyScreen(m) {
-  const s = STRATS.find((x) => x.id === m[1]) ?? STRATS[0];
-  const eq = curve(s.seed, 120, s.ret / 120, 2.2).map((v) => v * 100);
-  const r = rng(s.seed + 9);
+  view.innerHTML = loadingHTML;
+  api(`/api/catalog/strategies/${m[1]}`).then(drawStrategy).catch((e) => { view.innerHTML = errorHTML(e); });
+}
+function drawStrategy(d) {
+  const s = { id: d.id, t: d.title, sym: d.symbol, tf: d.timeframes || d.timeframe, style: d.style, risk: d.risk, ret: d.return_12m, dd: d.max_drawdown, win: d.win_rate, pf: d.profit_factor, trades: d.trades, min: d.min_capital, price: d.price, subs: d.subs, seed: d.seed, by: d.author };
+  const live = d.has_track_record;
+  const riskPct = (d.common_inputs || []).find((i) => i.name === "InpRiskPct")?.default ?? "1.0";
+  const slAtr = (d.common_inputs || []).find((i) => i.name === "InpSLATRMult")?.default ?? "1.5";
+  const rr = (d.common_inputs || []).find((i) => i.name === "InpRR")?.default ?? "2.0";
   const months = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
-  const monthly = months.map(() => +((r() - 0.25) * s.ret / 4).toFixed(1));
+  const pair = d.pair_indicator;
   view.innerHTML = `
   <section class="page-head" style="padding-bottom:28px">
     <a class="small muted" href="#/strategies">← All strategies</a>
     <h1 class="title split-me">${esc(s.t)}</h1>
-    <div class="tags rise" style="--d:300ms"><span class="tag">${s.sym}</span><span class="tag">${s.tf}</span><span class="tag">${s.style}</span><span class="tag tag-amber">${s.risk} risk</span><span class="tag">${s.subs.toLocaleString()} subscribers</span><span class="tag">by ${esc(s.by)}</span></div>
+    <div class="tags rise" style="--d:300ms">${d.number ? `<span class="tag">EA #${String(d.number).padStart(2, "0")}</span>` : ""}<span class="tag">${esc(d.category || s.style)}</span><span class="tag">${esc(s.tf)}</span><span class="tag tag-amber">${s.risk} risk</span>${d.version ? `<span class="tag">v${esc(d.version)}</span>` : ""}<span class="tag">MT5</span><span class="tag">by ${esc(s.by)}</span></div>
   </section>
   <div class="detail">
     <div style="display:grid;gap:18px;min-width:0">
-      <dl class="kv">
+      ${live ? `<dl class="kv">
         <div><dt>12m return</dt><dd class="up">${pct(s.ret)}</dd></div>
         <div><dt>Max drawdown</dt><dd class="down">${pct(-s.dd)}</dd></div>
         <div><dt>Win rate</dt><dd>${s.win}%</dd></div>
         <div><dt>Profit factor</dt><dd>${s.pf}</dd></div>
         <div><dt>Trades</dt><dd>${s.trades}</dd></div>
       </dl>
-      <div class="sheet"><div class="panel-head" style="margin-bottom:14px"><h2 class="h3">Equity curve, $10,000 start</h2><div class="tabs"><button aria-selected="false">3M</button><button aria-selected="false">6M</button><button aria-selected="true">1Y</button></div></div>
-        ${chartSVG(eq, { labels: ["Oct '25", "Jan '26", "Apr '26", "Jul '26", "Sep '26"] })}</div>
+      <div class="sheet"><div class="panel-head" style="margin-bottom:14px"><h2 class="h3">Equity curve, $10,000 start</h2></div>${chartSVG(d.equity_curve, { labels: ["Oct '25", "Jan '26", "Apr '26", "Jul '26", "Sep '26"] })}</div>
       <div class="sheet"><h2 class="h3" style="margin-bottom:14px">Monthly returns</h2>
         <div class="table-wrap" style="border:0"><table><thead><tr>${months.map((x) => `<th class="num">${x}</th>`).join("")}</tr></thead>
-        <tbody><tr>${monthly.map((v) => `<td class="num ${cls(v)}"><b>${pct(v)}</b></td>`).join("")}</tr></tbody></table></div></div>
+        <tbody><tr>${d.monthly_returns.map((v) => `<td class="num ${cls(v.pct)}"><b>${pct(v.pct)}</b></td>`).join("")}</tr></tbody></table></div></div>`
+      : `<dl class="kv">
+        <div><dt>Style</dt><dd style="font-size:22px">${esc(d.category || s.style)}</dd></div>
+        <div><dt>Timeframes</dt><dd style="font-size:22px">${esc(s.tf)}</dd></div>
+        <div><dt>Risk per trade</dt><dd style="font-size:22px">${esc(riskPct)}%</dd></div>
+        <div><dt>Stop loss</dt><dd style="font-size:22px">${esc(slAtr)}× ATR</dd></div>
+        <div><dt>Take profit</dt><dd style="font-size:22px">${esc(rr)}R</dd></div>
+      </dl>
+      <div class="sheet" style="display:grid;gap:12px"><span class="tag tag-amber" style="justify-self:start">Live track record: coming soon</span><p class="muted">This EA is new to the catalogue. Verified live results will appear here once the first full month on a MrMarket account is in.</p></div>`}
       <div class="sheet" style="display:grid;gap:14px"><h2 class="h3">How it trades</h2>
-        <p class="muted">Waits for the ${s.sym} range to form, then enters on a confirmed break with a volatility-sized stop. Takes partial profit at 1R, trails the rest, and closes all positions before the weekend. No martingale, no grid, every trade has a stop loss.</p>
-        <ul class="checklist"><li>Stop loss on every trade</li><li>Max 1% account risk per trade by default</li><li>Pauses during high-impact news</li><li>Works on any MT5 broker</li></ul></div>
+        <p class="muted">${esc(d.description)}</p>
+        ${includedList(d.rules)}</div>
+      <div class="sheet" style="display:grid;gap:14px"><div class="panel-head"><h2 class="h3">Strategy settings</h2><span class="small muted">${d.inputs.length} inputs, all adjustable in MT5</span></div>
+        ${d.inputs.length ? paramsTable(d.inputs) : `<p class="muted">No strategy-specific inputs.</p>`}</div>
+      <details class="sheet" style="display:block"><summary class="h3" style="cursor:pointer">Risk, exits and filters <span class="small muted" style="font-weight:400">(shared by every MrMarket EA, ${(d.common_inputs || []).length} settings)</span></summary>
+        <div style="margin-top:14px">${paramsTable(d.common_inputs || [])}</div></details>
+      ${pair ? `<div class="sheet" style="display:grid;gap:14px"><div class="panel-head"><h2 class="h3">On the chart</h2><a class="small" href="#/indicator/${pair.id}">Indicator details →</a></div>
+        <div class="split-2" style="align-items:center"><a class="ind-art" href="#/indicator/${pair.id}">${indArt(pair.kind, (pair.number || 1) * 7 + 2)}</a>
+          <div style="display:grid;gap:10px"><b>${esc(pair.title)}</b><p class="muted small">${esc(pair.description)}</p><div class="tags">${(pair.plots || []).map((x) => `<span class="tag">${esc(x)}</span>`).join("")}</div><p class="small muted">Embedded in the EA. Also available on its own for discretionary trading.</p></div></div></div>` : ""}
+      <div class="sheet" style="display:grid;gap:14px"><h2 class="h3">What you get</h2>${includedList(d.included || [])}<p class="small muted">Delivered as a compiled MetaTrader 5 file. Source code is not included.</p></div>
     </div>
     <aside class="sticky">
       <div class="sheet" style="display:grid;gap:16px">
         <h2 class="h3">Subscribe</h2>
         <div class="plan">
-          <label><span><input type="radio" name="plan" value="Monthly" data-price="${s.price}" checked>Monthly</span><b>$${s.price}</b></label>
-          <label><span><input type="radio" name="plan" value="Quarterly" data-price="${Math.round(s.price * 3 * 0.85)}">Quarterly <span class="tag tag-up" style="margin-left:8px">Save 15%</span></span><b>$${Math.round(s.price * 3 * 0.85)}</b></label>
-          <label><span><input type="radio" name="plan" value="Yearly" data-price="${Math.round(s.price * 12 * 0.7)}">Yearly <span class="tag tag-up" style="margin-left:8px">Save 30%</span></span><b>$${Math.round(s.price * 12 * 0.7)}</b></label>
+          <label><span><input type="radio" name="plan" value="Monthly" data-price="${d.plans.Monthly}" checked>Monthly</span><b>$${d.plans.Monthly}</b></label>
+          <label><span><input type="radio" name="plan" value="Quarterly" data-price="${d.plans.Quarterly}">Quarterly <span class="tag tag-up" style="margin-left:8px">Save 15%</span></span><b>$${d.plans.Quarterly}</b></label>
+          <label><span><input type="radio" name="plan" value="Yearly" data-price="${d.plans.Yearly}">Yearly <span class="tag tag-up" style="margin-left:8px">Save 30%</span></span><b>$${d.plans.Yearly}</b></label>
         </div>
         <p class="small muted">Minimum capital $${s.min.toLocaleString()} · Runs on your MT5 account</p>
         ${buyBtn("strategy", s.id, "Subscribe", "Subscribed ✓")}
         <a class="btn btn-quiet" href="#/execute">Set up MT5 first</a>
       </div>
-      <div class="sheet mentor"><span class="avatar">${s.by.split(" ").map((w) => w[0]).join("")}</span><div><b>${esc(s.by)}</b><p class="small muted">Strategy author. Ask questions in the community or book a call.</p></div></div>
+      <div class="sheet" style="display:grid;gap:10px"><b>Requirements</b><ul class="small muted" style="display:grid;gap:6px;padding-left:18px"><li>MetaTrader 5 (build 3800+), Windows or VPS</li><li>Any broker, hedging or netting account</li><li>Algo Trading enabled in the terminal</li><li>Chart timeframe: ${esc(s.tf)}</li></ul></div>
+      <div class="sheet mentor-cta" style="display:grid;gap:10px"><b>Not sure which EA fits you?</b><p class="small muted">A mentor can match a strategy to your capital, hours and broker.</p><a class="btn btn-small btn-quiet" href="#/support">Book a free call</a></div>
     </aside>
   </div>
   ${footer()}`;
   splitWords(view.querySelector(".split-me"));
-  view.querySelectorAll(".sheet .tabs button").forEach((b) => b.addEventListener("click", () => b.parentElement.querySelectorAll("button").forEach((x) => x.setAttribute("aria-selected", String(x === b)))));
+}
+
+/* ---------------- indicator detail ---------------- */
+function indicatorScreen(m) {
+  view.innerHTML = loadingHTML;
+  api(`/api/catalog/indicators/${m[1]}`).then(drawIndicator).catch((e) => { view.innerHTML = errorHTML(e); });
+}
+function drawIndicator(d) {
+  const pair = d.pair_strategy;
+  view.innerHTML = `
+  <section class="page-head" style="padding-bottom:28px">
+    <a class="small muted" href="#/indicators">← All indicators</a>
+    <h1 class="title split-me">${esc(d.title)}</h1>
+    <div class="tags rise" style="--d:300ms">${d.number ? `<span class="tag">#${String(d.number).padStart(2, "0")}</span>` : ""}<span class="tag">${esc(d.category)}</span><span class="tag">${esc(d.platform)}</span><span class="tag">${d.window === "separate" ? "Separate window" : "On chart"}</span>${d.version ? `<span class="tag">v${esc(d.version)}</span>` : ""}</div>
+  </section>
+  <div class="detail">
+    <div style="display:grid;gap:18px;min-width:0">
+      <div class="ind-art" style="height:240px">${indArt(d.kind, (d.number || 1) * 7 + 2)}</div>
+      <div class="sheet" style="display:grid;gap:14px"><h2 class="h3">What it shows</h2><p class="muted">${esc(d.description)}</p>
+        <div class="tags">${(d.plots || []).map((x) => `<span class="tag">${esc(x)}</span>`).join("")}</div></div>
+      <div class="sheet" style="display:grid;gap:14px"><div class="panel-head"><h2 class="h3">Inputs</h2><span class="small muted">${(d.inputs || []).length} settings</span></div>
+        ${(d.inputs || []).length ? paramsTable(d.inputs, { showGroup: false }) : `<p class="muted">No inputs. Attach and go.</p>`}</div>
+      ${pair ? `<div class="sheet" style="display:grid;gap:12px"><div class="panel-head"><h2 class="h3">Trades automatically with</h2><a class="small" href="#/strategy/${pair.id}">EA details →</a></div>
+        <p class="muted">${esc(pair.title)}: ${esc(pair.description)}</p><div class="btn-row"><a class="btn btn-small" href="#/strategy/${pair.id}">View the EA</a></div></div>` : ""}
+      <div class="sheet" style="display:grid;gap:14px"><h2 class="h3">What you get</h2>${includedList(d.included || [])}<p class="small muted">Delivered as a compiled MetaTrader 5 file. Source code is not included.</p></div>
+    </div>
+    <aside class="sticky">
+      <div class="sheet" style="display:grid;gap:16px"><h2 class="h3">Subscribe</h2>
+        <div class="co-row"><span>Monthly</span><b>${d.price ? `$${d.price}<small class="muted"> /month</small>` : "Free"}</b></div>
+        ${buyBtn("indicator", d.id, d.price ? "Subscribe" : "Get free", "Subscribed ✓")}
+        <a class="btn btn-quiet" href="#/execute">Install MT5 first</a>
+        <p class="small muted">After subscribing, restart MT5. The indicator appears under Navigator → Indicators → Market.</p></div>
+    </aside>
+  </div>
+  ${footer()}`;
+  splitWords(view.querySelector(".split-me"));
+}
+
+/* ---------------- course player (videos) ---------------- */
+function videoEmbed(url) {
+  if (!url) return "";
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+  if (yt) return `<iframe src="https://www.youtube.com/embed/${yt[1]}?rel=0" title="Lesson video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) return `<iframe src="https://player.vimeo.com/video/${vm[1]}" title="Lesson video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  return `<video controls playsinline preload="metadata" src="${esc(url)}"></video>`;
+}
+function courseScreen(m) {
+  view.innerHTML = loadingHTML;
+  api(`/api/catalog/courses/${m[1]}`).then((d) => drawCourse(d, null)).catch((e) => { view.innerHTML = errorHTML(e); });
+}
+function drawCourse(d, currentId) {
+  const c = COURSES.find((x) => x.id === d.id) ?? { id: d.id, t: d.title, by: d.author, lvl: d.level, dur: d.duration, price: d.price, hue: d.hue };
+  const lessons = d.lessons;
+  const cur = lessons.find((l) => l.id === currentId) ?? lessons.find((l) => !l.done && !l.locked) ?? lessons[0];
+  const done = lessons.filter((l) => l.done).length;
+  const playerBody = !cur ? `<div class="player-msg"><b>No lessons yet</b></div>`
+    : cur.locked ? `<div class="player-msg"><span class="tag tag-amber">Members only</span><b>Enroll to watch “${esc(cur.title)}”</b><p class="muted small">Lesson 1 is a free preview. The full course unlocks every lesson and tracks your progress.</p>${buyBtn("course", c.id, c.price ? `Buy course · $${c.price}` : "Enroll free", "Enrolled ✓")}</div>`
+    : cur.video_url ? videoEmbed(cur.video_url)
+    : `<div class="player-msg"><span class="tag">Coming soon</span><b>“${esc(cur.title)}” is being recorded</b><p class="muted small">Videos are uploaded in order. You will see them here as soon as they are live.</p></div>`;
+  view.innerHTML = `
+  <section class="page-head" style="padding-bottom:22px">
+    <a class="small muted" href="#/learn">← All courses</a>
+    <h1 class="title split-me">${esc(c.t)}</h1>
+    <div class="tags rise" style="--d:300ms"><span class="tag">${esc(c.lvl)}</span><span class="tag">${lessons.length} lessons</span><span class="tag">${esc(c.dur)}</span><span class="tag">with ${esc(c.by)}</span>${d.enrolled ? `<span class="tag tag-up">Enrolled · ${d.progress}%</span>` : ""}</div>
+  </section>
+  <div class="course">
+    <div style="display:grid;gap:16px;min-width:0">
+      <div class="player" id="player">${playerBody}</div>
+      ${cur ? `<div class="panel" style="display:grid;gap:12px"><div class="panel-head"><div><span class="kicker">Lesson ${cur.idx}</span><h2 class="h3">${esc(cur.title)}</h2></div>
+        ${d.enrolled && !cur.locked ? `<button class="btn btn-small ${cur.done ? "btn-quiet" : ""}" id="done-btn" data-id="${cur.id}" data-done="${cur.done}">${cur.done ? "Mark as not done" : "Mark as complete"}</button>` : ""}</div>
+        ${d.enrolled ? `<div class="progress" style="--v:${d.progress}%"><i></i></div><p class="small muted">${done} of ${lessons.length} lessons complete</p>` : `<p class="small muted">Preview mode. <a href="#/learn">Enroll</a> to track progress and unlock every lesson.</p>`}</div>` : ""}
+    </div>
+    <aside class="panel lesson-list">
+      <div class="panel-head"><h2 class="h3">Lessons</h2><span class="small muted">${esc(c.dur)}</span></div>
+      <ol>${lessons.map((l) => `<li><button class="lesson ${l.id === cur?.id ? "is-cur" : ""} ${l.done ? "is-done" : ""}" data-lesson="${l.id}">
+        <span class="n">${l.done ? "✓" : l.idx}</span>
+        <span class="body"><b>${esc(l.title)}</b><span class="small muted">${esc(l.duration)}${l.free_preview ? " · Free preview" : ""}${l.locked ? " · Locked" : ""}${!l.locked && !l.video_url ? " · Coming soon" : ""}</span></span>
+        ${l.locked ? `<span class="lock" aria-hidden="true"></span>` : ""}</button></li>`).join("")}</ol>
+      ${d.enrolled ? "" : `<div style="padding:16px 18px 18px;display:grid;gap:10px"><span class="price">${c.price ? `$${c.price}` : "Free"}</span>${buyBtn("course", c.id, c.price ? "Buy course" : "Enroll free", "Enrolled ✓")}</div>`}
+    </aside>
+  </div>
+  ${footer()}`;
+  splitWords(view.querySelector(".split-me"));
+  view.querySelectorAll("[data-lesson]").forEach((b) => b.addEventListener("click", () => { drawCourse(d, Number(b.dataset.lesson)); window.scrollTo({ top: 0, behavior: "smooth" }); }));
+  view.querySelector("#done-btn")?.addEventListener("click", async (e) => {
+    const btn = e.currentTarget, id = Number(btn.dataset.id), wasDone = btn.dataset.done === "true";
+    btn.disabled = true;
+    try {
+      const r = await api(`/api/courses/${d.id}/lessons/${id}/complete`, { method: "POST", body: { done: !wasDone } });
+      const l = d.lessons.find((x) => x.id === id); l.done = !wasDone; d.progress = r.progress;
+      await loadAccount();
+      const next = !wasDone ? (d.lessons.find((x) => x.idx > l.idx && !x.done && !x.locked)?.id ?? id) : id;
+      drawCourse(d, next);
+      toast(!wasDone ? (r.progress === 100 ? "Course complete. Well done!" : "Lesson complete") : "Marked as not done");
+    } catch (err) { toast(err.message); btn.disabled = false; }
+  });
+}
+
+/* ---------------- python scripts ---------------- */
+function scriptsScreen() {
+  const cats = ["All", ...new Set(SCRIPTS.map((x) => x.cat))];
+  view.innerHTML = `
+  <section class="page-head">
+    <p class="eyebrow rise"><i></i>Python scripts</p>
+    <h1 class="title split-me">Tools around <em>your trading</em></h1>
+    <p class="lede rise" style="--d:400ms">Backtesting, risk, reporting and alerts in Python, built to work with MT5 and the MrMarket EAs. Each script ships with a README and a one-line install. First releases are on the way.</p>
+  </section>
+  <div class="toolbar">
+    <div class="cats">${cats.map((c, i) => `<button class="cat" aria-pressed="${i === 0}" data-cat="${c}">${c}</button>`).join("")}</div>
+    <label class="search">${SEARCH_ICON}<input id="q" placeholder="Search scripts" aria-label="Search scripts"></label>
+  </div>
+  <div class="cards cards-3" id="list"></div>
+  <section class="section split-2" style="margin-top:60px">
+    <div><h2 class="title">How scripts <em>are delivered</em></h2></div>
+    <div class="faq">
+      <details><summary>What do I need to run them?</summary><p>Python 3.10 or newer on Windows, macOS or your VPS. Each script lists its own extra packages and installs them with one command.</p></details>
+      <details><summary>Do they connect to my MT5 account?</summary><p>Only the ones that say so, and only through the official MetaTrader5 Python package on the same Windows machine as your terminal. Nothing leaves your computer.</p></details>
+      <details><summary>Will I get the source code?</summary><p>Yes. Scripts are delivered as readable Python with a README, unlike the compiled EAs and indicators.</p></details>
+    </div>
+  </section>
+  ${footer()}`;
+  splitWords(view.querySelector(".split-me"));
+  let cat = "All", q = "";
+  const box = view.querySelector("#list");
+  const draw = () => {
+    const list = SCRIPTS.filter((x) => (cat === "All" || x.cat === cat) && (x.t + " " + x.desc).toLowerCase().includes(q));
+    box.innerHTML = list.length ? list.map((x) => `<article class="card hover">
+      <div class="strat-head"><div><span class="py-badge" aria-hidden="true">Py</span></div>${x.status === "available" ? `<span class="tag tag-up">Available</span>` : `<span class="tag tag-amber">Coming soon</span>`}</div>
+      <h3 class="h3">${esc(x.t)}</h3>
+      <div class="tags"><span class="tag">${esc(x.cat)}</span>${x.ver ? `<span class="tag">v${esc(x.ver)}</span>` : ""}${(x.tags || []).slice(0, 3).map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+      <p class="muted small">${esc(x.desc)}</p>
+      <p class="small muted"><b style="color:var(--text)">Needs:</b> ${esc(x.req)}</p>
+      <div class="card-foot"><span class="price">${x.price ? `$${x.price}<small> one-time</small>` : "Free"}</span>
+        ${x.status === "available" ? buyBtn("script", x.id, x.price ? "Buy script" : "Get free", "Purchased ✓", "btn-small") : `<button class="btn btn-small btn-quiet" data-waitlist="script:${x.id}">Notify me</button>`}</div>
+    </article>`).join("") : `<div class="empty" style="grid-column:1/-1">${SCRIPTS.length ? "No scripts match." : "Scripts are being prepared. Check back soon."}</div>`;
+  };
+  draw();
+  view.querySelectorAll("[data-cat]").forEach((b) => b.addEventListener("click", () => {
+    cat = b.dataset.cat; view.querySelectorAll("[data-cat]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); draw();
+  }));
+  view.querySelector("#q").addEventListener("input", (e) => { q = e.target.value.toLowerCase(); draw(); });
 }
 
 /* ---------------- execution ---------------- */
@@ -793,10 +972,11 @@ function supportScreen() {
 /* ---------------- my account ---------------- */
 function accountScreen() {
   const subs = [
-    ...Object.entries(acct.subs).map(([id, v]) => ({ kind: "strategy", id, title: STRATS.find((x) => x.id === id)?.t, type: "Strategy", ...v })),
-    ...Object.entries(acct.inds).map(([id, v]) => ({ kind: "indicator", id, title: INDICATORS.find((x) => x.id === id)?.t, type: "Indicator", ...v })),
+    ...Object.entries(acct.subs).map(([id, v]) => ({ kind: "strategy", id, title: STRATS.find((x) => x.id === id)?.t ?? v.title, type: "Strategy", ...v })),
+    ...Object.entries(acct.inds).map(([id, v]) => ({ kind: "indicator", id, title: INDICATORS.find((x) => x.id === id)?.t ?? v.title, type: "Indicator", ...v })),
+    ...Object.entries(acct.scripts).map(([id, v]) => ({ kind: "script", id, title: SCRIPTS.find((x) => x.id === id)?.t ?? v.title, type: "Script", ...v })),
   ];
-  const monthly = (v) => v.plan === "Quarterly" ? v.price / 3 : v.plan === "Yearly" ? v.price / 12 : v.price;
+  const monthly = (v) => v.plan === "Quarterly" ? v.price / 3 : v.plan === "Yearly" ? v.price / 12 : v.plan === "One-time" ? 0 : v.price;
   const spend = subs.reduce((a, v) => a + monthly(v), 0) + (acct.plan?.price ?? 0);
   const courses = Object.entries(acct.courses).map(([id, v]) => ({ c: COURSES.find((x) => x.id === id), ...v })).filter((x) => x.c);
   const lives = Object.keys(acct.live).map((i) => LIVE.find((l) => l.id === Number(i))).filter(Boolean);
@@ -842,7 +1022,7 @@ function accountScreen() {
       <div class="thumb">${thumbSVG(c.hue, COURSES.indexOf(c) + 3)}<span class="play" aria-hidden="true"></span><span class="dur">${c.dur}</span></div>
       <h3 class="h3">${esc(c.t)}</h3><p class="small muted">${esc(c.by)} · Enrolled ${since}</p>
       <div class="progress" style="--v:${prog}%"><i></i></div>
-      <div class="card-foot"><span class="small muted">${prog === 100 ? "Completed" : prog ? `${prog}% complete` : "Not started"}</span><button class="btn btn-small" data-toast="Opening ${esc(c.t)}">${prog === 100 ? "Review" : prog ? "Continue" : "Start"}</button></div>
+      <div class="card-foot"><span class="small muted">${prog === 100 ? "Completed" : prog ? `${prog}% complete` : "Not started"}</span><a class="btn btn-small" href="#/course/${c.id}">${prog === 100 ? "Review" : prog ? "Continue" : "Start"}</a></div>
     </article>`).join("")}</div>` : `<div class="empty"><b style="color:var(--text)">No courses yet</b><a class="btn btn-small" href="#/learn">Browse courses</a></div>`}</div>
 
     <div data-pane="a-sessions" hidden>${upcoming ? `<ul>
@@ -926,12 +1106,15 @@ function loginScreen() {
 }
 
 /* ---------------- router ---------------- */
-const NAV = [["learn", "#/learn", "Learn"], ["indicators", "#/indicators", "Indicators"], ["strategies", "#/strategies", "Strategies"], ["execute", "#/execute", "Execution"], ["algo", "#/algo", "Algo"], ["support", "#/support", "Handholding"]];
+const NAV = [["learn", "#/learn", "Learn"], ["indicators", "#/indicators", "Indicators"], ["strategies", "#/strategies", "Strategies"], ["scripts", "#/scripts", "Scripts"], ["execute", "#/execute", "Execution"], ["algo", "#/algo", "Algo"], ["support", "#/support", "Handholding"]];
 const ROUTES = [
   [/^#\/learn$/, learnScreen, 1, "learn"],
   [/^#\/indicators$/, indicatorsScreen, 1, "indicators"],
   [/^#\/strategies$/, strategiesScreen, 1, "strategies"],
   [/^#\/strategy\/([\w-]+)$/, strategyScreen, 2, "strategies"],
+  [/^#\/indicator\/([\w-]+)$/, indicatorScreen, 2, "indicators"],
+  [/^#\/course\/([\w-]+)$/, courseScreen, 2, "learn"],
+  [/^#\/scripts$/, scriptsScreen, 1, "scripts"],
   [/^#\/execute$/, executeScreen, 1, "execute"],
   [/^#\/algo$/, algoScreen, 1, "algo"],
   [/^#\/support$/, supportScreen, 1, "support"],
@@ -959,6 +1142,16 @@ document.getElementById("menu-btn").addEventListener("click", (e) => {
 /* generic toast buttons */
 view.addEventListener("click", (e) => { const b = e.target.closest("[data-toast]"); if (b) toast(b.dataset.toast); });
 view.addEventListener("click", (e) => { if (e.target.closest("[data-logout]")) { setAuthed(false); loadAccount(); toast("Logged out"); location.hash = "#/"; } });
+
+/* waitlist buttons */
+view.addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-waitlist]");
+  if (!b || b.disabled || needLogin()) return;
+  const [kind, id] = b.dataset.waitlist.split(":");
+  b.disabled = true;
+  try { const r = await api("/api/waitlist", { method: "POST", body: { kind, id } }); b.textContent = "On the list ✓"; toast(r.message); }
+  catch (err) { toast(err.message); b.disabled = false; }
+});
 
 /* purchase buttons: buy once, then the button links to My account */
 view.addEventListener("click", async (e) => {

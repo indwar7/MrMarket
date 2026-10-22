@@ -33,7 +33,11 @@ func setup() {
 	}
 	if cfg.Seed {
 		hash, _ := auth.HashPassword("demo1234")
-		if err := st.Seed(context.Background(), hash); err != nil {
+		if err := st.SeedCatalog(context.Background()); err != nil {
+			initErr = err
+			return
+		}
+		if err := st.SeedDemo(context.Background(), hash); err != nil {
 			initErr = err
 			return
 		}

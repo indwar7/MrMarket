@@ -1,5 +1,7 @@
 package store
 
+import "encoding/json"
+
 type User struct {
 	ID        int64  `json:"id"`
 	Email     string `json:"email"`
@@ -35,35 +37,73 @@ type LiveSession struct {
 }
 
 type Indicator struct {
-	ID          string  `json:"id"`
-	Title       string  `json:"title"`
-	Category    string  `json:"category"`
-	Platform    string  `json:"platform"`
-	Description string  `json:"description"`
-	Price       int     `json:"price"`
-	Rating      float64 `json:"rating"`
-	Subs        int     `json:"subs"`
-	Kind        string  `json:"kind"`
+	ID          string          `json:"id"`
+	Title       string          `json:"title"`
+	Category    string          `json:"category"`
+	Platform    string          `json:"platform"`
+	Description string          `json:"description"`
+	Price       int             `json:"price"`
+	Rating      float64         `json:"rating"`
+	Subs        int             `json:"subs"`
+	Kind        string          `json:"kind"`
+	Number      int             `json:"number"`
+	Version     string          `json:"version"`
+	Inputs      json.RawMessage `json:"inputs"`
+	Plots       json.RawMessage `json:"plots"`
+	Window      string          `json:"window"`
+	PairID      string          `json:"pair_strategy_id"`
+	SizeKB      int             `json:"size_kb"`
 }
 
 type Strategy struct {
-	ID          string  `json:"id"`
-	Title       string  `json:"title"`
-	Symbol      string  `json:"symbol"`
-	Timeframe   string  `json:"timeframe"`
-	Style       string  `json:"style"`
-	Risk        string  `json:"risk"`
-	Return      float64 `json:"return_12m"`
-	Drawdown    float64 `json:"max_drawdown"`
-	WinRate     int     `json:"win_rate"`
-	PF          float64 `json:"profit_factor"`
-	Trades      int     `json:"trades"`
-	MinCapital  int     `json:"min_capital"`
-	Price       int     `json:"price"`
-	Subs        int     `json:"subs"`
-	Seed        int     `json:"seed"`
-	Author      string  `json:"author"`
-	Description string  `json:"description"`
+	ID          string          `json:"id"`
+	Title       string          `json:"title"`
+	Symbol      string          `json:"symbol"`
+	Timeframe   string          `json:"timeframe"`
+	Style       string          `json:"style"`
+	Risk        string          `json:"risk"`
+	Return      float64         `json:"return_12m"`
+	Drawdown    float64         `json:"max_drawdown"`
+	WinRate     int             `json:"win_rate"`
+	PF          float64         `json:"profit_factor"`
+	Trades      int             `json:"trades"`
+	MinCapital  int             `json:"min_capital"`
+	Price       int             `json:"price"`
+	Subs        int             `json:"subs"`
+	Seed        int             `json:"seed"`
+	Author      string          `json:"author"`
+	Description string          `json:"description"`
+	Number      int             `json:"number"`
+	Version     string          `json:"version"`
+	Category    string          `json:"category"`
+	Inputs      json.RawMessage `json:"inputs"`
+	PairID      string          `json:"pair_indicator_id"`
+	Timeframes  string          `json:"timeframes"`
+	SizeKB      int             `json:"size_kb"`
+}
+
+type Lesson struct {
+	ID          int64  `json:"id"`
+	CourseID    string `json:"course_id"`
+	Idx         int    `json:"idx"`
+	Title       string `json:"title"`
+	Duration    string `json:"duration"`
+	VideoURL    string `json:"video_url"`
+	FreePreview bool   `json:"free_preview"`
+	Locked      bool   `json:"locked"`
+	Done        bool   `json:"done"`
+}
+
+type Script struct {
+	ID           string          `json:"id"`
+	Title        string          `json:"title"`
+	Category     string          `json:"category"`
+	Status       string          `json:"status"`
+	Price        int             `json:"price"`
+	Version      string          `json:"version"`
+	Description  string          `json:"description"`
+	Requirements string          `json:"requirements"`
+	Tags         json.RawMessage `json:"tags"`
 }
 
 type Broker struct {
