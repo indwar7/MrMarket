@@ -9,7 +9,11 @@ const initials = (name = "") => name.split(/\s+/).map((w) => w[0]).join("").slic
 async function api(path, { method = "GET", body } = {}) {
   const headers = { "Content-Type": "application/json" };
   if (token()) headers.Authorization = `Bearer ${token()}`;
-  const res = await fetch(API + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), 10000);
+  let res;
+  try { res = await fetch(API + path, { method, headers, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal }); }
+  catch (e) { throw new Error(e.name === "AbortError" ? "Server is slow to respond. Please retry." : "Cannot reach the server. Check your connection."); }
+  finally { clearTimeout(timer); }
   let data = null; try { data = await res.json(); } catch { /* no body */ }
   if (res.status === 401 && token()) { setAuthed(false); acct = emptyAccount(); }
   if (!res.ok) throw Object.assign(new Error(data?.error || `Request failed (${res.status})`), { status: res.status });
@@ -1226,6 +1230,6 @@ function drawBgChart() {
 drawBgChart();
 view.innerHTML = loadingHTML;
 Promise.allSettled([loadCatalog(), loadAccount()]).then(([cat]) => {
-  if (cat.status === "rejected") toast("Showing offline catalog: " + cat.reason.message);
+  if (cat.status === "rejected") toast("Showing offline catalogue. " + cat.reason.message);
   route();
 });
