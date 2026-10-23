@@ -94,6 +94,7 @@ type Lesson struct {
 	FreePreview bool   `json:"free_preview"`
 	Module      string `json:"module"`
 	Summary     string `json:"summary"`
+	ResourceURL string `json:"resource_url"`
 	Locked      bool   `json:"locked"`
 	Done        bool   `json:"done"`
 }

@@ -195,7 +195,7 @@ func (s *Server) course(w http.ResponseWriter, r *http.Request) {
 		l.Done = done[l.ID]
 		l.Locked = !d.Enrolled && !l.FreePreview
 		if l.Locked {
-			l.VideoURL = ""
+			l.VideoURL, l.ResourceURL = "", ""
 		}
 	}
 	writeJSON(w, 200, d)

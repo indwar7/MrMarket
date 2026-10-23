@@ -664,6 +664,7 @@ function drawCourse(d, currentId) {
       ${cur ? `<div class="panel" style="display:grid;gap:12px"><div class="panel-head"><div><span class="kicker">Lesson ${cur.idx}</span><h2 class="h3">${esc(cur.title)}</h2></div>
         ${d.enrolled && !cur.locked ? `<button class="btn btn-small ${cur.done ? "btn-quiet" : ""}" id="done-btn" data-id="${cur.id}" data-done="${cur.done}">${cur.done ? "Mark as not done" : "Mark as complete"}</button>` : ""}</div>
         ${cur.summary ? `<p class="muted" style="max-width:70ch">${esc(cur.summary)}</p>` : ""}
+        ${cur.resource_url ? `<div class="resource"><span class="xls-badge" aria-hidden="true">XLS</span><div><b>Practice workbook</b><p class="small muted">Fill-in exercises, trade plan and quiz for this lesson, with answer key.</p></div><a class="btn btn-small btn-quiet" href="${esc(cur.resource_url)}" download>Download .xlsx</a></div>` : ""}
         ${d.enrolled ? `<div class="progress" style="--v:${d.progress}%"><i></i></div><p class="small muted">${done} of ${lessons.length} lessons complete</p>` : `<p class="small muted">Preview mode. <a href="#/learn">Enroll</a> to track progress and unlock every lesson.</p>`}</div>` : ""}
       ${desc ? `<div class="panel" style="gap:8px"><h2 class="h3">About this course</h2><p class="muted">${esc(desc)}</p></div>` : ""}
       ${disclaimer ? `<div class="panel disclaimer" style="gap:8px"><div class="panel-head"><h2 class="h3">Disclaimer</h2><span class="tag tag-amber">Please read</span></div><p class="small muted">${esc(disclaimer)}</p></div>` : ""}
@@ -1251,6 +1252,7 @@ async function swap(dir, render) {
   document.documentElement.dataset.dir = dir;
   if (document.startViewTransition) {
     const tr = document.startViewTransition(() => { render(); window.scrollTo(0, 0); });
+    tr.finished.catch(() => { /* a newer transition replaced this one */ });
     try { await tr.updateCallbackDone; } catch { /* ignore */ }
   } else {
     document.documentElement.classList.add("no-vt");

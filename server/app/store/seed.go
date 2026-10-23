@@ -157,10 +157,10 @@ func (s *Store) SeedCatalog(ctx context.Context) error {
 			if dur == "" {
 				dur = fmt.Sprintf("%d min", 8+(i*7)%11)
 			}
-			exec(`INSERT INTO lessons(course_id,idx,title,duration,video_url,free_preview,module,summary) VALUES(?,?,?,?,?,?,?,?)
-			      ON CONFLICT(course_id,idx) DO UPDATE SET title=excluded.title, duration=excluded.duration, free_preview=excluded.free_preview, module=excluded.module, summary=excluded.summary,
+			exec(`INSERT INTO lessons(course_id,idx,title,duration,video_url,free_preview,module,summary,resource_url) VALUES(?,?,?,?,?,?,?,?,?)
+			      ON CONFLICT(course_id,idx) DO UPDATE SET title=excluded.title, duration=excluded.duration, free_preview=excluded.free_preview, module=excluded.module, summary=excluded.summary, resource_url=excluded.resource_url,
 			        video_url=CASE WHEN excluded.video_url<>'' THEN excluded.video_url ELSE lessons.video_url END`,
-				c.ID, i+1, l.Title, dur, l.Video, l.FreePreview || i == 0, l.Module, l.Summary)
+				c.ID, i+1, l.Title, dur, l.Video, l.FreePreview || i == 0, l.Module, l.Summary, l.Workbook)
 		}
 		// lessons removed from the seed
 		exec(`DELETE FROM lesson_progress WHERE lesson_id IN (SELECT id FROM lessons WHERE course_id=? AND idx>?)`, c.ID, len(lessons[c.ID]))
@@ -360,6 +360,7 @@ type seedLesson struct {
 	Duration    string `json:"duration"`
 	Summary     string `json:"summary"`
 	Video       string `json:"video"`
+	Workbook    string `json:"workbook"`
 	FreePreview bool   `json:"free_preview"`
 }
 

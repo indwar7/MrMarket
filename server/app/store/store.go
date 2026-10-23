@@ -52,7 +52,7 @@ func Open(url string) (*Store, error) {
 		{"strategies", "inputs", "TEXT NOT NULL DEFAULT '[]'"}, {"strategies", "pair_id", "TEXT NOT NULL DEFAULT ''"}, {"strategies", "timeframes", "TEXT NOT NULL DEFAULT 'Any'"}, {"strategies", "size_kb", "INTEGER NOT NULL DEFAULT 0"},
 		{"indicators", "number", "INTEGER NOT NULL DEFAULT 0"}, {"indicators", "version", "TEXT NOT NULL DEFAULT ''"}, {"indicators", "inputs", "TEXT NOT NULL DEFAULT '[]'"}, {"indicators", "plots", "TEXT NOT NULL DEFAULT '[]'"},
 		{"indicators", "window", "TEXT NOT NULL DEFAULT 'chart'"}, {"indicators", "pair_id", "TEXT NOT NULL DEFAULT ''"}, {"indicators", "size_kb", "INTEGER NOT NULL DEFAULT 0"},
-		{"lessons", "module", "TEXT NOT NULL DEFAULT ''"}, {"lessons", "summary", "TEXT NOT NULL DEFAULT ''"},
+		{"lessons", "module", "TEXT NOT NULL DEFAULT ''"}, {"lessons", "summary", "TEXT NOT NULL DEFAULT ''"}, {"lessons", "resource_url", "TEXT NOT NULL DEFAULT ''"},
 		{"courses", "description", "TEXT NOT NULL DEFAULT ''"}, {"courses", "disclaimer", "TEXT NOT NULL DEFAULT ''"},
 	} {
 		if err := st.ensureColumn(c.table, c.col, c.def); err != nil {
@@ -307,7 +307,7 @@ func (s *Store) Mentors(ctx context.Context) ([]Mentor, error) {
 // ---- lessons (videos) ----
 
 func (s *Store) Lessons(ctx context.Context, courseID string) ([]Lesson, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id,course_id,idx,title,duration,video_url,free_preview,module,summary FROM lessons WHERE course_id=? ORDER BY idx`, courseID)
+	rows, err := s.db.QueryContext(ctx, `SELECT id,course_id,idx,title,duration,video_url,free_preview,module,summary,resource_url FROM lessons WHERE course_id=? ORDER BY idx`, courseID)
 	if err != nil {
 		return nil, err
 	}
@@ -315,7 +315,7 @@ func (s *Store) Lessons(ctx context.Context, courseID string) ([]Lesson, error) 
 	out := []Lesson{}
 	for rows.Next() {
 		var l Lesson
-		if err := rows.Scan(&l.ID, &l.CourseID, &l.Idx, &l.Title, &l.Duration, &l.VideoURL, &l.FreePreview, &l.Module, &l.Summary); err != nil {
+		if err := rows.Scan(&l.ID, &l.CourseID, &l.Idx, &l.Title, &l.Duration, &l.VideoURL, &l.FreePreview, &l.Module, &l.Summary, &l.ResourceURL); err != nil {
 			return nil, err
 		}
 		out = append(out, l)
