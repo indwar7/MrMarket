@@ -13,3 +13,12 @@ jobs:
           echo "smc: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/courses/smc | python3 -c 'import sys,json;d=json.load(sys.stdin);print(len(d["lessons"]),"lessons;",len(set(l["module"] for l in d["lessons"])),"modules; disclaimer",len(d["disclaimer"]))')"
           echo "web has scripts page: $(curl -sf https://mrmarket-portal.vercel.app/app.js | grep -c scriptsScreen)"
           echo "web has course player: $(curl -sf https://mrmarket-portal.vercel.app/app.js | grep -c drawCourse)"
+          echo "web has about page: $(curl -sf https://mrmarket-portal.vercel.app/app.js | grep -c aboutScreen)"
+          echo "team photos: $(curl -s -o /dev/null -w '%{http_code}' https://mrmarket-portal.vercel.app/assets/team/vinayakk.jpg) $(curl -s -o /dev/null -w '%{http_code}' https://mrmarket-portal.vercel.app/assets/team/aseem.jpg)"
+          echo "workbook: $(curl -s -o /dev/null -w '%{http_code} %{size_download}B' https://mrmarket-portal.vercel.app/assets/workbooks/candlesticks/07-doji.xlsx)"
+          echo "scripts available: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/scripts | python3 -c 'import sys,json;print(sum(1 for x in json.load(sys.stdin) if x["status"]=="available"))')"
+          TOK=$(curl -sf https://mrmarket-api.vercel.app/api/auth/login -d '{"email":"demo@mrmarket.com","password":"demo1234"}' | python3 -c 'import sys,json;print(json.load(sys.stdin)["token"])')
+          curl -sf -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/purchase -d '{"kind":"script","id":"py-position-size"}' >/dev/null || true
+          echo "script zip: $(curl -s -o /dev/null -w '%{http_code} %{size_download}B %{content_type}' -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/downloads/script/py-position-size)"
+          echo "ea download (owned, no files): $(curl -s -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/downloads/strategy/ea-05-orb)"
+          echo "candlesticks videos (enrolled): $(curl -sf -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/catalog/courses/candlesticks | python3 -c 'import sys,json;d=json.load(sys.stdin);print(sum(1 for l in d["lessons"] if l["video_url"]),"videos",sum(1 for l in d["lessons"] if l["resource_url"]),"workbooks")' || echo "(demo not enrolled)")"
