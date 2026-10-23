@@ -19,6 +19,21 @@ async function api(path, { method = "GET", body } = {}) {
   if (!res.ok) throw Object.assign(new Error(data?.error || `Request failed (${res.status})`), { status: res.status });
   return data;
 }
+async function downloadItem(kind, id, btn) {
+  if (needLogin()) return;
+  const label = btn?.textContent; if (btn) { btn.disabled = true; btn.textContent = "Preparing…"; }
+  try {
+    const res = await fetch(`${API}/api/downloads/${kind}/${id}`, { headers: { Authorization: `Bearer ${token()}` } });
+    if (!res.ok) { let msg = `Download failed (${res.status})`; try { msg = (await res.json()).error || msg; } catch { /* no body */ } throw new Error(msg); }
+    const name = (res.headers.get("Content-Disposition") || "").match(/filename="([^"]+)"/)?.[1] || `${id}.zip`;
+    const url = URL.createObjectURL(await res.blob());
+    const a = Object.assign(document.createElement("a"), { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    toast(`Downloading ${name}`);
+  } catch (e) { toast(e.message); }
+  finally { if (btn) { btn.disabled = false; btn.textContent = label; } }
+}
+const dlBtn = (kind, id, label = "Download", extra = "") => `<button class="btn ${extra}" data-download="${kind}:${id}">${esc(label)}</button>`;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function fmtDate(iso = "", monthYear = false) {
   const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -582,6 +597,7 @@ function drawStrategy(d) {
         </div>
         <p class="small muted">Minimum capital $${s.min.toLocaleString()} · Runs on your MT5 account</p>
         ${buyBtn("strategy", s.id, "Subscribe", "Subscribed ✓")}
+        ${owns("strategy", s.id) ? dlBtn("strategy", s.id, "Download EA for MT5 (.ex5)") : ""}
         <a class="btn btn-quiet" href="#/execute">Set up MT5 first</a>
       </div>
       <div class="sheet" style="display:grid;gap:10px"><b>Requirements</b><ul class="small muted" style="display:grid;gap:6px;padding-left:18px"><li>MetaTrader 5 (build 3800+), Windows or VPS</li><li>Any broker, hedging or netting account</li><li>Algo Trading enabled in the terminal</li><li>Chart timeframe: ${esc(s.tf)}</li></ul></div>
@@ -620,6 +636,7 @@ function drawIndicator(d) {
       <div class="sheet" style="display:grid;gap:16px"><h2 class="h3">Subscribe</h2>
         <div class="co-row"><span>Monthly</span><b>${d.price ? `$${d.price}<small class="muted"> /month</small>` : "Free"}</b></div>
         ${buyBtn("indicator", d.id, d.price ? "Subscribe" : "Get free", "Subscribed ✓")}
+        ${owns("indicator", d.id) ? dlBtn("indicator", d.id, "Download indicator (.ex5)") : ""}
         <a class="btn btn-quiet" href="#/execute">Install MT5 first</a>
         <p class="small muted">After subscribing, restart MT5. The indicator appears under Navigator → Indicators → Market.</p></div>
     </aside>
@@ -794,7 +811,7 @@ function scriptsScreen() {
       <p class="muted small">${esc(x.desc)}</p>
       <p class="small muted"><b style="color:var(--text)">Needs:</b> ${esc(x.req)}</p>
       <div class="card-foot"><span class="price">${x.price ? `$${x.price}<small> one-time</small>` : "Free"}</span>
-        ${x.status === "available" ? buyBtn("script", x.id, x.price ? "Buy script" : "Get free", "Purchased ✓", "btn-small") : `<button class="btn btn-small btn-quiet" data-waitlist="script:${x.id}">Notify me</button>`}</div>
+        ${x.status !== "available" ? `<button class="btn btn-small btn-quiet" data-waitlist="script:${x.id}">Notify me</button>` : owns("script", x.id) ? dlBtn("script", x.id, "Download .zip", "btn-small") : buyBtn("script", x.id, x.price ? "Buy script" : "Get free", "Purchased ✓", "btn-small")}</div>
     </article>`).join("") : `<div class="empty" style="grid-column:1/-1">${SCRIPTS.length ? "No scripts match." : "Scripts are being prepared. Check back soon."}</div>`;
   };
   draw();
@@ -1088,7 +1105,7 @@ function accountScreen() {
         <td>${v.price ? v.plan : "Free"}</td><td class="muted">${v.since}</td>
         <td class="num"><b>${v.price ? `$${v.price}` : "Free"}</b></td>
         <td><span class="tag tag-up">Active</span></td>
-        <td><button class="link-btn" data-cancel="${v.kind}:${v.id}">Cancel</button></td></tr>`).join("")}
+        <td><span class="btn-row">${dlBtn(v.kind, v.id, v.kind === "script" ? "Download" : "MT5 file", "btn-small btn-quiet")}<button class="link-btn" data-cancel="${v.kind}:${v.id}">Cancel</button></span></td></tr>`).join("")}
       ${acct.plan ? `<tr><td><b>${esc(acct.plan.name)}</b></td><td><span class="tag">Support plan</span></td><td>${acct.plan.price ? "Monthly" : "Free"}</td><td class="muted">${acct.plan.since}</td><td class="num"><b>${acct.plan.price ? `$${acct.plan.price}` : "Free"}</b></td><td><span class="tag tag-up">Active</span></td><td><button class="link-btn" data-cancel="plan:${acct.plan.id}">Cancel</button></td></tr>` : ""}
       </tbody></table></div>` : `<div class="empty"><b style="color:var(--text)">No subscriptions yet</b><a class="btn btn-small" href="#/strategies">Browse strategies</a></div>`}</div>
 
@@ -1218,6 +1235,9 @@ document.getElementById("menu-btn").addEventListener("click", (e) => {
 view.addEventListener("click", (e) => { const b = e.target.closest("[data-toast]"); if (b) toast(b.dataset.toast); });
 view.addEventListener("click", (e) => { if (e.target.closest("[data-logout]")) { setAuthed(false); loadAccount(); toast("Logged out"); location.hash = "#/"; } });
 
+/* download buttons */
+view.addEventListener("click", (e) => { const b = e.target.closest("[data-download]"); if (!b || b.disabled) return; const [kind, id] = b.dataset.download.split(":"); downloadItem(kind, id, b); });
+
 /* waitlist buttons */
 view.addEventListener("click", async (e) => {
   const b = e.target.closest("[data-waitlist]");
@@ -1239,6 +1259,8 @@ view.addEventListener("click", async (e) => {
   const picked = b.closest(".sticky")?.querySelector('input[name="plan"]:checked');
   if (picked) { plan = picked.value; price = Number(picked.dataset.price); }
   if (!(await purchase(kind, id, plan, price))) return;
+  if (kind === "script" && location.hash === "#/scripts") { toast(BOUGHT_MSG[kind]); scriptsScreen(); return; }
+  if (kind === "course" && location.hash === `#/course/${id}`) { toast("Enrolled. All lessons are unlocked."); courseScreen([null, id]); return; }
   view.querySelectorAll("[data-buy]").forEach((x) => {
     const [k, i] = x.dataset.buy.split(":");
     const on = owns(k, k === "live" ? Number(i) : i);
@@ -1252,7 +1274,7 @@ async function swap(dir, render) {
   document.documentElement.dataset.dir = dir;
   if (document.startViewTransition) {
     const tr = document.startViewTransition(() => { render(); window.scrollTo(0, 0); });
-    tr.finished.catch(() => { /* a newer transition replaced this one */ });
+    tr.ready.catch(() => { /* skipped */ }); tr.finished.catch(() => { /* a newer transition replaced this one */ });
     try { await tr.updateCallbackDone; } catch { /* ignore */ }
   } else {
     document.documentElement.classList.add("no-vt");

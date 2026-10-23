@@ -1,8 +1,88 @@
 [
-  {"id": "py-backtester", "title": "MT5 Strategy Backtester", "category": "Research", "status": "coming_soon", "price": 29, "version": "", "description": "Replay any MrMarket EA logic on MT5 history exported to CSV. Prints equity curve, drawdown, win rate and a trade list you can open in Excel.", "requirements": "Python 3.11+, pandas, MT5 history export", "tags": ["pandas", "backtest", "csv"]},
-  {"id": "py-position-size", "title": "Position Size Calculator", "category": "Risk", "status": "coming_soon", "price": 0, "version": "", "description": "Command-line and GUI calculator: account size, risk %, stop distance in points, contract size, result in lots. Supports forex, metals, indices and crypto CFDs.", "requirements": "Python 3.10+", "tags": ["risk", "lots"]},
-  {"id": "py-journal-export", "title": "Trade Journal Exporter", "category": "Reporting", "status": "coming_soon", "price": 19, "version": "", "description": "Pulls closed deals from MT5 and writes a tagged Excel journal with per-strategy P&L, R multiples, time-of-day stats and a monthly summary sheet.", "requirements": "Python 3.10+, MetaTrader5 package (Windows), openpyxl", "tags": ["excel", "journal", "mt5"]},
-  {"id": "py-telegram-bridge", "title": "Telegram Signal Bridge", "category": "Alerts", "status": "coming_soon", "price": 24, "version": "", "description": "Forwards every EA entry, exit and error from the MT5 Experts log to a Telegram channel or private chat, with chart screenshot attached.", "requirements": "Python 3.10+, Telegram bot token", "tags": ["telegram", "alerts"]},
-  {"id": "py-equity-analyser", "title": "Equity Curve Analyser", "category": "Research", "status": "coming_soon", "price": 15, "version": "", "description": "Reads a backtest or live report and plots equity, underwater curve, rolling Sharpe and Monte Carlo drawdown bands so you know what to expect before going live.", "requirements": "Python 3.10+, matplotlib, numpy", "tags": ["monte-carlo", "drawdown"]},
-  {"id": "py-news-filter", "title": "Economic Calendar Filter", "category": "Filters", "status": "coming_soon", "price": 15, "version": "", "description": "Downloads the week's high-impact events and writes a pause-window file the MrMarket EAs read, so strategies stand aside around NFP, CPI and rate decisions.", "requirements": "Python 3.10+, internet access on the VPS", "tags": ["news", "filter"]}
+ {
+  "id": "py-backtester",
+  "title": "MT5 Strategy Backtester",
+  "category": "Research",
+  "status": "available",
+  "price": 29,
+  "version": "1.0.0",
+  "description": "Replay any MrMarket EA logic on MT5 history exported to CSV. Prints equity curve, drawdown, win rate and a trade list you can open in Excel.",
+  "requirements": "Python 3.11+, pandas, MT5 history export",
+  "tags": [
+   "pandas",
+   "backtest",
+   "csv"
+  ]
+ },
+ {
+  "id": "py-position-size",
+  "title": "Position Size Calculator",
+  "category": "Risk",
+  "status": "available",
+  "price": 0,
+  "version": "1.0.0",
+  "description": "Command-line and GUI calculator: account size, risk %, stop distance in points, contract size, result in lots. Supports forex, metals, indices and crypto CFDs.",
+  "requirements": "Python 3.10+",
+  "tags": [
+   "risk",
+   "lots"
+  ]
+ },
+ {
+  "id": "py-journal-export",
+  "title": "Trade Journal Exporter",
+  "category": "Reporting",
+  "status": "available",
+  "price": 19,
+  "version": "1.0.0",
+  "description": "Pulls closed deals from MT5 and writes a tagged Excel journal with per-strategy P&L, R multiples, time-of-day stats and a monthly summary sheet.",
+  "requirements": "Python 3.10+, MetaTrader5 package (Windows), openpyxl",
+  "tags": [
+   "excel",
+   "journal",
+   "mt5"
+  ]
+ },
+ {
+  "id": "py-telegram-bridge",
+  "title": "Telegram Signal Bridge",
+  "category": "Alerts",
+  "status": "available",
+  "price": 24,
+  "version": "1.0.0",
+  "description": "Forwards every EA entry, exit and error from the MT5 Experts log to a Telegram channel or private chat, with chart screenshot attached.",
+  "requirements": "Python 3.10+, Telegram bot token",
+  "tags": [
+   "telegram",
+   "alerts"
+  ]
+ },
+ {
+  "id": "py-equity-analyser",
+  "title": "Equity Curve Analyser",
+  "category": "Research",
+  "status": "available",
+  "price": 15,
+  "version": "1.0.0",
+  "description": "Reads a backtest or live report and plots equity, underwater curve, rolling Sharpe and Monte Carlo drawdown bands so you know what to expect before going live.",
+  "requirements": "Python 3.10+, matplotlib, numpy",
+  "tags": [
+   "monte-carlo",
+   "drawdown"
+  ]
+ },
+ {
+  "id": "py-news-filter",
+  "title": "Economic Calendar Filter",
+  "category": "Filters",
+  "status": "available",
+  "price": 15,
+  "version": "1.0.0",
+  "description": "Downloads the week's high-impact events and writes a pause-window file the MrMarket EAs read, so strategies stand aside around NFP, CPI and rate decisions.",
+  "requirements": "Python 3.10+, internet access on the VPS",
+  "tags": [
+   "news",
+   "filter"
+  ]
+ }
 ]

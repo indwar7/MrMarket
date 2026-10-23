@@ -40,6 +40,7 @@ func (s *Server) Router(origins []string) http.Handler {
 		AllowedOrigins:   origins,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Authorization", "Content-Type", "X-Bridge-Token"},
+		ExposedHeaders:   []string{"Content-Disposition"},
 		AllowCredentials: true,
 		MaxAge:           600,
 	}))
@@ -76,6 +77,7 @@ func (s *Server) Router(origins []string) http.Handler {
 			r.Put("/courses/{id}/progress", s.setProgress)
 			r.Post("/courses/{id}/lessons/{lid}/complete", s.completeLesson)
 			r.Post("/waitlist", s.waitlist)
+			r.Get("/downloads/{kind}/{id}", s.download)
 			r.Get("/bookings", s.bookings)
 			r.Post("/bookings", s.createBooking)
 			r.Get("/tickets", s.tickets)

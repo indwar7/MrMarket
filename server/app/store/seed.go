@@ -2,7 +2,7 @@ package store
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"regexp"
@@ -18,6 +18,11 @@ var lessonsJSON []byte
 
 //go:embed seed/courses.json
 var coursesJSON []byte
+
+// ScriptFiles holds the Python scripts delivered to buyers (seed/scripts/<id>/...).
+//
+//go:embed seed/scripts
+var ScriptFiles embed.FS
 
 //go:embed seed/scripts.json
 var scriptsJSON []byte
