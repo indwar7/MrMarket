@@ -18,19 +18,22 @@
    "module": "Chart Foundations",
    "title": "Line, Bar and Candlestick Charts",
    "duration": "Video",
-   "summary": "Welcome back. If you open any trading platform, you'll see you can display price in different ways. The three most common are line charts, bar charts and candlestick charts. In this lesson, you'll see the same data shown all three ways, and why most traders choose candles."
+   "summary": "Welcome back. If you open any trading platform, you'll see you can display price in different ways. The three most common are line charts, bar charts and candlestick charts. In this lesson, you'll see the same data shown all three ways, and why most traders choose candles.",
+   "video": "https://youtu.be/sri0uOS3Hww"
   },
   {
    "module": "Chart Foundations",
    "title": "Anatomy of a Candle",
    "duration": "Video",
-   "summary": "Hello, and welcome to this lesson. In the last lesson, you saw why traders prefer candlestick charts over line charts. Today, we're going to take a single candle apart, piece by piece. By the end, you'll be able to read any candle on any chart, whether it's a Dubai stock like Emaar, or a US stock like Apple."
+   "summary": "Hello, and welcome to this lesson. In the last lesson, you saw why traders prefer candlestick charts over line charts. Today, we're going to take a single candle apart, piece by piece. By the end, you'll be able to read any candle on any chart, whether it's a Dubai stock like Emaar, or a US stock like Apple.",
+   "video": "https://youtu.be/A5OpGDNjgU4"
   },
   {
    "module": "Chart Foundations",
    "title": "Timeframes and How Candles Build",
    "duration": "Video",
-   "summary": "Welcome back. In the last lesson, you saw that a candle can cover one minute, one hour or one day. Now we'll see exactly how that works: how small candles combine into bigger ones, and how to choose the right timeframe for you."
+   "summary": "Welcome back. In the last lesson, you saw that a candle can cover one minute, one hour or one day. Now we'll see exactly how that works: how small candles combine into bigger ones, and how to choose the right timeframe for you.",
+   "video": "https://youtu.be/znHdBlT_C-g"
   },
   {
    "module": "Reading a Single Candle",
@@ -54,7 +57,8 @@
    "module": "Single-Candle Patterns",
    "title": "The Doji Family",
    "duration": "Video",
-   "summary": "Welcome to a new module: single-candle patterns. These are patterns made from just one candle. We'll start with the doji, the classic candle of indecision, and its two important cousins: the dragonfly and the gravestone. By the end, you'll also have a clear, step-by-step strategy for trading the gravestone doji, and you'll see real examples on Emaar Properties, including ones that didn't work out."
+   "summary": "Welcome to a new module: single-candle patterns. These are patterns made from just one candle. We'll start with the doji, the classic candle of indecision, and its two important cousins: the dragonfly and the gravestone. By the end, you'll also have a clear, step-by-step strategy for trading the gravestone doji, and you'll see real examples on Emaar Properties, including ones that didn't work out.",
+   "video": "https://youtu.be/FjC4Kfp456s"
   },
   {
    "module": "Single-Candle Patterns",
@@ -66,97 +70,113 @@
    "module": "Single-Candle Patterns",
    "title": "Inverted Hammer and Shooting Star",
    "duration": "Video",
-   "summary": "Welcome back. Last lesson, you met the hammer and the hanging man. Now we'll flip that shape upside down. A small body near the bottom with a long upper wick gives us two more patterns: the inverted hammer and the shooting star. By the end, you'll also have a clear, step-by-step strategy for trading the shooting star, and you'll see real examples on Emaar Properties."
+   "summary": "Welcome back. Last lesson, you met the hammer and the hanging man. Now we'll flip that shape upside down. A small body near the bottom with a long upper wick gives us two more patterns: the inverted hammer and the shooting star. By the end, you'll also have a clear, step-by-step strategy for trading the shooting star, and you'll see real examples on Emaar Properties.",
+   "video": "https://youtu.be/bXgy-lG21zE"
   },
   {
    "module": "Single-Candle Patterns",
    "title": "Marubozu",
    "duration": "Video",
-   "summary": "Welcome back. So far, many patterns have been about indecision and rejection. Now let's look at the opposite: the marubozu. It's a candle with no wicks at all, and it shows one side in complete control. By the end, you'll also have a clear, step-by-step strategy for trading the bullish marubozu breakout, and you'll see real examples on Emaar Properties and Emirates NBD, including ones that didn't work out."
+   "summary": "Welcome back. So far, many patterns have been about indecision and rejection. Now let's look at the opposite: the marubozu. It's a candle with no wicks at all, and it shows one side in complete control. By the end, you'll also have a clear, step-by-step strategy for trading the bullish marubozu breakout, and you'll see real examples on Emaar Properties and Emirates NBD, including ones that didn't work out.",
+   "video": "https://youtu.be/MQ24KUlPFM4"
   },
   {
    "module": "Single-Candle Patterns",
    "title": "Spinning Top",
    "duration": "Video",
-   "summary": "Welcome back. Our last single-candle pattern is the spinning top. It's a close cousin of the doji, and it's another candle of indecision. Let's learn to spot it, and what to watch for next. By the end, you'll also have a clear, step-by-step strategy for trading the spinning top at the top, and you'll see real examples on Emirates NBD."
+   "summary": "Welcome back. Our last single-candle pattern is the spinning top. It's a close cousin of the doji, and it's another candle of indecision. Let's learn to spot it, and what to watch for next. By the end, you'll also have a clear, step-by-step strategy for trading the spinning top at the top, and you'll see real examples on Emirates NBD.",
+   "video": "https://youtu.be/AqYqmxLKKpI"
   },
   {
    "module": "Two-Candle Patterns",
    "title": "Bullish Engulfing",
    "duration": "Video",
-   "summary": "Welcome to a new module: two-candle patterns. These patterns compare two candles side by side. We'll start with one of the most popular reversal patterns of all: the bullish engulfing. By the end, you'll also have a clear, step-by-step strategy for trading the bullish engulfing, and you'll see real examples on Emirates NBD."
+   "summary": "Welcome to a new module: two-candle patterns. These patterns compare two candles side by side. We'll start with one of the most popular reversal patterns of all: the bullish engulfing. By the end, you'll also have a clear, step-by-step strategy for trading the bullish engulfing, and you'll see real examples on Emirates NBD.",
+   "video": "https://youtu.be/tUuNcbXS3o8"
   },
   {
    "module": "Two-Candle Patterns",
    "title": "Bearish Engulfing",
    "duration": "Video",
-   "summary": "Welcome back. You've learned the bullish engulfing. Now let's flip it. The bearish engulfing is its mirror image, and it's one of the most watched warning signs at the top of a rise. By the end, you'll also have a clear, step-by-step strategy for trading the bearish engulfing, and you'll see real examples on Emirates NBD, including ones that didn't work out."
+   "summary": "Welcome back. You've learned the bullish engulfing. Now let's flip it. The bearish engulfing is its mirror image, and it's one of the most watched warning signs at the top of a rise. By the end, you'll also have a clear, step-by-step strategy for trading the bearish engulfing, and you'll see real examples on Emirates NBD, including ones that didn't work out.",
+   "video": "https://youtu.be/uDSWnM6y_CM"
   },
   {
    "module": "Two-Candle Patterns",
    "title": "Harami",
    "duration": "Video",
-   "summary": "Welcome back. The engulfing patterns showed a big candle swallowing a small one. The harami is the opposite: a small candle sitting inside a big one. Harami means 'pregnant' in Japanese, because the shape looks like a mother and baby. By the end, you'll also have a clear, step-by-step strategy for trading the bullish harami, and you'll see real examples on Emirates NBD."
+   "summary": "Welcome back. The engulfing patterns showed a big candle swallowing a small one. The harami is the opposite: a small candle sitting inside a big one. Harami means 'pregnant' in Japanese, because the shape looks like a mother and baby. By the end, you'll also have a clear, step-by-step strategy for trading the bullish harami, and you'll see real examples on Emirates NBD.",
+   "video": "https://youtu.be/KsupWQ8U4Us"
   },
   {
    "module": "Two-Candle Patterns",
    "title": "Piercing Line and Dark Cloud Cover",
    "duration": "Video",
-   "summary": "Welcome back. The engulfing patterns needed the second candle to cover the whole first body. But what if it only gets halfway or more? That gives us two more patterns: the piercing line and the dark cloud cover. By the end, you'll also have a clear, step-by-step strategy for trading the piercing line, and you'll see real examples on Emirates NBD, including ones that didn't work out."
+   "summary": "Welcome back. The engulfing patterns needed the second candle to cover the whole first body. But what if it only gets halfway or more? That gives us two more patterns: the piercing line and the dark cloud cover. By the end, you'll also have a clear, step-by-step strategy for trading the piercing line, and you'll see real examples on Emirates NBD, including ones that didn't work out.",
+   "video": "https://youtu.be/kU0PZZKUUxw"
   },
   {
    "module": "Two-Candle Patterns",
    "title": "Tweezer Tops and Bottoms",
    "duration": "Video",
-   "summary": "Welcome back. Our last two-candle pattern is the tweezer. It's named after the tool, because the two candles look like the prongs of a pair of tweezers. Tweezers show a price level being defended twice in a row. By the end, you'll also have a clear, step-by-step strategy for trading the tweezer bottom, and you'll see real examples on Emirates NBD, including ones that didn't work out."
+   "summary": "Welcome back. Our last two-candle pattern is the tweezer. It's named after the tool, because the two candles look like the prongs of a pair of tweezers. Tweezers show a price level being defended twice in a row. By the end, you'll also have a clear, step-by-step strategy for trading the tweezer bottom, and you'll see real examples on Emirates NBD, including ones that didn't work out.",
+   "video": "https://youtu.be/JbTrwHjdIdc"
   },
   {
    "module": "Three-Candle Patterns",
    "title": "Morning Star",
    "duration": "Video",
-   "summary": "Welcome to a new module: three-candle patterns. With three candles, a pattern can tell a fuller story. We'll start with the morning star, one of the most respected bullish reversal patterns. Like the morning star in the sky, it appears just before the sun rises. By the end, you'll also have a clear, step-by-step strategy for trading the morning star, and you'll see real examples on Emirates NBD."
+   "summary": "Welcome to a new module: three-candle patterns. With three candles, a pattern can tell a fuller story. We'll start with the morning star, one of the most respected bullish reversal patterns. Like the morning star in the sky, it appears just before the sun rises. By the end, you'll also have a clear, step-by-step strategy for trading the morning star, and you'll see real examples on Emirates NBD.",
+   "video": "https://youtu.be/AR5lkCKI9X0"
   },
   {
    "module": "Three-Candle Patterns",
    "title": "Evening Star",
    "duration": "Video",
-   "summary": "Welcome back. If the morning star appears before sunrise, the evening star appears just before nightfall. It's the bearish mirror of the morning star, and it warns that a rise may be ending. By the end, you'll also have a clear, step-by-step strategy for trading the evening star, and you'll see real examples on Apple."
+   "summary": "Welcome back. If the morning star appears before sunrise, the evening star appears just before nightfall. It's the bearish mirror of the morning star, and it warns that a rise may be ending. By the end, you'll also have a clear, step-by-step strategy for trading the evening star, and you'll see real examples on Apple.",
+   "video": "https://youtu.be/L4deF2bOJI0"
   },
   {
    "module": "Three-Candle Patterns",
    "title": "Three White Soldiers and Three Black Crows",
    "duration": "Video",
-   "summary": "Welcome back. Our final three-candle patterns are all about strength. Three white soldiers are three strong green candles in a row. Three black crows are three strong red candles. Let's see what makes them powerful, and when to be careful. By the end, you'll also have a clear, step-by-step strategy for trading the three white soldiers, and you'll see real examples on Apple, including ones that didn't work out."
+   "summary": "Welcome back. Our final three-candle patterns are all about strength. Three white soldiers are three strong green candles in a row. Three black crows are three strong red candles. Let's see what makes them powerful, and when to be careful. By the end, you'll also have a clear, step-by-step strategy for trading the three white soldiers, and you'll see real examples on Apple, including ones that didn't work out.",
+   "video": "https://youtu.be/3Bm-8FlumCE"
   },
   {
    "module": "Context",
    "title": "Identifying the Trend",
    "duration": "Video",
-   "summary": "Welcome to a new module: context. You now know many patterns. But here's the truth: a pattern on its own means little. Where it appears is what matters. And the first piece of context is the trend."
+   "summary": "Welcome to a new module: context. You now know many patterns. But here's the truth: a pattern on its own means little. Where it appears is what matters. And the first piece of context is the trend.",
+   "video": "https://youtu.be/ZviMieqqx34"
   },
   {
    "module": "Context",
    "title": "Support and Resistance",
    "duration": "Video",
-   "summary": "Welcome back. The second piece of context is support and resistance. These are price levels where the market has turned before, and often turns again. They're where patterns become really powerful."
+   "summary": "Welcome back. The second piece of context is support and resistance. These are price levels where the market has turned before, and often turns again. They're where patterns become really powerful.",
+   "video": "https://youtu.be/H62VBVRJBiY"
   },
   {
    "module": "Context",
    "title": "Pattern Location",
    "duration": "Video",
-   "summary": "Welcome back. You know the trend, and you know support and resistance. Now let's put patterns in their place. In this lesson, you'll see why the same pattern can work at one level and fail at another."
+   "summary": "Welcome back. You know the trend, and you know support and resistance. Now let's put patterns in their place. In this lesson, you'll see why the same pattern can work at one level and fail at another.",
+   "video": "https://youtu.be/MnCQpnNCVos"
   },
   {
    "module": "Context",
    "title": "Volume as Confirmation",
    "duration": "Video",
-   "summary": "Welcome back. Candles show you price. Volume shows you participation: how many shares changed hands. In this lesson, you'll learn how volume can confirm a pattern, or warn you that it's weak."
+   "summary": "Welcome back. Candles show you price. Volume shows you participation: how many shares changed hands. In this lesson, you'll learn how volume can confirm a pattern, or warn you that it's weak.",
+   "video": "https://youtu.be/6cR9sd8fqvM"
   },
   {
    "module": "Context",
    "title": "Gaps in Stock Charts",
    "duration": "Video",
-   "summary": "Welcome back. Stocks don't trade overnight. So when news arrives after the close, the next day's open can jump far from the previous close. That leaves a gap on the chart. In this lesson, you'll learn to read gaps and what they mean for candles."
+   "summary": "Welcome back. Stocks don't trade overnight. So when news arrives after the close, the next day's open can jump far from the previous close. That leaves a gap on the chart. In this lesson, you'll learn to read gaps and what they mean for candles.",
+   "video": "https://youtu.be/4vbtSbV_G9E"
   },
   {
    "module": "Trade Plan",
