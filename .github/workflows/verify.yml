@@ -20,5 +20,8 @@ jobs:
           TOK=$(curl -sf https://mrmarket-api.vercel.app/api/auth/login -d '{"email":"demo@mrmarket.com","password":"demo1234"}' | python3 -c 'import sys,json;print(json.load(sys.stdin)["token"])')
           curl -sf -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/purchase -d '{"kind":"script","id":"py-position-size"}' >/dev/null || true
           echo "script zip: $(curl -s -o /dev/null -w '%{http_code} %{size_download}B %{content_type}' -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/downloads/script/py-position-size)"
-          echo "ea download (owned, no files): $(curl -s -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/downloads/strategy/ea-05-orb)"
+          echo "ea download (demo owns ORB): $(curl -s -o /dev/null -w '%{http_code} %{size_download}B' -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/downloads/strategy/ea-05-orb)"
+          echo "admin ping: $(curl -s -H "X-Admin-Key: ${{ secrets.ADMIN_KEY }}" https://mrmarket-api.vercel.app/api/admin/ping)"
+          echo "register disabled: $(curl -s -o /dev/null -w '%{http_code}' https://mrmarket-api.vercel.app/api/auth/register -d '{}')"
+          echo "visitor candlesticks videos: $(curl -sf https://mrmarket-api.vercel.app/api/catalog/courses/candlesticks | python3 -c 'import sys,json;d=json.load(sys.stdin);print(sum(1 for l in d["lessons"] if l["video_url"]),"videos visible without login")')"
           echo "candlesticks videos (enrolled): $(curl -sf -H "Authorization: Bearer $TOK" https://mrmarket-api.vercel.app/api/catalog/courses/candlesticks | python3 -c 'import sys,json;d=json.load(sys.stdin);print(sum(1 for l in d["lessons"] if l["video_url"]),"videos",sum(1 for l in d["lessons"] if l["resource_url"]),"workbooks")' || echo "(demo not enrolled)")"

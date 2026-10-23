@@ -26,10 +26,11 @@ type Server struct {
 	hub      *ws.Hub
 	log      *slog.Logger
 	tokenTTL time.Duration
+	adminKey string
 }
 
-func New(st *store.Store, au *auth.Service, pay payments.Provider, hub *ws.Hub, log *slog.Logger) *Server {
-	return &Server{store: st, auth: au, pay: pay, hub: hub, log: log, tokenTTL: 30 * 24 * time.Hour}
+func New(st *store.Store, au *auth.Service, pay payments.Provider, hub *ws.Hub, log *slog.Logger, adminKey string) *Server {
+	return &Server{store: st, auth: au, pay: pay, hub: hub, log: log, tokenTTL: 30 * 24 * time.Hour, adminKey: adminKey}
 }
 
 func (s *Server) Router(origins []string) http.Handler {
@@ -39,7 +40,7 @@ func (s *Server) Router(origins []string) http.Handler {
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   origins,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Authorization", "Content-Type", "X-Bridge-Token"},
+		AllowedHeaders:   []string{"Authorization", "Content-Type", "X-Bridge-Token", "X-Admin-Key"},
 		ExposedHeaders:   []string{"Content-Disposition"},
 		AllowCredentials: true,
 		MaxAge:           600,
@@ -48,8 +49,20 @@ func (s *Server) Router(origins []string) http.Handler {
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) { writeJSON(w, 200, map[string]string{"status": "ok"}) })
 
 	r.Route("/api", func(r chi.Router) {
-		r.Post("/auth/register", s.register)
+		// No self-registration: logins are created by the admin after payment.
 		r.Post("/auth/login", s.login)
+		r.Post("/requests", s.createRequest)
+
+		r.Route("/admin", func(r chi.Router) {
+			r.Use(s.adminAuth)
+			r.Get("/ping", s.adminPing)
+			r.Get("/leads", s.adminLeads)
+			r.Put("/leads/{id}", s.adminLeadStatus)
+			r.Get("/users", s.adminUsers)
+			r.Post("/users", s.adminCreateUser)
+			r.Post("/grant", s.adminGrant)
+			r.Delete("/grant", s.adminGrant)
+		})
 
 		r.Route("/catalog", func(r chi.Router) {
 			r.Get("/courses", s.courses)

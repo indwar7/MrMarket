@@ -262,3 +262,24 @@ func PositionPnL(p Position) float64 {
 	}
 	return dir * (p.CurrentPrice - p.OpenPrice) * p.Lots * mult
 }
+
+type Lead struct {
+	ID        int64  `json:"id"`
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	Kind      string `json:"kind"`
+	ItemID    string `json:"item_id"`
+	Item      string `json:"item"`
+	Plan      string `json:"plan"`
+	Note      string `json:"note"`
+	UserID    *int64 `json:"user_id"`
+	Status    string `json:"status"`
+	CreatedAt string `json:"created_at"`
+}
+
+type AdminUser struct {
+	User          User           `json:"user"`
+	Subscriptions []Subscription `json:"subscriptions"`
+	Courses       []Enrollment   `json:"courses"`
+}

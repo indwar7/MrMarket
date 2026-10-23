@@ -42,7 +42,7 @@ func setup() {
 			return
 		}
 	}
-	router = api.New(st, auth.New(cfg.JWTSecret), payments.Demo{}, ws.NewHub(), log).Router(cfg.CORSOrigins)
+	router = api.New(st, auth.New(cfg.JWTSecret), payments.Demo{}, ws.NewHub(), log, cfg.AdminKey).Router(cfg.CORSOrigins)
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {

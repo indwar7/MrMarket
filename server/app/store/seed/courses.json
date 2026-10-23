@@ -20,7 +20,7 @@
   "duration": "Video course",
   "price": 49,
   "rating": 4.9,
-  "students": 12840,
+  "students": 0,
   "hue": 24,
   "description": "Learn to read naked charts with no indicator clutter. You'll find structure, key levels and high-quality setups, then plan every trade with entry, stop and target. Examples on Emaar, Emirates NBD and Apple, including trades that failed. Follow along in TradingView with the practice workbook.",
   "disclaimer": "Education only, not investment or trading advice. Charts and companies shown are illustrations, not opinions. Past patterns do not predict future results. Trading risks your capital. Practise on a demo account first."
@@ -33,7 +33,7 @@
   "duration": "Video course",
   "price": 39,
   "rating": 4.9,
-  "students": 8402,
+  "students": 0,
   "hue": 150,
   "description": "A practical, step-by-step system for controlling losses and sizing trades, from your first risk rule to a full account plan. Use the position size calculator and trade journal template in the practice workbook. Examples on Emaar, Emirates NBD and Apple, including losing trades and drawdowns. Follow along in TradingView and Excel or Google Sheets.",
   "disclaimer": "Education only, not investment or trading advice. Charts, companies and numbers shown are illustrations, not recommendations. Risk rules reduce losses but cannot remove them. Trading risks your capital. Practise on a demo account first."
@@ -46,7 +46,7 @@
   "duration": "Video course",
   "price": 79,
   "rating": 4.7,
-  "students": 6120,
+  "students": 0,
   "hue": 280,
   "description": "A step-by-step framework for reading structure, liquidity and imbalance on a clean chart. You'll learn to mark key zones, wait for confirmation and plan every trade with entry, stop and target. Examples on Emaar, Emirates NBD and Apple, including setups that failed. Follow along in TradingView with the practice workbook.",
   "disclaimer": "Education only, not investment or trading advice. Smart money concepts are an interpretation of price behavior, not proof of what any institution is doing. Charts and companies shown are illustrations, not recommendations. Past patterns do not predict future results. Trading risks your capital. Practise on a demo account first."
@@ -59,7 +59,7 @@
   "duration": "Video course",
   "price": 0,
   "rating": 4.8,
-  "students": 20113,
+  "students": 0,
   "hue": 210,
   "description": "A hands-on, step-by-step guide to MetaTrader 5, from setup and charting to orders, position sizing, going live and basic automation. Every lesson is screen-recorded so you can follow click by click. Examples on EURUSD, gold and Apple. Use the practice workbook with a free demo account.",
   "disclaimer": "Education only, not investment or trading advice. Nothing here is a recommendation to buy or sell any instrument, or to use any particular broker. Examples are illustrations, and some trades shown did not work out. Leveraged trading carries a high risk of losing your capital. Practise on a demo account first and consider speaking to a licensed adviser before trading real money."
@@ -72,7 +72,7 @@
   "duration": "Video course",
   "price": 129,
   "rating": 4.8,
-  "students": 3390,
+  "students": 0,
   "hue": 340,
   "description": "A step-by-step, code-along guide to building an Expert Advisor in MQL5, from basic syntax to trade execution, risk management, backtesting and a demo run. You'll build one complete EA from a simple rules-based strategy and get the full source code in the practice workbook. Examples on EURUSD, gold and Apple. Follow along in MetaEditor and the MT5 Strategy Tester.",
   "disclaimer": "Education only, not investment or trading advice. The EA built in this course is a teaching example, not a profitable system or a recommendation. Backtest results do not predict live results. Automated trading carries a high risk of losing your capital, and code errors can cause unintended trades. Test on a demo account first and consider speaking to a licensed adviser before trading real money."
@@ -85,7 +85,7 @@
   "duration": "Video course",
   "price": 29,
   "rating": 4.9,
-  "students": 9870,
+  "students": 0,
   "hue": 45,
   "description": "A practical, step-by-step guide to the mental side of trading, from understanding your own biases to building a routine, a journal and a plan for bad days. Use the trade journal, pre-trade checklist and weekly review templates in the practice workbook. Examples drawn from real trades on Emaar, Emirates NBD and Apple, including mistakes. Follow along in TradingView and Excel or Google Sheets.",
   "disclaimer": "Education only, not investment, financial or trading advice, and not a substitute for professional mental health support. Nothing here is a recommendation to buy or sell any instrument. Examples are illustrations, and some trades shown did not work out. Trading risks your capital. Practise on a demo account first and consider speaking to a licensed adviser before trading real money."

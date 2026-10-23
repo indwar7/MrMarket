@@ -41,7 +41,7 @@ func main() {
 		}
 	}
 
-	srv := api.New(st, auth.New(cfg.JWTSecret), payments.Demo{}, ws.NewHub(), log)
+	srv := api.New(st, auth.New(cfg.JWTSecret), payments.Demo{}, ws.NewHub(), log, cfg.AdminKey)
 	httpSrv := &http.Server{
 		Addr:              cfg.Addr,
 		Handler:           srv.Router(cfg.CORSOrigins),

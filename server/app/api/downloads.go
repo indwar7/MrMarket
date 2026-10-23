@@ -3,6 +3,7 @@ package api
 import (
 	"archive/zip"
 	"bytes"
+	"io"
 	"io/fs"
 	"net/http"
 	"os"
@@ -69,19 +70,38 @@ func (s *Server) download(w http.ResponseWriter, r *http.Request) {
 			writeErr(w, 403, "subscribe first")
 			return
 		}
-		dir := os.Getenv("MT5_FILES_DIR")
-		if dir == "" {
-			writeErr(w, 503, "File delivery is being set up. Your mentor will send the MT5 file by email in the meantime.")
+		if dir := os.Getenv("MT5_FILES_DIR"); dir != "" {
+			path := filepath.Join(dir, id+".ex5")
+			if _, err := os.Stat(path); err == nil {
+				w.Header().Set("Content-Type", "application/octet-stream")
+				w.Header().Set("Content-Disposition", `attachment; filename="`+id+`.ex5"`)
+				http.ServeFile(w, r, path)
+				return
+			}
+		}
+		// Private GitHub repo as the file store (MT5_FILES_REPO=owner/name, MT5_FILES_TOKEN=read token).
+		repo, tok := os.Getenv("MT5_FILES_REPO"), os.Getenv("MT5_FILES_TOKEN")
+		if repo == "" || tok == "" {
+			writeErr(w, 503, "File delivery is not configured yet. Your mentor will send the MT5 file by email.")
 			return
 		}
-		path := filepath.Join(dir, id+".ex5")
-		if _, err := os.Stat(path); err != nil {
+		req, _ := http.NewRequestWithContext(r.Context(), http.MethodGet, "https://api.github.com/repos/"+repo+"/contents/"+id+".ex5", nil)
+		req.Header.Set("Authorization", "Bearer "+tok)
+		req.Header.Set("Accept", "application/vnd.github.raw")
+		req.Header.Set("User-Agent", "mrmarket-api")
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			writeErr(w, 502, "file store unreachable")
+			return
+		}
+		defer resp.Body.Close()
+		if resp.StatusCode != 200 {
 			writeErr(w, 503, "This file is not uploaded yet. Your mentor will send it by email.")
 			return
 		}
 		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Header().Set("Content-Disposition", `attachment; filename="`+id+`.ex5"`)
-		http.ServeFile(w, r, path)
+		_, _ = io.Copy(w, resp.Body)
 	default:
 		writeErr(w, 400, "kind must be script, strategy or indicator")
 	}

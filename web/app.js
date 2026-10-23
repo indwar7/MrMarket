@@ -184,31 +184,43 @@ function itemFor(kind, id) {
 
 const buyBtn = (kind, id, label, ownedLabel, extra = "") => {
   const on = owns(kind, id);
-  return `<button class="btn ${extra} ${on ? "is-on" : ""}" data-buy="${kind}:${id}" data-label="${esc(label)}" data-owned="${esc(ownedLabel)}">${esc(on ? ownedLabel : label)}</button>`;
+  const it = itemFor(kind, id);
+  const text = on ? ownedLabel : (it.price > 0 || !authed()) ? (it.price > 0 ? "Request access" : "Request free access") : label;
+  return `<button class="btn ${extra} ${on ? "is-on" : ""}" data-buy="${kind}:${id}" data-label="${esc(text)}" data-owned="${esc(ownedLabel)}">${esc(text)}</button>`;
 };
 
-function checkout(title, price, period) {
+function requestAccess(kind, id, title, price, period, plan) {
   return new Promise((done) => {
+    const u = me();
     const m = document.createElement("div");
     m.className = "modal";
-    m.innerHTML = `<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="co-t">
-      <h2 class="h2" id="co-t">Confirm purchase</h2>
-      <div class="co-row"><span>${esc(title)}</span><b>$${price}<small class="muted">${period}</small></b></div>
-      <div class="co-row"><span class="muted">Tax</span><span>$0</span></div>
-      <div class="co-row co-total"><span>Total today</span><b>$${price}</b></div>
-      <div class="co-card"><span class="visa">VISA</span><span>•••• 4242</span><span class="muted small">Exp 08/29</span></div>
-      <div class="btn-row"><button class="btn" data-ok>Pay $${price}</button><button class="btn btn-quiet" data-no>Cancel</button></div>
-      <p class="small muted">Demo checkout. No real payment is taken.</p></div>`;
+    m.innerHTML = `<form class="modal-card" role="dialog" aria-modal="true" aria-labelledby="ra-t" novalidate>
+      <h2 class="h2" id="ra-t">Request access</h2>
+      <div class="co-row"><span>${esc(title)}</span><b>${price ? `$${price}<small class="muted">${period}</small>` : "Free"}</b></div>
+      <p class="small muted">Tell us where to reach you. We confirm the price, you pay, and we send your login${authed() ? " and unlock this on your account" : ""} by email or WhatsApp. No self-service sign-up.</p>
+      <label class="field"><span>Name</span><input class="inp" id="ra-name" required value="${esc(u.name ?? "")}"></label>
+      <label class="field"><span>Email</span><input class="inp" id="ra-email" type="email" required value="${esc(u.email ?? "")}"></label>
+      <label class="field"><span>WhatsApp (optional)</span><input class="inp" id="ra-phone" placeholder="+971 50 000 0000"></label>
+      <label class="field"><span>Note (optional)</span><input class="inp" id="ra-note" placeholder="Broker, account size, questions"></label>
+      <p class="form-error" id="ra-err" role="alert" hidden></p>
+      <div class="btn-row"><button class="btn" type="submit">Send request</button><button class="btn btn-quiet" type="button" data-no>Cancel</button></div>
+      <p class="small muted">Prefer to talk first? <a href="#/support" data-no>Book a free onboarding call</a>.</p></form>`;
     document.body.append(m);
     const close = (v) => { m.remove(); removeEventListener("keydown", onKey); done(v); };
     const onKey = (e) => { if (e.key === "Escape") close(false); };
     addEventListener("keydown", onKey);
-    m.addEventListener("click", (e) => {
-      if (e.target === m || e.target.closest("[data-no]")) close(false);
-      const ok = e.target.closest("[data-ok]");
-      if (ok) { ok.textContent = "Processing…"; ok.disabled = true; setTimeout(() => close(true), 800); }
+    m.addEventListener("click", (e) => { if (e.target === m || e.target.closest("[data-no]")) close(false); });
+    m.querySelector("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = m.querySelector("#ra-name").value.trim(), email = m.querySelector("#ra-email").value.trim(), err = m.querySelector("#ra-err");
+      if (!name || !email.includes("@")) { err.textContent = "Name and a valid email are required."; err.hidden = false; return; }
+      const btn = m.querySelector('[type="submit"]'); btn.disabled = true; btn.textContent = "Sending…";
+      try {
+        const r = await api("/api/requests", { method: "POST", body: { name, email, phone: m.querySelector("#ra-phone").value.trim(), kind, id: String(id), plan: plan || "", note: m.querySelector("#ra-note").value.trim() } });
+        m.querySelector(".modal-card").innerHTML = `<h2 class="h2">Request sent</h2><p class="muted">${esc(r.message)}</p><p class="small muted">Reference #${r.id}. Keep an eye on ${esc(email)}.</p><div class="btn-row"><button class="btn" type="button" data-no>Done</button></div>`;
+      } catch (ex) { err.textContent = ex.message; err.hidden = false; btn.disabled = false; btn.textContent = "Send request"; }
     });
-    m.querySelector("[data-ok]").focus();
+    m.querySelector("#ra-name").focus();
   });
 }
 
@@ -219,12 +231,13 @@ function needLogin() {
   return true;
 }
 
+// Paid items and anonymous visitors go through "Request access" (manual payment, login sent by the team).
+// Logged-in members can take free items directly.
 async function purchase(kind, id, plan = "Monthly", priceOverride) {
-  if (needLogin()) return false;
   const it = itemFor(kind, id);
   const price = priceOverride ?? it.price;
   const period = plan === "Quarterly" ? "/quarter" : plan === "Yearly" ? "/year" : it.period;
-  if (price > 0 && !(await checkout(it.title, price, period))) return false;
+  if (price > 0 || !authed()) { await requestAccess(kind, id, it.title, price, period, plan); return false; }
   try { await api("/api/purchase", { method: "POST", body: { kind, id: String(id), plan } }); }
   catch (e) { toast(e.message); return false; }
   await loadAccount();
@@ -342,12 +355,26 @@ const TEAM = [
 
 /* ---------------- home ---------------- */
 const PILLARS = [
-  ["Learning", "Recorded courses and live sessions, from first chart to first EA.", "#/learn"],
-  ["Indicator", "A marketplace of MT5 indicators you can subscribe to in one click.", "#/indicators"],
-  ["Strategy", "Verified, backtested strategies with live track records.", "#/strategies"],
+  ["Learning", "Video courses with practice workbooks, from your first candle to your first EA.", "#/learn"],
+  ["Indicator", "31 MT5 signal indicators, each matched to an Expert Advisor.", "#/indicators"],
+  ["Strategy", "31 Expert Advisors with one shared risk engine: ATR stops, % risk, trailing, news filter.", "#/strategies"],
   ["Execution Tool", "Pick your broker and get MT5 set up in minutes.", "#/execute"],
   ["Algo", "One dashboard for every strategy, order, position and P&L.", "#/algo"],
   ["Handholding", "Mentors, onboarding calls and a community at your side.", "#/support"],
+];
+const FEATURES = () => [
+  { k: "mt5", kicker: "MetaTrader 5", title: "Expert Advisors & indicators", href: "#/strategies", cta: "Browse the 31 EAs",
+    p: "A catalogue of 31 Expert Advisors, from MA crossover and Donchian breakouts to Wyckoff springs, harmonic patterns and session scalping. Every EA ships with its own on-chart signal indicator and the same risk engine: ATR-sized stops, % risk sizing, break-even, trailing, partial close, spread, session and news filters.",
+    bullets: ["Compiled .ex5 files for any MT5 broker, hedging or netting", "All 31 signal indicators available on their own for discretionary trading", "Switch strategies on and off from the Algo dashboard"],
+    stat: [String(STRATS.length || 31) + " EAs", String(INDICATORS.length || 31) + " indicators"], lock: "Delivered to subscribers after purchase" },
+  { k: "video", kicker: "Video courses", title: "Learn the craft on video", href: "#/course/candlesticks", cta: "Watch Basics of Candlesticks free",
+    p: "Structured video courses with lesson notes and practice workbooks. Basics of Candlesticks is open to everyone: 33 lessons from the anatomy of a candle to a complete trade plan, with real examples on Emaar, Emirates NBD and Apple. Further courses cover price action, risk, smart money, MT5, MQL5 and trading psychology.",
+    bullets: ["Watch inside the portal, no downloads", "Excel practice workbooks with answer keys per lesson", "Progress tracking when you log in"],
+    stat: [String(COURSES.length || 15) + " courses", COURSES.reduce((a, c) => a + (c.lessons || 0), 0) + " lessons"], lock: "Basics of Candlesticks is free to watch" },
+  { k: "py", kicker: "Python scripts", title: "Tools around your trading", href: "#/scripts", cta: "See the scripts",
+    p: "Six Python tools built to sit next to MT5: a CSV backtester with the MrMarket risk engine, a position size calculator, an MT5 to Excel trade journal exporter, a Telegram signal bridge, an equity curve and Monte Carlo analyser, and an economic calendar filter that keeps your EAs out of the news.",
+    bullets: ["Readable Python with a README and one-line install", "Works on Windows, macOS and your VPS", "Source code included for scripts"],
+    stat: [String(SCRIPTS.length || 6) + " scripts", "Python 3.10+"], lock: "Delivered to buyers as a zip" },
 ];
 
 function homeScreen() {
@@ -359,9 +386,9 @@ function homeScreen() {
       <p class="lede rise" style="--d:500ms">Learn the craft, subscribe to indicators and strategies, execute on MT5 and watch your algos run. With a mentor beside you the whole way.</p>
       <div class="btn-row rise" style="--d:650ms"><a class="btn" href="#/learn">Start learning</a><a class="btn btn-quiet" href="#/strategies">Browse strategies</a></div>
       <dl class="stats rise" style="--d:800ms">
-        <div><dt>Traders learning</dt><dd>48,000+</dd></div>
-        <div><dt>Strategies live</dt><dd>120</dd></div>
-        <div><dt>Brokers supported</dt><dd>8</dd></div>
+        <div><dt>Expert Advisors</dt><dd>${STRATS.length || 31}</dd></div>
+        <div><dt>Video lessons</dt><dd>${COURSES.reduce((a, c) => a + (c.lessons || 0), 0) || 449}</dd></div>
+        <div><dt>Python scripts</dt><dd>${SCRIPTS.length || 6}</dd></div>
       </dl>
     </div>
     <div class="hero-art">
@@ -378,8 +405,23 @@ function homeScreen() {
   </section>
 
   <section class="section">
-    <div class="section-head"><h2 class="title">Popular <em>strategies</em></h2>
-      <p class="lede">Backtested and running live. Subscribe and they trade on your own MT5 account.</p></div>
+    <div class="section-head"><h2 class="title">What we <em>offer</em></h2>
+      <p class="lede">Three things, each complete on its own: MT5 robots and indicators, video courses, and Python tools.</p></div>
+    <div class="features">
+      ${FEATURES().map((f) => `<article class="feature feature-${f.k}">
+        <div class="feature-head"><span class="kicker">${f.kicker}</span><div class="feature-stats">${f.stat.map((x) => `<b>${esc(x)}</b>`).join("")}</div></div>
+        <h3 class="h2">${f.title}</h3>
+        <p class="muted">${f.p}</p>
+        <ul class="checklist">${f.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+        <p class="small muted feature-lock">${f.lock}</p>
+        <a class="btn" href="${f.href}">${f.cta}</a>
+      </article>`).join("")}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="title">From the <em>EA catalogue</em></h2>
+      <p class="lede">Each Expert Advisor runs on your own MT5 account with the broker you choose.</p></div>
     <div class="cards cards-3">${STRATS.slice(0, 3).map(stratCard).join("")}</div>
   </section>
 
@@ -417,12 +459,13 @@ function homeScreen() {
       <details><summary>Where does my money sit?</summary><p>With your broker, in your own account. Strategies trade on your MT5 terminal. MrMarket never holds client funds.</p></details>
       <details><summary>Which brokers can I use?</summary><p>Any broker that offers MetaTrader 5. The Execution page has step-by-step setup for the most popular ones.</p></details>
       <details><summary>Can I stop a strategy at any time?</summary><p>Yes. Each strategy has a switch on the Algo dashboard. Turning it off stops new trades. You choose whether open positions are closed.</p></details>
+      <details><summary>How do I get access?</summary><p>Pick what you want and press Request access. We confirm the price, you pay, and we send your login by email or WhatsApp. There is no self-service sign-up.</p></details>
       <details><summary>Are backtest results guaranteed?</summary><p>No. Backtests and live records show how a strategy behaved in the past. Markets change and losses are possible.</p></details>
     </div>
   </section>
 
   <section class="cta-band">
-    <div><h2 class="title">Stop trading <em>on luck</em></h2><p class="muted" style="color:#b5b5b5;margin-top:14px;max-width:50ch">Join 48,000 traders building a process with the right tools and the right people.</p></div>
+    <div><h2 class="title">Stop trading <em>on luck</em></h2><p class="muted" style="color:#b5b5b5;margin-top:14px;max-width:50ch">Build a process with the right tools and the right people beside you.</p></div>
     <a class="btn" href="#/support">Book a free onboarding call</a>
   </section>
   ${footer()}`;
@@ -623,7 +666,7 @@ function drawStrategy(d) {
         <div><dt>Stop loss</dt><dd style="font-size:22px">${esc(slAtr)}× ATR</dd></div>
         <div><dt>Take profit</dt><dd style="font-size:22px">${esc(rr)}R</dd></div>
       </dl>
-      <div class="sheet" style="display:grid;gap:12px"><span class="tag tag-amber" style="justify-self:start">Live track record: coming soon</span><p class="muted">This EA is new to the catalogue. Verified live results will appear here once the first full month on a MrMarket account is in.</p></div>`}
+`}
       <div class="sheet" style="display:grid;gap:14px"><h2 class="h3">How it trades</h2>
         <p class="muted">${esc(d.description)}</p>
         ${includedList(d.rules)}</div>
@@ -715,9 +758,9 @@ function drawCourse(d, currentId) {
   const cur = lessons.find((l) => l.id === currentId) ?? lessons.find((l) => !l.done && !l.locked) ?? lessons[0];
   const done = lessons.filter((l) => l.done).length;
   const playerBody = !cur ? `<div class="player-msg"><b>No lessons yet</b></div>`
-    : cur.locked ? `<div class="player-msg"><span class="tag tag-amber">Members only</span><b>Enroll to watch “${esc(cur.title)}”</b><p class="muted small">Lesson 1 is a free preview. The full course unlocks every lesson and tracks your progress.</p>${buyBtn("course", c.id, c.price ? `Buy course · $${c.price}` : "Enroll free", "Enrolled ✓")}</div>`
+    : cur.locked ? `<div class="player-msg"><span class="tag tag-amber">Members only</span><b>“${esc(cur.title)}” is part of the full course</b><p class="muted small">The first lessons are open to everyone. Members get every lesson, workbook and progress tracking.</p>${buyBtn("course", c.id, c.price ? `Get the course · $${c.price}` : "Join free", "Enrolled ✓")}</div>`
     : cur.video_url ? videoEmbed(cur.video_url)
-    : `<div class="player-msg"><span class="tag">Video coming soon</span><b>“${esc(cur.title)}”</b><p class="muted small">This lesson's video is on its way and will play right here. Read the lesson outline below while you wait.</p></div>`;
+    : `<div class="player-cover">${thumbSVG(c.hue ?? 30, (c.id || "x").length * 3 + 5)}<div class="player-msg"><span class="tag">Lesson ${cur.idx} · Notes</span><b>${esc(cur.title)}</b><p class="muted small">${esc(cur.module || c.t)}</p></div></div>`;
   view.innerHTML = `
   <section class="page-head" style="padding-bottom:22px">
     <a class="small muted" href="#/learn">← All courses</a>
@@ -731,7 +774,7 @@ function drawCourse(d, currentId) {
         ${d.enrolled && !cur.locked ? `<button class="btn btn-small ${cur.done ? "btn-quiet" : ""}" id="done-btn" data-id="${cur.id}" data-done="${cur.done}">${cur.done ? "Mark as not done" : "Mark as complete"}</button>` : ""}</div>
         ${cur.summary ? `<p class="muted" style="max-width:70ch">${esc(cur.summary)}</p>` : ""}
         ${cur.resource_url ? `<div class="resource"><span class="xls-badge" aria-hidden="true">XLS</span><div><b>Practice workbook</b><p class="small muted">Fill-in exercises, trade plan and quiz for this lesson, with answer key.</p></div><a class="btn btn-small btn-quiet" href="${esc(cur.resource_url)}" download>Download .xlsx</a></div>` : ""}
-        ${d.enrolled ? `<div class="progress" style="--v:${d.progress}%"><i></i></div><p class="small muted">${done} of ${lessons.length} lessons complete</p>` : `<p class="small muted">Preview mode. <a href="#/learn">Enroll</a> to track progress and unlock every lesson.</p>`}</div>` : ""}
+        ${d.enrolled ? `<div class="progress" style="--v:${d.progress}%"><i></i></div><p class="small muted">${done} of ${lessons.length} lessons complete</p>` : authed() ? `<p class="small muted">Join the course to track your progress.</p>` : `<p class="small muted">Watching as a visitor. <a href="#/login">Log in</a> to track progress.</p>`}</div>` : ""}
       ${desc ? `<div class="panel" style="gap:8px"><h2 class="h3">About this course</h2><p class="muted">${esc(desc)}</p></div>` : ""}
       ${disclaimer ? `<div class="panel disclaimer" style="gap:8px"><div class="panel-head"><h2 class="h3">Disclaimer</h2><span class="tag tag-amber">Please read</span></div><p class="small muted">${esc(disclaimer)}</p></div>` : ""}
     </div>
@@ -739,7 +782,7 @@ function drawCourse(d, currentId) {
       <div class="panel-head"><h2 class="h3">Lessons</h2><span class="small muted">${esc(c.dur)}</span></div>
       <ol>${modules.map((mod) => `${mod ? `<li class="module"><span>${esc(mod)}</span><span class="small muted">${lessons.filter((l) => (l.module || "") === mod).length}</span></li>` : ""}${lessons.filter((l) => (l.module || "") === mod).map((l) => `<li><button class="lesson ${l.id === cur?.id ? "is-cur" : ""} ${l.done ? "is-done" : ""}" data-lesson="${l.id}">
         <span class="n">${l.done ? "✓" : l.idx}</span>
-        <span class="body"><b>${esc(l.title)}</b><span class="small muted">${esc(l.duration)}${l.free_preview ? " · Free preview" : ""}${l.locked ? " · Locked" : ""}${!l.locked && !l.video_url ? " · Coming soon" : ""}</span></span>
+        <span class="body"><b>${esc(l.title)}</b><span class="small muted">${l.video_url ? "▶ Video" : "Notes"}${l.resource_url ? " · Workbook" : ""}${l.free_preview && !d.enrolled ? " · Free" : ""}${l.locked ? " · Members" : ""}</span></span>
         ${l.locked ? `<span class="lock" aria-hidden="true"></span>` : ""}</button></li>`).join("")}`).join("")}</ol>
       ${d.enrolled ? "" : `<div style="padding:16px 18px 18px;display:grid;gap:10px"><span class="price">${c.price ? `$${c.price}` : "Free"}</span>${buyBtn("course", c.id, c.price ? "Buy course" : "Enroll free", "Enrolled ✓")}</div>`}
     </aside>
@@ -797,6 +840,102 @@ function aboutScreen() {
   splitWords(view.querySelector(".split-me"));
 }
 
+/* ---------------- admin (team only; needs ADMIN_KEY) ---------------- */
+const adminKey = () => { try { return sessionStorage.getItem("mm_admin"); } catch { return null; } };
+async function adminApi(path, opts = {}) {
+  const res = await fetch(API + path, { method: opts.method || "GET", headers: { "Content-Type": "application/json", "X-Admin-Key": adminKey() || "" }, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  let data = null; try { data = await res.json(); } catch { /* none */ }
+  if (!res.ok) throw new Error(data?.error || `Request failed (${res.status})`);
+  return data;
+}
+function adminScreen() {
+  if (!adminKey()) {
+    view.innerHTML = `<section class="login" style="grid-template-columns:1fr;max-width:460px;margin:60px auto"><form class="sheet login-form" novalidate>
+      <h2 class="h2">Team admin</h2><p class="small muted">Enter the admin key to manage requests, logins and purchases.</p>
+      <label class="field"><span>Admin key</span><input class="inp" type="password" id="ak" autocomplete="off"></label>
+      <p class="form-error" id="ak-err" hidden></p><button class="btn" type="submit">Continue</button></form></section>${footer()}`;
+    view.querySelector("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try { sessionStorage.setItem("mm_admin", view.querySelector("#ak").value.trim()); await adminApi("/api/admin/ping"); adminScreen(); }
+      catch (err) { sessionStorage.removeItem("mm_admin"); const el = view.querySelector("#ak-err"); el.textContent = err.message; el.hidden = false; }
+    });
+    return;
+  }
+  view.innerHTML = loadingHTML;
+  Promise.all([adminApi("/api/admin/leads"), adminApi("/api/admin/users")]).then(([leads, users]) => drawAdmin(leads, users)).catch((e) => { view.innerHTML = errorHTML(e); });
+}
+function drawAdmin(leads, users) {
+  const items = { strategy: STRATS.map((x) => [x.id, x.t]), indicator: INDICATORS.map((x) => [x.id, x.t]), course: COURSES.map((x) => [x.id, x.t]), script: SCRIPTS.map((x) => [x.id, x.t]), plan: Object.entries(PLANS).map(([k, v]) => [k, v.name]), live: LIVE.map((x) => [String(x.id), x.t]) };
+  const kindSel = (id) => `<select class="inp" id="${id}">${Object.keys(items).map((k) => `<option value="${k}">${k}</option>`).join("")}</select>`;
+  const itemSel = (id, kind) => `<select class="inp" id="${id}">${items[kind].map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join("")}</select>`;
+  const st = (x) => x === "new" ? "tag-amber" : x === "paid" ? "tag-up" : "";
+  view.innerHTML = `
+  <div class="dash-head"><div><span class="kicker">Team admin</span><h1 class="title" style="font-size:clamp(32px,4vw,52px)">Requests <em class="inline">& logins</em></h1></div>
+    <div class="btn-row"><button class="btn btn-small btn-quiet" id="ad-refresh">Refresh</button><button class="btn btn-small btn-quiet" id="ad-out">Sign out</button></div></div>
+  <dl class="kpis">
+    <div class="kpi hero-kpi"><dt>New requests</dt><dd>${leads.filter((l) => l.status === "new").length}</dd><span class="delta muted">of ${leads.length} total</span></div>
+    <div class="kpi"><dt>Users</dt><dd>${users.length}</dd><span class="delta muted">logins created</span></div>
+    <div class="kpi"><dt>Active subscriptions</dt><dd>${users.reduce((a, u) => a + u.subscriptions.length, 0)}</dd><span class="delta muted">EAs, indicators, scripts, plans</span></div>
+    <div class="kpi"><dt>Enrollments</dt><dd>${users.reduce((a, u) => a + u.courses.length, 0)}</dd><span class="delta muted">courses</span></div>
+  </dl>
+  <div class="dash-grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="panel"><div class="panel-head"><h2 class="h3">1. Create or reset a login</h2></div>
+      <form id="f-user" class="admin-form" novalidate>
+        <label class="field"><span>Email</span><input class="inp" id="u-email" type="email" required></label>
+        <label class="field"><span>Name</span><input class="inp" id="u-name"></label>
+        <label class="field"><span>Password (8+ chars)</span><input class="inp" id="u-pass" required value="${Math.random().toString(36).slice(2, 10)}${Math.random().toString(36).slice(2, 6)}"></label>
+        <button class="btn btn-small" type="submit">Create / reset</button></form>
+      <p class="small muted" id="u-msg"></p></div>
+    <div class="panel"><div class="panel-head"><h2 class="h3">2. Assign a purchase</h2></div>
+      <form id="f-grant" class="admin-form" novalidate>
+        <label class="field"><span>User email</span><input class="inp" id="g-email" type="email" required list="user-emails"><datalist id="user-emails">${users.map((u) => `<option value="${esc(u.user.email)}">`).join("")}</datalist></label>
+        <label class="field"><span>Kind</span>${kindSel("g-kind")}</label>
+        <label class="field"><span>Item</span><span id="g-item-wrap">${itemSel("g-item", "strategy")}</span></label>
+        <label class="field"><span>Billing label</span><select class="inp" id="g-plan"><option>Monthly</option><option>Quarterly</option><option>Yearly</option><option>One-time</option></select></label>
+        <span class="btn-row"><button class="btn btn-small" type="submit">Assign</button><button class="btn btn-small btn-quiet" type="button" id="g-revoke">Revoke</button></span></form>
+      <p class="small muted" id="g-msg"></p></div>
+  </div>
+  <div class="panel" style="margin-top:12px"><div class="panel-head"><h2 class="h3">Access requests</h2><span class="small muted">Newest first</span></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>When</th><th>Name</th><th>Contact</th><th>Wants</th><th>Note</th><th>Status</th><th></th></tr></thead>
+    <tbody>${leads.map((l) => `<tr><td class="muted">${l.id}</td><td class="muted">${fmtDate(l.created_at)} ${fmtTime(l.created_at).slice(0, 5)}</td><td><b>${esc(l.name)}</b>${l.user_id ? `<span class="small muted" style="display:block">has login</span>` : ""}</td>
+      <td><a href="mailto:${esc(l.email)}">${esc(l.email)}</a>${l.phone ? `<span class="small muted" style="display:block">${esc(l.phone)}</span>` : ""}</td>
+      <td><span class="tag">${esc(l.kind)}</span> ${esc(l.item)}${l.plan ? ` <span class="small muted">(${esc(l.plan)})</span>` : ""}</td><td class="muted small">${esc(l.note)}</td>
+      <td><span class="tag ${st(l.status)}">${esc(l.status)}</span></td>
+      <td><span class="btn-row">${["new", "contacted", "paid", "done", "closed"].filter((x) => x !== l.status).map((x) => `<button class="link-btn" data-lead="${l.id}:${x}">${x}</button>`).join("")}<button class="link-btn" data-fill="${esc(l.email)}:${esc(l.name)}:${l.kind}:${esc(l.item_id)}:${esc(l.plan)}">use ↑</button></span></td></tr>`).join("") || `<tr><td colspan="8" class="muted">No requests yet.</td></tr>`}</tbody></table></div></div>
+  <div class="panel" style="margin-top:12px"><div class="panel-head"><h2 class="h3">Users</h2></div>
+    <div class="table-wrap"><table><thead><tr><th>Email</th><th>Name</th><th>Since</th><th>Has access to</th></tr></thead>
+    <tbody>${users.map((u) => `<tr><td><b>${esc(u.user.email)}</b></td><td>${esc(u.user.name)}</td><td class="muted">${fmtDate(u.user.created_at)}</td>
+      <td><div class="tags">${u.subscriptions.map((x) => `<span class="tag ${x.kind === "strategy" ? "tag-amber" : ""}" title="${x.kind}">${esc(x.title)}</span>`).join("")}${u.courses.map((c) => `<span class="tag tag-up">${esc(c.course.title)}</span>`).join("")}${!u.subscriptions.length && !u.courses.length ? `<span class="small muted">nothing yet</span>` : ""}</div></td></tr>`).join("")}</tbody></table></div></div>
+  ${footer()}`;
+  const say = (id, msg, bad) => { const el = view.querySelector(id); el.textContent = msg; el.style.color = bad ? "var(--down)" : "var(--up)"; };
+  view.querySelector("#ad-refresh").addEventListener("click", adminScreen);
+  view.querySelector("#ad-out").addEventListener("click", () => { sessionStorage.removeItem("mm_admin"); adminScreen(); });
+  view.querySelector("#g-kind").addEventListener("change", (e) => { view.querySelector("#g-item-wrap").innerHTML = itemSel("g-item", e.target.value); });
+  view.querySelector("#f-user").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try { const r = await adminApi("/api/admin/users", { method: "POST", body: { email: view.querySelector("#u-email").value.trim(), name: view.querySelector("#u-name").value.trim(), password: view.querySelector("#u-pass").value } });
+      say("#u-msg", `${r.message}: ${r.user.email}. Send them: email ${r.user.email} / password ${view.querySelector("#u-pass").value}`); view.querySelector("#g-email").value = r.user.email; }
+    catch (err) { say("#u-msg", err.message, true); }
+  });
+  const grant = async (method) => {
+    try { const r = await adminApi("/api/admin/grant", { method, body: { email: view.querySelector("#g-email").value.trim(), kind: view.querySelector("#g-kind").value, id: view.querySelector("#g-item").value, plan: view.querySelector("#g-plan").value } }); say("#g-msg", r.message + " · " + view.querySelector("#g-item").selectedOptions[0].textContent); }
+    catch (err) { say("#g-msg", err.message, true); }
+  };
+  view.querySelector("#f-grant").addEventListener("submit", (e) => { e.preventDefault(); grant("POST"); });
+  view.querySelector("#g-revoke").addEventListener("click", () => grant("DELETE"));
+  view.querySelectorAll("[data-lead]").forEach((b) => b.addEventListener("click", async () => {
+    const [id, status] = b.dataset.lead.split(":");
+    try { await adminApi(`/api/admin/leads/${id}`, { method: "PUT", body: { status } }); adminScreen(); } catch (err) { toast(err.message); }
+  }));
+  view.querySelectorAll("[data-fill]").forEach((b) => b.addEventListener("click", () => {
+    const [email, name, kind, item, plan] = b.dataset.fill.split(":");
+    view.querySelector("#u-email").value = email; view.querySelector("#u-name").value = name; view.querySelector("#g-email").value = email;
+    view.querySelector("#g-kind").value = kind; view.querySelector("#g-item-wrap").innerHTML = itemSel("g-item", kind); view.querySelector("#g-item").value = item;
+    if (plan) view.querySelector("#g-plan").value = plan;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }));
+}
+
 /* ---------------- python scripts ---------------- */
 function scriptsScreen() {
   const cats = ["All", ...new Set(SCRIPTS.map((x) => x.cat))];
@@ -804,7 +943,7 @@ function scriptsScreen() {
   <section class="page-head">
     <p class="eyebrow rise"><i></i>Python scripts</p>
     <h1 class="title split-me">Tools around <em>your trading</em></h1>
-    <p class="lede rise" style="--d:400ms">Backtesting, risk, reporting and alerts in Python, built to work with MT5 and the MrMarket EAs. Each script ships with a README and a one-line install. First releases are on the way.</p>
+    <p class="lede rise" style="--d:400ms">Backtesting, risk, reporting and alerts in Python, built to work with MT5 and the MrMarket EAs. Each script ships with a README and a one-line install, and is delivered as a zip after purchase.</p>
   </section>
   <div class="toolbar">
     <div class="cats">${cats.map((c, i) => `<button class="cat" aria-pressed="${i === 0}" data-cat="${c}">${c}</button>`).join("")}</div>
@@ -826,14 +965,14 @@ function scriptsScreen() {
   const draw = () => {
     const list = SCRIPTS.filter((x) => (cat === "All" || x.cat === cat) && (x.t + " " + x.desc).toLowerCase().includes(q));
     box.innerHTML = list.length ? list.map((x) => `<article class="card hover">
-      <div class="strat-head"><div><span class="py-badge" aria-hidden="true">Py</span></div>${x.status === "available" ? `<span class="tag tag-up">Available</span>` : `<span class="tag tag-amber">Coming soon</span>`}</div>
+      <div class="strat-head"><div><span class="py-badge" aria-hidden="true">Py</span></div>${x.status === "available" ? `<span class="tag tag-up">Available</span>` : `<span class="tag tag-amber">In development</span>`}</div>
       <h3 class="h3">${esc(x.t)}</h3>
       <div class="tags"><span class="tag">${esc(x.cat)}</span>${x.ver ? `<span class="tag">v${esc(x.ver)}</span>` : ""}${(x.tags || []).slice(0, 3).map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
       <p class="muted small">${esc(x.desc)}</p>
       <p class="small muted"><b style="color:var(--text)">Needs:</b> ${esc(x.req)}</p>
       <div class="card-foot"><span class="price">${x.price ? `$${x.price}<small> one-time</small>` : "Free"}</span>
         ${x.status !== "available" ? `<button class="btn btn-small btn-quiet" data-waitlist="script:${x.id}">Notify me</button>` : owns("script", x.id) ? dlBtn("script", x.id, "Download .zip", "btn-small") : buyBtn("script", x.id, x.price ? "Buy script" : "Get free", "Purchased ✓", "btn-small")}</div>
-    </article>`).join("") : `<div class="empty" style="grid-column:1/-1">${SCRIPTS.length ? "No scripts match." : "Scripts are being prepared. Check back soon."}</div>`;
+    </article>`).join("") : `<div class="empty" style="grid-column:1/-1">No scripts match.</div>`;
   };
   draw();
   view.querySelectorAll("[data-cat]").forEach((b) => b.addEventListener("click", () => {
@@ -1145,7 +1284,7 @@ function accountScreen() {
     <div data-pane="a-bill" hidden><div class="table-wrap"><table>
       <thead><tr><th>Date</th><th>Item</th><th>Type</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead>
       <tbody>${acct.orders.map((o, i) => `<tr><td class="muted">${o.date}</td><td><b>${esc(o.item)}</b></td><td style="text-transform:capitalize">${o.kind === "live" ? "Live session" : o.kind}</td><td class="num"><b>${o.amount ? `$${o.amount}` : "Free"}</b>${o.amount ? `<small class="muted">${o.period}</small>` : ""}</td><td><span class="tag tag-up">${o.amount ? "Paid" : "Confirmed"}</span></td><td>${o.amount ? `<button class="link-btn" data-toast="Invoice INV-${2026100 + acct.orders.length - i} downloaded">Invoice</button>` : ""}</td></tr>`).join("")}</tbody></table></div>
-      <p class="small muted" style="margin-top:12px">Paying with Visa •••• 4242 · <button class="link-btn" data-toast="Card update is not connected in this demo">Update card</button></p></div>
+      <p class="small muted" style="margin-top:12px">Payments are handled by the MrMarket team. Need an invoice or a change? <a href="#/support">Message support</a>.</p></div>
   </div>
   ${footer()}`;
   wireTabs();
@@ -1158,7 +1297,6 @@ function accountScreen() {
 }
 
 /* ---------------- login ---------------- */
-const DEMO = { email: "demo@mrmarket.com", pass: "demo1234", name: "Demo Trader" };
 const authed = () => Boolean(token());
 function setAuthed(on, tok, user) {
   try {
@@ -1179,25 +1317,20 @@ function loginScreen() {
     </div>
     <form class="sheet login-form rise" style="--d:200ms" novalidate>
       <h2 class="h2">Log in</h2>
-      <div class="demo-box">
-        <div><b>Demo account</b><p class="small muted">Email: <code>${DEMO.email}</code><br>Password: <code>${DEMO.pass}</code></p></div>
-        <button type="button" class="btn btn-small btn-quiet" id="fill-demo">Use demo</button>
-      </div>
+      <p class="small muted">Use the login we sent you after your purchase.</p>
       <label class="field"><span>Email</span><input class="inp" type="email" id="email" autocomplete="username" placeholder="you@example.com" required></label>
       <label class="field"><span>Password</span>
         <span class="pw"><input class="inp" type="password" id="pass" autocomplete="current-password" placeholder="••••••••" required><button type="button" id="toggle-pw" aria-label="Show password">Show</button></span></label>
-      <div class="login-row"><label class="small"><input type="checkbox" checked style="accent-color:var(--amber)"> Remember me</label><a class="small" href="#" data-toast="Reset link sent (demo)" onclick="return false">Forgot password?</a></div>
+      <div class="login-row"><label class="small"><input type="checkbox" checked style="accent-color:var(--amber)"> Remember me</label><a class="small" href="#/support">Forgot password? Message support</a></div>
       <p class="form-error" id="err" role="alert" hidden></p>
       <button class="btn" type="submit">Log in</button>
-      <div class="or"><span>or</span></div>
-      <button type="button" class="btn btn-quiet" data-toast="Google sign-in is not connected in this demo">Continue with Google</button>
-      <p class="small muted" style="text-align:center">New to MrMarket? <a href="#/support">Book a free onboarding call</a></p>
+      <div class="or"><span>no account yet?</span></div>
+      <p class="small muted" style="text-align:center">Access is sent after purchase. Pick an EA, course or script and press <b>Request access</b>, or <a href="#/support">book a free onboarding call</a>.</p>
     </form>
   </section>
   ${footer()}`;
   splitWords(view.querySelector(".split-me"));
   const email = view.querySelector("#email"), pass = view.querySelector("#pass"), err = view.querySelector("#err");
-  view.querySelector("#fill-demo").addEventListener("click", () => { email.value = DEMO.email; pass.value = DEMO.pass; err.hidden = true; });
   view.querySelector("#toggle-pw").addEventListener("click", (e) => {
     const show = pass.type === "password"; pass.type = show ? "text" : "password"; e.target.textContent = show ? "Hide" : "Show";
   });
@@ -1211,7 +1344,7 @@ function loginScreen() {
       await loadAccount();
       toast(`Welcome back, ${r.user.name}`); location.hash = `#/${next}`;
     } catch (ex) {
-      err.textContent = ex.status === 401 ? "Email or password is incorrect. Use the demo account above." : ex.message; err.hidden = false;
+      err.textContent = ex.status === 401 ? "Email or password is incorrect." : ex.message; err.hidden = false;
       btn.disabled = false; btn.textContent = "Log in";
     }
   });
@@ -1228,6 +1361,7 @@ const ROUTES = [
   [/^#\/course\/([\w-]+)$/, courseScreen, 2, "learn"],
   [/^#\/scripts$/, scriptsScreen, 1, "scripts"],
   [/^#\/about$/, aboutScreen, 1, "about"],
+  [/^#\/admin/, adminScreen, 1, ""],
   [/^#\/execute$/, executeScreen, 1, "execute"],
   [/^#\/algo$/, algoScreen, 1, "algo"],
   [/^#\/support$/, supportScreen, 1, "support"],

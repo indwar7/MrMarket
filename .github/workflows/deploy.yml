@@ -48,6 +48,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           NEW_RT: ${{ steps.tok.outputs.rotated }}
         run: gh secret set VERCEL_REFRESH_TOKEN -b"$NEW_RT" -R ${{ github.repository }}
+      - name: Sync API environment variables
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}
+          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+          MT5_FILES_REPO: ${{ secrets.MT5_FILES_REPO }}
+          MT5_FILES_TOKEN: ${{ secrets.GH_PAT }}
+          TOKEN: ${{ steps.tok.outputs.token }}
+        run: |
+          cd server
+          for name in ADMIN_KEY MT5_FILES_REPO MT5_FILES_TOKEN; do
+            vercel env rm "$name" production --yes --token "$TOKEN" >/dev/null 2>&1 || true
+            printf '%s' "${!name}" | vercel env add "$name" production --token "$TOKEN" >/dev/null
+            echo "set $name"
+          done
       - name: Deploy API
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}

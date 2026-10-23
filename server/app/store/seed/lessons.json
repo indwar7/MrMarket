@@ -20,7 +20,8 @@
    "duration": "Video",
    "summary": "Welcome back. If you open any trading platform, you'll see you can display price in different ways. The three most common are line charts, bar charts and candlestick charts. In this lesson, you'll see the same data shown all three ways, and why most traders choose candles.",
    "video": "https://youtu.be/sri0uOS3Hww",
-   "workbook": "assets/workbooks/candlesticks/01-line-bar-chart.xlsx"
+   "workbook": "assets/workbooks/candlesticks/01-line-bar-chart.xlsx",
+   "free_preview": true
   },
   {
    "module": "Chart Foundations",
@@ -28,7 +29,8 @@
    "duration": "Video",
    "summary": "Hello, and welcome to this lesson. In the last lesson, you saw why traders prefer candlestick charts over line charts. Today, we're going to take a single candle apart, piece by piece. By the end, you'll be able to read any candle on any chart, whether it's a Dubai stock like Emaar, or a US stock like Apple.",
    "video": "https://youtu.be/A5OpGDNjgU4",
-   "workbook": "assets/workbooks/candlesticks/02-anatomy-of-candle.xlsx"
+   "workbook": "assets/workbooks/candlesticks/02-anatomy-of-candle.xlsx",
+   "free_preview": true
   },
   {
    "module": "Chart Foundations",
@@ -36,28 +38,32 @@
    "duration": "Video",
    "summary": "Welcome back. In the last lesson, you saw that a candle can cover one minute, one hour or one day. Now we'll see exactly how that works: how small candles combine into bigger ones, and how to choose the right timeframe for you.",
    "video": "https://youtu.be/znHdBlT_C-g",
-   "workbook": "assets/workbooks/candlesticks/03-timeframe.xlsx"
+   "workbook": "assets/workbooks/candlesticks/03-timeframe.xlsx",
+   "free_preview": true
   },
   {
    "module": "Reading a Single Candle",
    "title": "Bullish vs Bearish Candles",
    "duration": "Video",
    "summary": "Welcome to the next module: reading a single candle. You already know that green means the close was above the open, and red means it was below. In this lesson, we'll go deeper: what bullish and bearish really mean, and what a series of candles tells you.",
-   "workbook": "assets/workbooks/candlesticks/04-bullish-vs-bearish-candle.xlsx"
+   "workbook": "assets/workbooks/candlesticks/04-bullish-vs-bearish-candle.xlsx",
+   "free_preview": true
   },
   {
    "module": "Reading a Single Candle",
    "title": "Body Size: Strength vs Indecision",
    "duration": "Video",
    "summary": "Welcome back. In the last lesson, you saw that a long body means a strong win and a tiny body means a narrow one. Now we'll make that precise. You'll learn to measure body size, and to tell strength from indecision.",
-   "workbook": "assets/workbooks/candlesticks/05-body-size.xlsx"
+   "workbook": "assets/workbooks/candlesticks/05-body-size.xlsx",
+   "free_preview": true
   },
   {
    "module": "Reading a Single Candle",
    "title": "Wicks: Rejection and Pressure",
    "duration": "Video",
    "summary": "Welcome back. You've learned to read the body of a candle. Now let's read the wicks. Wicks show you where price went during the period, but couldn't stay. That makes them one of the best clues to where buyers and sellers are pushing back.",
-   "workbook": "assets/workbooks/candlesticks/06-wicks.xlsx"
+   "workbook": "assets/workbooks/candlesticks/06-wicks.xlsx",
+   "free_preview": true
   },
   {
    "module": "Single-Candle Patterns",
@@ -65,14 +71,16 @@
    "duration": "Video",
    "summary": "Welcome to a new module: single-candle patterns. These are patterns made from just one candle. We'll start with the doji, the classic candle of indecision, and its two important cousins: the dragonfly and the gravestone. By the end, you'll also have a clear, step-by-step strategy for trading the gravestone doji, and you'll see real examples on Emaar Properties, including ones that didn't work out.",
    "video": "https://youtu.be/FjC4Kfp456s",
-   "workbook": "assets/workbooks/candlesticks/07-doji.xlsx"
+   "workbook": "assets/workbooks/candlesticks/07-doji.xlsx",
+   "free_preview": true
   },
   {
    "module": "Single-Candle Patterns",
    "title": "Hammer and Hanging Man",
    "duration": "Video",
    "summary": "Welcome back. In this lesson, you'll meet two of the most famous candlestick patterns: the hammer and the hanging man. Here's the twist: they look exactly the same. What separates them is where they appear. By the end, you'll also have a clear, step-by-step strategy for trading the hammer, and you'll see real examples on Emaar Properties, including ones that didn't work out.",
-   "workbook": "assets/workbooks/candlesticks/08-hammer-and-hanging-man.xlsx"
+   "workbook": "assets/workbooks/candlesticks/08-hammer-and-hanging-man.xlsx",
+   "free_preview": true
   },
   {
    "module": "Single-Candle Patterns",
@@ -80,7 +88,8 @@
    "duration": "Video",
    "summary": "Welcome back. Last lesson, you met the hammer and the hanging man. Now we'll flip that shape upside down. A small body near the bottom with a long upper wick gives us two more patterns: the inverted hammer and the shooting star. By the end, you'll also have a clear, step-by-step strategy for trading the shooting star, and you'll see real examples on Emaar Properties.",
    "video": "https://youtu.be/bXgy-lG21zE",
-   "workbook": "assets/workbooks/candlesticks/09-shooting-star-and-inverted-hammer.xlsx"
+   "workbook": "assets/workbooks/candlesticks/09-shooting-star-and-inverted-hammer.xlsx",
+   "free_preview": true
   },
   {
    "module": "Single-Candle Patterns",
@@ -88,7 +97,8 @@
    "duration": "Video",
    "summary": "Welcome back. So far, many patterns have been about indecision and rejection. Now let's look at the opposite: the marubozu. It's a candle with no wicks at all, and it shows one side in complete control. By the end, you'll also have a clear, step-by-step strategy for trading the bullish marubozu breakout, and you'll see real examples on Emaar Properties and Emirates NBD, including ones that didn't work out.",
    "video": "https://youtu.be/MQ24KUlPFM4",
-   "workbook": "assets/workbooks/candlesticks/10-marubozu.xlsx"
+   "workbook": "assets/workbooks/candlesticks/10-marubozu.xlsx",
+   "free_preview": true
   },
   {
    "module": "Single-Candle Patterns",
@@ -96,7 +106,8 @@
    "duration": "Video",
    "summary": "Welcome back. Our last single-candle pattern is the spinning top. It's a close cousin of the doji, and it's another candle of indecision. Let's learn to spot it, and what to watch for next. By the end, you'll also have a clear, step-by-step strategy for trading the spinning top at the top, and you'll see real examples on Emirates NBD.",
    "video": "https://youtu.be/AqYqmxLKKpI",
-   "workbook": "assets/workbooks/candlesticks/11-spinning-top.xlsx"
+   "workbook": "assets/workbooks/candlesticks/11-spinning-top.xlsx",
+   "free_preview": true
   },
   {
    "module": "Two-Candle Patterns",
@@ -104,7 +115,8 @@
    "duration": "Video",
    "summary": "Welcome to a new module: two-candle patterns. These patterns compare two candles side by side. We'll start with one of the most popular reversal patterns of all: the bullish engulfing. By the end, you'll also have a clear, step-by-step strategy for trading the bullish engulfing, and you'll see real examples on Emirates NBD.",
    "video": "https://youtu.be/tUuNcbXS3o8",
-   "workbook": "assets/workbooks/candlesticks/12-bullish-engulfing.xlsx"
+   "workbook": "assets/workbooks/candlesticks/12-bullish-engulfing.xlsx",
+   "free_preview": true
   },
   {
    "module": "Two-Candle Patterns",
@@ -112,7 +124,8 @@
    "duration": "Video",
    "summary": "Welcome back. You've learned the bullish engulfing. Now let's flip it. The bearish engulfing is its mirror image, and it's one of the most watched warning signs at the top of a rise. By the end, you'll also have a clear, step-by-step strategy for trading the bearish engulfing, and you'll see real examples on Emirates NBD, including ones that didn't work out.",
    "video": "https://youtu.be/uDSWnM6y_CM",
-   "workbook": "assets/workbooks/candlesticks/13-bearish-engulfing.xlsx"
+   "workbook": "assets/workbooks/candlesticks/13-bearish-engulfing.xlsx",
+   "free_preview": true
   },
   {
    "module": "Two-Candle Patterns",
@@ -120,7 +133,8 @@
    "duration": "Video",
    "summary": "Welcome back. The engulfing patterns showed a big candle swallowing a small one. The harami is the opposite: a small candle sitting inside a big one. Harami means 'pregnant' in Japanese, because the shape looks like a mother and baby. By the end, you'll also have a clear, step-by-step strategy for trading the bullish harami, and you'll see real examples on Emirates NBD.",
    "video": "https://youtu.be/KsupWQ8U4Us",
-   "workbook": "assets/workbooks/candlesticks/14-harami.xlsx"
+   "workbook": "assets/workbooks/candlesticks/14-harami.xlsx",
+   "free_preview": true
   },
   {
    "module": "Two-Candle Patterns",
@@ -128,7 +142,8 @@
    "duration": "Video",
    "summary": "Welcome back. The engulfing patterns needed the second candle to cover the whole first body. But what if it only gets halfway or more? That gives us two more patterns: the piercing line and the dark cloud cover. By the end, you'll also have a clear, step-by-step strategy for trading the piercing line, and you'll see real examples on Emirates NBD, including ones that didn't work out.",
    "video": "https://youtu.be/kU0PZZKUUxw",
-   "workbook": "assets/workbooks/candlesticks/15-piercing-line-and-dark-cloud-cover.xlsx"
+   "workbook": "assets/workbooks/candlesticks/15-piercing-line-and-dark-cloud-cover.xlsx",
+   "free_preview": true
   },
   {
    "module": "Two-Candle Patterns",
@@ -136,7 +151,8 @@
    "duration": "Video",
    "summary": "Welcome back. Our last two-candle pattern is the tweezer. It's named after the tool, because the two candles look like the prongs of a pair of tweezers. Tweezers show a price level being defended twice in a row. By the end, you'll also have a clear, step-by-step strategy for trading the tweezer bottom, and you'll see real examples on Emirates NBD, including ones that didn't work out.",
    "video": "https://youtu.be/JbTrwHjdIdc",
-   "workbook": "assets/workbooks/candlesticks/16-tweezer.xlsx"
+   "workbook": "assets/workbooks/candlesticks/16-tweezer.xlsx",
+   "free_preview": true
   },
   {
    "module": "Three-Candle Patterns",
@@ -144,7 +160,8 @@
    "duration": "Video",
    "summary": "Welcome to a new module: three-candle patterns. With three candles, a pattern can tell a fuller story. We'll start with the morning star, one of the most respected bullish reversal patterns. Like the morning star in the sky, it appears just before the sun rises. By the end, you'll also have a clear, step-by-step strategy for trading the morning star, and you'll see real examples on Emirates NBD.",
    "video": "https://youtu.be/AR5lkCKI9X0",
-   "workbook": "assets/workbooks/candlesticks/17-morning-star.xlsx"
+   "workbook": "assets/workbooks/candlesticks/17-morning-star.xlsx",
+   "free_preview": true
   },
   {
    "module": "Three-Candle Patterns",
@@ -152,7 +169,8 @@
    "duration": "Video",
    "summary": "Welcome back. If the morning star appears before sunrise, the evening star appears just before nightfall. It's the bearish mirror of the morning star, and it warns that a rise may be ending. By the end, you'll also have a clear, step-by-step strategy for trading the evening star, and you'll see real examples on Apple.",
    "video": "https://youtu.be/L4deF2bOJI0",
-   "workbook": "assets/workbooks/candlesticks/18-evening-star.xlsx"
+   "workbook": "assets/workbooks/candlesticks/18-evening-star.xlsx",
+   "free_preview": true
   },
   {
    "module": "Three-Candle Patterns",
@@ -160,7 +178,8 @@
    "duration": "Video",
    "summary": "Welcome back. Our final three-candle patterns are all about strength. Three white soldiers are three strong green candles in a row. Three black crows are three strong red candles. Let's see what makes them powerful, and when to be careful. By the end, you'll also have a clear, step-by-step strategy for trading the three white soldiers, and you'll see real examples on Apple, including ones that didn't work out.",
    "video": "https://youtu.be/3Bm-8FlumCE",
-   "workbook": "assets/workbooks/candlesticks/19-three-white-soldier.xlsx"
+   "workbook": "assets/workbooks/candlesticks/19-three-white-soldier.xlsx",
+   "free_preview": true
   },
   {
    "module": "Context",
@@ -168,7 +187,8 @@
    "duration": "Video",
    "summary": "Welcome to a new module: context. You now know many patterns. But here's the truth: a pattern on its own means little. Where it appears is what matters. And the first piece of context is the trend.",
    "video": "https://youtu.be/ZviMieqqx34",
-   "workbook": "assets/workbooks/candlesticks/20-trend-identification.xlsx"
+   "workbook": "assets/workbooks/candlesticks/20-trend-identification.xlsx",
+   "free_preview": true
   },
   {
    "module": "Context",
@@ -176,7 +196,8 @@
    "duration": "Video",
    "summary": "Welcome back. The second piece of context is support and resistance. These are price levels where the market has turned before, and often turns again. They're where patterns become really powerful.",
    "video": "https://youtu.be/H62VBVRJBiY",
-   "workbook": "assets/workbooks/candlesticks/21-support-and-resistance.xlsx"
+   "workbook": "assets/workbooks/candlesticks/21-support-and-resistance.xlsx",
+   "free_preview": true
   },
   {
    "module": "Context",
@@ -184,7 +205,8 @@
    "duration": "Video",
    "summary": "Welcome back. You know the trend, and you know support and resistance. Now let's put patterns in their place. In this lesson, you'll see why the same pattern can work at one level and fail at another.",
    "video": "https://youtu.be/MnCQpnNCVos",
-   "workbook": "assets/workbooks/candlesticks/22-pattern-location.xlsx"
+   "workbook": "assets/workbooks/candlesticks/22-pattern-location.xlsx",
+   "free_preview": true
   },
   {
    "module": "Context",
@@ -192,7 +214,8 @@
    "duration": "Video",
    "summary": "Welcome back. Candles show you price. Volume shows you participation: how many shares changed hands. In this lesson, you'll learn how volume can confirm a pattern, or warn you that it's weak.",
    "video": "https://youtu.be/6cR9sd8fqvM",
-   "workbook": "assets/workbooks/candlesticks/23-volume.xlsx"
+   "workbook": "assets/workbooks/candlesticks/23-volume.xlsx",
+   "free_preview": true
   },
   {
    "module": "Context",
@@ -200,54 +223,62 @@
    "duration": "Video",
    "summary": "Welcome back. Stocks don't trade overnight. So when news arrives after the close, the next day's open can jump far from the previous close. That leaves a gap on the chart. In this lesson, you'll learn to read gaps and what they mean for candles.",
    "video": "https://youtu.be/4vbtSbV_G9E",
-   "workbook": "assets/workbooks/candlesticks/24-gaps.xlsx"
+   "workbook": "assets/workbooks/candlesticks/24-gaps.xlsx",
+   "free_preview": true
   },
   {
    "module": "Trade Plan",
    "title": "Entry Using Candles",
    "duration": "Video",
    "summary": "Welcome to a new module: building a trade plan. You can spot patterns, and you know where they matter. Now let's turn a pattern into a plan, starting with the entry: exactly when and where to get in.",
-   "workbook": "assets/workbooks/candlesticks/25-entry.xlsx"
+   "workbook": "assets/workbooks/candlesticks/25-entry.xlsx",
+   "free_preview": true
   },
   {
    "module": "Trade Plan",
    "title": "Stop-Loss Placement",
    "duration": "Video",
    "summary": "Welcome back. Every trade needs an exit for when you're wrong. That's your stop-loss. In this lesson, you'll learn to place it using the structure of the candle pattern itself, and to calculate your risk per share.",
-   "workbook": "assets/workbooks/candlesticks/26-stoploss.xlsx"
+   "workbook": "assets/workbooks/candlesticks/26-stoploss.xlsx",
+   "free_preview": true
   },
   {
    "module": "Trade Plan",
    "title": "Targets and Risk-Reward",
    "duration": "Video",
    "summary": "Welcome back. You have an entry and a stop. The last piece of the plan is the target: where you'll take profit. In this lesson, you'll learn to set targets at key levels, and to check that the reward is worth the risk.",
-   "workbook": "assets/workbooks/candlesticks/27-target.xlsx"
+   "workbook": "assets/workbooks/candlesticks/27-target.xlsx",
+   "free_preview": true
   },
   {
    "module": "Trade Plan",
    "title": "Common Mistakes and False Signals",
    "duration": "Video",
    "summary": "Welcome back. You now have all the pieces of a trade plan. Before we start the walkthroughs, let's look at the mistakes that trip up most beginners, and the false signals that catch people out. Knowing these will save you a lot of money and frustration.",
-   "workbook": "assets/workbooks/candlesticks/28-common-mistakes.xlsx"
+   "workbook": "assets/workbooks/candlesticks/28-common-mistakes.xlsx",
+   "free_preview": true
   },
   {
    "module": "Walkthroughs and Wrap-Up",
    "title": "Complete Walkthrough",
    "duration": "Video",
-   "summary": "Welcome to a walkthrough lesson. This time, we're not learning a new pattern. Instead, we'll put everything together and analyse Emaar step by step, using the same checklist every time. First, I'll show you the process on a practice chart. Then I'll apply it live on the real chart."
+   "summary": "Welcome to a walkthrough lesson. This time, we're not learning a new pattern. Instead, we'll put everything together and analyse Emaar step by step, using the same checklist every time. First, I'll show you the process on a practice chart. Then I'll apply it live on the real chart.",
+   "free_preview": true
   },
   {
    "module": "Walkthroughs and Wrap-Up",
    "title": "Bonus: Candles Confirming a Double Top",
    "duration": "Video",
    "summary": "Welcome to a bonus lesson. So far, we've looked at patterns of one, two or three candles. But candles also form bigger shapes over many days, called chart patterns. In this preview, you'll see how candles help confirm one of the most famous: the double top. By the end, you'll also have a clear, step-by-step strategy for trading the double top, and you'll see real examples on Emaar Properties.",
-   "workbook": "assets/workbooks/candlesticks/30-bonus-double-top.xlsx"
+   "workbook": "assets/workbooks/candlesticks/30-bonus-double-top.xlsx",
+   "free_preview": true
   },
   {
    "module": "Walkthroughs and Wrap-Up",
    "title": "Course Wrap-Up and Next Steps",
    "duration": "Video",
-   "summary": "Congratulations! You've reached the final lesson of Basics of Candlesticks. In this lesson, we'll look back at everything you've learned, build your practice plan, and look at what comes next."
+   "summary": "Congratulations! You've reached the final lesson of Basics of Candlesticks. In this lesson, we'll look back at everything you've learned, build your practice plan, and look at what comes next.",
+   "free_preview": true
   }
  ],
  "price-action": [
