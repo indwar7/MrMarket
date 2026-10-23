@@ -3,24 +3,56 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+concurrency: deploy
 jobs:
-  api:
+  deploy:
     runs-on: ubuntu-latest
     env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}
     steps:
       - uses: actions/checkout@v4
       - run: npm i -g vercel@latest
-      - run: cd server && vercel deploy --prod --yes --token "$VERCEL_TOKEN"
-  web:
-    runs-on: ubuntu-latest
-    env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm i -g vercel@latest
-      - run: cd web && vercel deploy --prod --yes --token "$VERCEL_TOKEN"
+      - name: Get a Vercel access token
+        id: tok
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_REFRESH_TOKEN: ${{ secrets.VERCEL_REFRESH_TOKEN }}
+          VERCEL_CLIENT_ID: ${{ secrets.VERCEL_CLIENT_ID }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.parse, sys
+          out = open(os.environ["GITHUB_OUTPUT"], "a")
+          def ok(tok):
+              req = urllib.request.Request("https://api.vercel.com/v2/user", headers={"Authorization": "Bearer " + tok})
+              try: urllib.request.urlopen(req, timeout=20); return True
+              except Exception: return False
+          static = os.environ.get("VERCEL_TOKEN", "")
+          if static and ok(static):
+              print("using VERCEL_TOKEN"); out.write("token=" + static + "\n"); out.write("rotated=\n"); sys.exit(0)
+          rt, cid = os.environ["VERCEL_REFRESH_TOKEN"], os.environ["VERCEL_CLIENT_ID"]
+          disc = json.load(urllib.request.urlopen("https://vercel.com/.well-known/openid-configuration", timeout=20))
+          data = urllib.parse.urlencode({"grant_type": "refresh_token", "refresh_token": rt, "client_id": cid}).encode()
+          try:
+              res = json.load(urllib.request.urlopen(urllib.request.Request(disc["token_endpoint"], data, {"Content-Type": "application/x-www-form-urlencoded"}), timeout=20))
+          except urllib.error.HTTPError as e:
+              print("refresh failed:", e.code, e.read()[:300]); sys.exit(1)
+          print("refreshed; expires_in", res.get("expires_in"))
+          print("::add-mask::" + res["access_token"]); out.write("token=" + res["access_token"] + "\n")
+          nrt = res.get("refresh_token", "")
+          if nrt: print("::add-mask::" + nrt)
+          out.write("rotated=" + nrt + "\n")
+          PY
+      - name: Save rotated refresh token
+        if: steps.tok.outputs.rotated != ''
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          NEW_RT: ${{ steps.tok.outputs.rotated }}
+        run: gh secret set VERCEL_REFRESH_TOKEN -b"$NEW_RT" -R ${{ github.repository }}
+      - name: Deploy API
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}
+        run: cd server && vercel deploy --prod --yes --token "${{ steps.tok.outputs.token }}"
+      - name: Deploy web
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
+        run: cd web && vercel deploy --prod --yes --token "${{ steps.tok.outputs.token }}"
