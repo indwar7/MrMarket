@@ -202,62 +202,2943 @@
   }
  ],
  "price-action": [
-  "Welcome and how to use this course",
-  "Candles, bodies and wicks",
-  "Support and resistance that actually holds",
-  "Trend structure: higher highs, higher lows",
-  "Breakouts versus fakeouts",
-  "Pin bars and engulfing candles in context",
-  "Multi-timeframe confirmation",
-  "Building your first price action plan"
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Price Action Mastery. If you already know candlesticks and want to trade what price is actually doing, this course is for you. We'll build a complete price action method, from market structure to a full trade plan, with real examples. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "What Price Action Really Is",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Swing Highs and Swing Lows",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Trends: Higher Highs, Lower Lows",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Break of Structure and Change of Character",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Support and Resistance",
+   "title": "Drawing Horizontal Levels",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Support and Resistance",
+   "title": "Zones vs Lines",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Support and Resistance",
+   "title": "Role Reversal: Support Becomes Resistance",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Support and Resistance",
+   "title": "Round Numbers and Previous Day Levels",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trends and Pullbacks",
+   "title": "Trendlines and Channels",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trends and Pullbacks",
+   "title": "Pullbacks vs Reversals",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trends and Pullbacks",
+   "title": "Two-Legged Pullbacks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trends and Pullbacks",
+   "title": "Moving Averages as Context",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Price Action Setups",
+   "title": "Pin Bar at a Level",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Price Action Setups",
+   "title": "Inside Bar Breakouts",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Price Action Setups",
+   "title": "Outside Bar and Engulfing Setups",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Price Action Setups",
+   "title": "Breakouts and Retests",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Price Action Setups",
+   "title": "False Breakouts and Traps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Price Action Setups",
+   "title": "Range Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Chart Patterns",
+   "title": "Double Top and Double Bottom",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Chart Patterns",
+   "title": "Head and Shoulders",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Chart Patterns",
+   "title": "Triangles, Flags and Wedges",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Confirmation",
+   "title": "Volume and Price Action",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Confirmation",
+   "title": "Multi-Timeframe Analysis",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Entry Triggers",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Stop-Loss Placement",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Targets, Risk-Reward and Position Size",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: From Blank Chart to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
  ],
  "mt5-basics": [
-  "Installing MetaTrader 5",
-  "Logging in to your broker server",
-  "Reading the chart window",
-  "Placing market and pending orders",
-  "Stop loss, take profit and partial close",
-  "Attaching an indicator from Navigator",
-  "Attaching an Expert Advisor and allowing algo trading",
-  "Running MT5 on a VPS 24/5"
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to MT5 from Zero to Live. Maybe you've never opened MetaTrader, or you've only clicked around on a demo. Either way, this course takes you from installing the platform to placing your first live trade with a clear risk plan. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up Your Workbook",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Getting Started",
+   "title": "What MT5 Is and How It Differs from MT4",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Getting Started",
+   "title": "Choosing a Broker and Account Type",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Getting Started",
+   "title": "Installing MT5 on Desktop, Web and Mobile",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Getting Started",
+   "title": "Opening and Logging into a Demo Account",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Platform Tour",
+   "title": "The MT5 Interface at a Glance",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Platform Tour",
+   "title": "Market Watch and Symbols",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Platform Tour",
+   "title": "Charts, Timeframes and Chart Types",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Platform Tour",
+   "title": "Navigator, Toolbox and Terminal",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Charting Tools",
+   "title": "Drawing Lines, Zones and Fibonacci",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Charting Tools",
+   "title": "Adding and Customizing Indicators",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Charting Tools",
+   "title": "Saving Templates and Profiles",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Placing Trades",
+   "title": "Order Types Explained",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Placing Trades",
+   "title": "Placing a Market Order",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Placing Trades",
+   "title": "Pending Orders: Limit and Stop",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Placing Trades",
+   "title": "Setting Stop-Loss and Take-Profit",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Placing Trades",
+   "title": "Modifying, Trailing and Closing Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk and Sizing in MT5",
+   "title": "Lots, Contract Size and Pip Value",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk and Sizing in MT5",
+   "title": "Calculating Position Size Before Every Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk and Sizing in MT5",
+   "title": "Margin, Leverage and Margin Calls",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Spreads, Commissions and Swaps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Funding Your Account and Withdrawals",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "From Demo to Live: What Changes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Your First Live Trade Checklist",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Automation and Tools",
+   "title": "Price Alerts and Notifications",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Automation and Tools",
+   "title": "Trading on the MT5 Mobile App",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Automation and Tools",
+   "title": "Expert Advisors, Strategy Tester and VPS Basics",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: Install to First Live Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
  ],
  "risk": [
-  "Why position sizing beats entries",
-  "Risk per trade and the 1% rule",
-  "Calculating lots from stop distance",
-  "R multiples and expectancy",
-  "Drawdown math and recovery",
-  "Correlated positions and total exposure",
-  "Scaling up safely"
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Risk Management and Position Sizing. Most traders lose money because of how much they risk, not because of what they buy. In this course you'll learn to decide your risk before every trade, size each position with simple math, and protect your account through bad streaks. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up Your Workbook",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Risk Foundations",
+   "title": "Why Traders Lose Money",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Foundations",
+   "title": "Risk vs Reward vs Return",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Foundations",
+   "title": "Capital at Risk: Trade, Day and Account",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Foundations",
+   "title": "Your Risk Tolerance",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Math of Survival",
+   "title": "Win Rate and Expectancy",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Math of Survival",
+   "title": "Why a 50% Loss Needs a 100% Gain",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Math of Survival",
+   "title": "Risk of Ruin",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Math of Survival",
+   "title": "Losing Streaks and Probability",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Stop-Loss Fundamentals",
+   "title": "Where a Stop Belongs",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Stop-Loss Fundamentals",
+   "title": "Technical Stops vs Percentage Stops",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Stop-Loss Fundamentals",
+   "title": "Volatility and ATR Stops",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Position Sizing",
+   "title": "The Fixed Percentage Risk Rule",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Position Sizing",
+   "title": "Position Size Formula, Step by Step",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Position Sizing",
+   "title": "Sizing with Wide and Tight Stops",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Position Sizing",
+   "title": "Fixed Amount vs Fixed Percent vs Fixed Lots",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Position Sizing",
+   "title": "Leverage and Margin Explained",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Position Sizing",
+   "title": "Sizing in Forex, Stocks and Futures",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk-Reward and Targets",
+   "title": "Setting Risk-Reward Ratios",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk-Reward and Targets",
+   "title": "Scaling Out and Trailing Stops",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk-Reward and Targets",
+   "title": "Choosing Trades Worth Taking",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Portfolio and Account Control",
+   "title": "Correlation and Overexposure",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Portfolio and Account Control",
+   "title": "Daily Loss Limits and Max Drawdown",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Portfolio and Account Control",
+   "title": "Scaling Size Up and Down",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Discipline and Review",
+   "title": "Journaling Your Risk",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Discipline and Review",
+   "title": "Common Mistakes and Revenge Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Wrap-Up",
+   "title": "Building Your Personal Risk Plan and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
  ],
  "smc": [
-  "Liquidity: where the stops are",
-  "Market structure shifts",
-  "Order blocks and breaker blocks",
-  "Fair value gaps",
-  "Premium and discount zones",
-  "Session liquidity sweeps",
-  "Putting it together on EURUSD",
-  "SMC with the MrMarket Smart Money EA"
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Smart Money Concepts. If you've seen terms like order blocks, liquidity sweeps and fair value gaps and wondered how to use them, this course is for you. We'll build a clear, rules-based way to read where large players may be active, from market structure to a full trade plan. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Foundations",
+   "title": "What Smart Money Concepts Are and Are Not",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Foundations",
+   "title": "How Markets Move: Buyers, Sellers and Liquidity",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Foundations",
+   "title": "Reading Price Without Indicators",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Foundations",
+   "title": "Timeframes and Top-Down Analysis",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Swing Highs and Lows, Internal vs External",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Higher Highs and Lower Lows",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Break of Structure (BOS)",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Change of Character (CHoCH)",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Market Structure",
+   "title": "Premium and Discount Zones",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Liquidity",
+   "title": "What Liquidity Is and Where It Rests",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Liquidity",
+   "title": "Equal Highs and Equal Lows",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Liquidity",
+   "title": "Buy-Side and Sell-Side Liquidity",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Liquidity",
+   "title": "Liquidity Sweeps and Stop Hunts",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Liquidity",
+   "title": "Inducement and False Breakouts",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Zones and Imbalance",
+   "title": "Order Blocks Explained",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Zones and Imbalance",
+   "title": "Valid vs Weak Order Blocks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Zones and Imbalance",
+   "title": "Breaker Blocks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Zones and Imbalance",
+   "title": "Fair Value Gaps (Imbalance)",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Zones and Imbalance",
+   "title": "Mitigation and Rebalancing",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Zones and Imbalance",
+   "title": "Supply and Demand Zones Compared",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Putting It Together",
+   "title": "Building a Bias from Higher Timeframes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Putting It Together",
+   "title": "Choosing the Point of Interest",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Putting It Together",
+   "title": "Confirmation on Lower Timeframes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Putting It Together",
+   "title": "Trading Sessions and Timing",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Entry Models",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Stop-Loss Placement",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Targets and Risk-Reward",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Common Mistakes and Overfitting",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: From Bias to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
  ],
  "algo-mql5": [
-  "MQL5 basics and the MetaEditor",
-  "Variables, inputs and OnTick",
-  "Reading indicator buffers",
-  "Placing trades with CTrade",
-  "Stop loss, take profit and trailing",
-  "Risk-based lot sizing",
-  "Filters: spread, sessions, news",
-  "Backtesting in the Strategy Tester",
-  "Optimising inputs without curve fitting",
-  "Packaging and protecting your EA"
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Build Your First EA in MQL5. If you have a trading idea and want a robot to execute it for you, this course is for you. You don't need to be a programmer. We'll go from your first line of code to a tested Expert Advisor with built-in risk controls. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up MetaEditor",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "MQL5 Foundations",
+   "title": "How an EA Works: Ticks, Bars and Events",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "MQL5 Foundations",
+   "title": "Your First Script: Hello, Market",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "MQL5 Foundations",
+   "title": "Variables, Data Types and Inputs",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "MQL5 Foundations",
+   "title": "Operators, Conditions and Loops",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "MQL5 Foundations",
+   "title": "Functions and Code Structure",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Working with Market Data",
+   "title": "Reading Prices, Bars and Symbol Info",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Working with Market Data",
+   "title": "Detecting a New Bar",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Working with Market Data",
+   "title": "Using Indicator Handles and Buffers",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Working with Market Data",
+   "title": "Moving Average and RSI in Code",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Strategy Design",
+   "title": "Turning a Trading Idea into Written Rules",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Strategy Design",
+   "title": "Entry and Exit Logic in Plain English",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Strategy Design",
+   "title": "Mapping Rules to Code",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Execution",
+   "title": "The CTrade Class",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Execution",
+   "title": "Opening Buy and Sell Orders",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Execution",
+   "title": "Stop-Loss and Take-Profit in Code",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Execution",
+   "title": "Modifying and Closing Positions",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Execution",
+   "title": "One Trade at a Time: Position Checks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management in Code",
+   "title": "Calculating Lot Size from Risk Percent",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management in Code",
+   "title": "Spread, Slippage and Trading Filters",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management in Code",
+   "title": "Daily Loss Limit and Max Drawdown Stops",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management in Code",
+   "title": "Trailing Stops and Break-Even Logic",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Testing and Debugging",
+   "title": "Compiling, Errors and Debugging",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Testing and Debugging",
+   "title": "Logging with Print and Comment",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Testing and Debugging",
+   "title": "Backtesting in the Strategy Tester",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Testing and Debugging",
+   "title": "Reading Results and Avoiding Overfitting",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Optimization and Walk-Forward Basics",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Demo Forward Testing and VPS Setup",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Monitoring, Maintenance and Common Failures",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: Blank File to Working EA",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
  ],
  "psychology": [
-  "Why good strategies lose money",
-  "Revenge trading and the tilt loop",
-  "Process goals versus outcome goals",
-  "Pre-trade and post-trade routines",
-  "Handling drawdowns while running algos",
-  "Journaling that changes behaviour"
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Trading Psychology. You can have a good strategy and still lose money if you can't follow it. In this course you'll learn why traders break their own rules, and how to build habits that keep you steady through wins, losses and boredom. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up Your Workbook",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Understanding Your Mind",
+   "title": "Why Smart People Make Bad Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Understanding Your Mind",
+   "title": "Fear and Greed in Real Time",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Understanding Your Mind",
+   "title": "Your Trading Personality and Risk Comfort",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Understanding Your Mind",
+   "title": "Money Beliefs and Expectations",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Cognitive Biases",
+   "title": "Loss Aversion and Holding Losers",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Cognitive Biases",
+   "title": "Confirmation Bias and Chart Staring",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Cognitive Biases",
+   "title": "Overconfidence After a Winning Streak",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Cognitive Biases",
+   "title": "Recency Bias and the Gambler's Fallacy",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Cognitive Biases",
+   "title": "Sunk Cost and Moving Your Stop",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Emotional Traps",
+   "title": "FOMO and Chasing Entries",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Emotional Traps",
+   "title": "Revenge Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Emotional Traps",
+   "title": "Overtrading and Boredom",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Emotional Traps",
+   "title": "Fear of Pulling the Trigger",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Emotional Traps",
+   "title": "Cutting Winners Too Early",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Process Over Outcome",
+   "title": "Thinking in Probabilities",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Process Over Outcome",
+   "title": "Good Trades vs Winning Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Process Over Outcome",
+   "title": "Rules, Plans and Pre-Trade Checklists",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Process Over Outcome",
+   "title": "Risk Size and Its Effect on Emotions",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Habits and Routines",
+   "title": "Your Daily Trading Routine",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Habits and Routines",
+   "title": "Journaling What You Felt, Not Just What You Did",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Habits and Routines",
+   "title": "Weekly and Monthly Reviews",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Habits and Routines",
+   "title": "Sleep, Stress and Screen Time",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Handling Drawdowns",
+   "title": "Losing Streaks and Drawdowns",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Handling Drawdowns",
+   "title": "Taking a Break and Coming Back",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: A Full Trading Day",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Building Your Personal Mindset Plan",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "technical-indicators": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Technical Indicators Made Simple. Indicators can feel like a wall of lines and numbers. In this course you'll learn what each major indicator measures, how to read it, and how to use two or three of them together without cluttering your chart. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Indicator Basics",
+   "title": "What Indicators Are and Are Not",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Indicator Basics",
+   "title": "Leading vs Lagging Indicators",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Indicator Basics",
+   "title": "Trend, Momentum, Volatility and Volume Types",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Indicator Basics",
+   "title": "Why Less Is More: Avoiding Indicator Overload",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trend Indicators",
+   "title": "Simple and Exponential Moving Averages",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trend Indicators",
+   "title": "Moving Average Crossovers",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trend Indicators",
+   "title": "Golden Cross and Death Cross",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trend Indicators",
+   "title": "MACD Explained",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trend Indicators",
+   "title": "ADX and Trend Strength",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trend Indicators",
+   "title": "Supertrend",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Momentum Indicators",
+   "title": "RSI Explained",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Momentum Indicators",
+   "title": "Overbought and Oversold in Context",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Momentum Indicators",
+   "title": "RSI Divergence",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Momentum Indicators",
+   "title": "Stochastic Oscillator",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Momentum Indicators",
+   "title": "CCI and Williams %R",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Volatility Indicators",
+   "title": "Bollinger Bands",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Volatility Indicators",
+   "title": "Average True Range (ATR)",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Volatility Indicators",
+   "title": "Keltner Channels and Squeezes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Volume Indicators",
+   "title": "Volume and Volume Moving Average",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Volume Indicators",
+   "title": "VWAP",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Volume Indicators",
+   "title": "On-Balance Volume",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Combining Indicators",
+   "title": "Building a Simple Indicator Stack",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Combining Indicators",
+   "title": "Confirming Signals with Price Action",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Combining Indicators",
+   "title": "Settings and Optimization Traps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Entries, Stops and Targets with Indicators",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Common Mistakes and False Signals",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: From Blank Chart to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "chart-patterns": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Classic Chart Patterns. Head and shoulders, flags, triangles and cup and handle all show up again and again on real charts. In this course you'll learn to spot them early, judge their quality and trade them with defined risk. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Pattern Foundations",
+   "title": "What Chart Patterns Are and Why They Form",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Pattern Foundations",
+   "title": "Trend Context and Pattern Location",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Pattern Foundations",
+   "title": "Drawing Trendlines and Necklines",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Pattern Foundations",
+   "title": "Volume Behavior Inside Patterns",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reversal Patterns",
+   "title": "Double Top and Double Bottom",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reversal Patterns",
+   "title": "Triple Top and Triple Bottom",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reversal Patterns",
+   "title": "Head and Shoulders",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reversal Patterns",
+   "title": "Inverse Head and Shoulders",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reversal Patterns",
+   "title": "Rounding Bottom and Rounding Top",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reversal Patterns",
+   "title": "V-Reversals and Spikes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Continuation Patterns",
+   "title": "Bull and Bear Flags",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Continuation Patterns",
+   "title": "Pennants",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Continuation Patterns",
+   "title": "Ascending, Descending and Symmetrical Triangles",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Continuation Patterns",
+   "title": "Rising and Falling Wedges",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Continuation Patterns",
+   "title": "Rectangles and Ranges",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Continuation Patterns",
+   "title": "Cup and Handle",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Breakouts",
+   "title": "Breakout Rules and Confirmation",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Breakouts",
+   "title": "Retests and Failed Breakouts",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Breakouts",
+   "title": "Volume and Breakout Quality",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Breakouts",
+   "title": "Pattern Failure as a Signal",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Entry Methods for Each Pattern",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Stop-Loss Placement",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Measured Move Targets",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan",
+   "title": "Risk-Reward and Pattern Selection",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Context",
+   "title": "Patterns Across Timeframes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Context",
+   "title": "Combining Patterns with Support, Resistance and Indicators",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: From Pattern to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "backtesting": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Backtesting Trading Strategies. Before you risk real money on an idea, you should know how it would have behaved. In this course you'll learn to test a strategy properly, read the results honestly and avoid the traps that make weak strategies look strong. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up Your Workbook",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting Foundations",
+   "title": "Why Backtest at All",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting Foundations",
+   "title": "Manual vs Automated Backtesting",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting Foundations",
+   "title": "Data Sources and Data Quality",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting Foundations",
+   "title": "Survivorship and Look-Ahead Bias",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Defining a Strategy",
+   "title": "Writing Testable Rules",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Defining a Strategy",
+   "title": "Entry, Exit and Stop Logic",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Defining a Strategy",
+   "title": "Choosing Markets and Timeframes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Defining a Strategy",
+   "title": "Setting a Hypothesis and Test Plan",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting in Practice",
+   "title": "Manual Backtesting in TradingView",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting in Practice",
+   "title": "Backtesting in Excel or Google Sheets",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting in Practice",
+   "title": "Backtesting with Python and pandas",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting in Practice",
+   "title": "Backtesting in the MT5 Strategy Tester",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Backtesting in Practice",
+   "title": "Commissions, Slippage and Spreads",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Performance Metrics",
+   "title": "Win Rate, Average Win and Average Loss",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Performance Metrics",
+   "title": "Expectancy and Profit Factor",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Performance Metrics",
+   "title": "Drawdown and Recovery",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Performance Metrics",
+   "title": "Sharpe and Sortino Ratios",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Performance Metrics",
+   "title": "Equity Curves and Trade Distribution",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Avoiding Traps",
+   "title": "Overfitting and Curve Fitting",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Avoiding Traps",
+   "title": "In-Sample vs Out-of-Sample Testing",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Avoiding Traps",
+   "title": "Walk-Forward Testing",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Avoiding Traps",
+   "title": "Sample Size and Statistical Confidence",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Robustness",
+   "title": "Parameter Sensitivity",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Robustness",
+   "title": "Monte Carlo Simulation Basics",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Robustness",
+   "title": "Testing Across Markets and Regimes",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Forward Testing and Paper Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Going Live",
+   "title": "Moving from Backtest to Live Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: Idea to Validated Strategy",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "swing-trading": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to the Swing Trading Playbook. Swing trading lets you hold positions for days to weeks without watching the screen all day. In this course you'll learn how to find strong stocks, pick clean setups and manage each trade from entry to exit. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Swing Trading Foundations",
+   "title": "What Swing Trading Is",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Trading Foundations",
+   "title": "Swing vs Day Trading vs Investing",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Trading Foundations",
+   "title": "Choosing Stocks and Markets to Swing Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Trading Foundations",
+   "title": "Building Your Watchlist and Scanner",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reading the Market",
+   "title": "Market Trend and Index Context",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reading the Market",
+   "title": "Sector Strength and Relative Strength",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reading the Market",
+   "title": "Support, Resistance and Key Levels",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reading the Market",
+   "title": "Volume and Accumulation",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reading the Market",
+   "title": "Multi-Timeframe Analysis: Weekly to Daily",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Setups",
+   "title": "Pullback to a Moving Average",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Setups",
+   "title": "Breakout from Consolidation",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Setups",
+   "title": "Trendline and Channel Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Setups",
+   "title": "Reversals at Key Levels",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Setups",
+   "title": "Gap Setups",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Swing Setups",
+   "title": "Range-Bound Swing Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Entries and Exits",
+   "title": "Entry Triggers",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Entries and Exits",
+   "title": "Stop-Loss Placement",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Entries and Exits",
+   "title": "Profit Targets and Scaling Out",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Entries and Exits",
+   "title": "Trailing Stops and Holding Winners",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk and Position Sizing",
+   "title": "Sizing a Swing Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk and Position Sizing",
+   "title": "Portfolio Heat and Number of Open Positions",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk and Position Sizing",
+   "title": "Overnight and Weekend Gap Risk",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Routine and Review",
+   "title": "Your Daily and Weekly Swing Routine",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Routine and Review",
+   "title": "Keeping a Trade Journal",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Routine and Review",
+   "title": "Managing Losing Streaks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Routine and Review",
+   "title": "Common Mistakes and False Signals",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: Scan to Exit",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "intraday-scalping": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Intraday and Scalping Strategies. Short-term trading moves fast, and small mistakes in costs, timing or size add up quickly. In this course you'll learn how to prepare for the session, trade proven intraday setups and keep your risk under control. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Foundations",
+   "title": "How Intraday Trading Differs",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Foundations",
+   "title": "Choosing Instruments: Liquidity, Spread and Volatility",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Foundations",
+   "title": "Market Sessions and the Best Times to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Foundations",
+   "title": "Building a Pre-Market Routine",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Tools",
+   "title": "Timeframes: 1, 5 and 15 Minute Charts",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Tools",
+   "title": "VWAP and Moving Averages Intraday",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Tools",
+   "title": "Previous Day Levels and the Opening Range",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Tools",
+   "title": "Volume and Relative Volume",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Strategies",
+   "title": "Opening Range Breakout",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Strategies",
+   "title": "VWAP Pullback",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Strategies",
+   "title": "Trend Day vs Range Day",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Strategies",
+   "title": "Support and Resistance Reversals",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Strategies",
+   "title": "News and Event Volatility",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Intraday Strategies",
+   "title": "Gap and Go, Gap Fill",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Scalping",
+   "title": "What Scalping Is and Who It Suits",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Scalping",
+   "title": "Scalping Setups on 1-Minute Charts",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Scalping",
+   "title": "Spread, Commission and Slippage Costs",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Scalping",
+   "title": "Order Flow Basics: Tape and Depth",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Execution",
+   "title": "Fast Entries and Order Types",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Execution",
+   "title": "Stops and Targets for Short Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Execution",
+   "title": "Taking Partials and Exiting Quickly",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Control",
+   "title": "Daily Loss Limits and Maximum Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Control",
+   "title": "Position Sizing for Intraday Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Control",
+   "title": "Leverage and Margin Intraday",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Review",
+   "title": "Journaling Intraday Trades",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Review",
+   "title": "Common Mistakes and Overtrading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: A Full Trading Session",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "forex-fundamentals": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Forex Trading Fundamentals. The currency market is the largest in the world, and it runs almost around the clock. In this course you'll learn how it works, what moves it and how to place your first trade with a clear risk plan. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Forex Basics",
+   "title": "What the Forex Market Is and How It Works",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Forex Basics",
+   "title": "Currency Pairs: Majors, Minors and Exotics",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Forex Basics",
+   "title": "Pips, Lots and Pip Value",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Forex Basics",
+   "title": "Spreads, Swaps and Trading Costs",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Forex Basics",
+   "title": "Forex Sessions and Liquidity",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Brokers and Platforms",
+   "title": "Choosing a Regulated Broker",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Brokers and Platforms",
+   "title": "Leverage, Margin and Account Types",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "What Moves Currencies",
+   "title": "Interest Rates and Central Banks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "What Moves Currencies",
+   "title": "Inflation, Jobs and GDP Data",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "What Moves Currencies",
+   "title": "The Economic Calendar and High-Impact News",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "What Moves Currencies",
+   "title": "Risk-On and Risk-Off Markets",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "What Moves Currencies",
+   "title": "Correlations Between Pairs, Gold and Oil",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Technical Analysis for Forex",
+   "title": "Trends, Support and Resistance",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Technical Analysis for Forex",
+   "title": "Candlesticks and Price Action Setups",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Technical Analysis for Forex",
+   "title": "Key Indicators for Forex",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Technical Analysis for Forex",
+   "title": "Multi-Timeframe Analysis",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Technical Analysis for Forex",
+   "title": "Pivot Points and Round Numbers",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Strategies",
+   "title": "Trend Following in Forex",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Strategies",
+   "title": "Range and Reversal Trading",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Strategies",
+   "title": "News Trading Basics",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management",
+   "title": "Position Sizing in Forex",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management",
+   "title": "Stop-Loss, Take-Profit and Risk-Reward",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Risk Management",
+   "title": "Managing Leverage and Drawdowns",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan and Execution",
+   "title": "Building a Forex Trading Plan",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trade Plan and Execution",
+   "title": "Placing Your First Trade: Demo to Live",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Pitfalls",
+   "title": "Common Mistakes, Scams and Red Flags",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: From Analysis to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "fibonacci-harmonic": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Fibonacci and Harmonic Patterns. These tools are popular, and also easy to misuse. In this course you'll learn to draw them correctly, find levels where several signals line up and trade them with a defined stop. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up TradingView",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Foundations",
+   "title": "The Fibonacci Sequence and Ratios",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Foundations",
+   "title": "How Fibonacci Is Used in Trading, and Its Limits",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Foundations",
+   "title": "Drawing Retracements Correctly",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Foundations",
+   "title": "Choosing Swing Points",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Tools",
+   "title": "Key Retracement Levels: 38.2, 50 and 61.8",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Tools",
+   "title": "Extensions and Targets",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Tools",
+   "title": "Confluence with Support and Resistance",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Tools",
+   "title": "Multi-Timeframe Fibonacci Clusters",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Fibonacci Tools",
+   "title": "Fibonacci with Candlesticks and Price Action",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Pattern Basics",
+   "title": "What Harmonic Patterns Are",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Pattern Basics",
+   "title": "Measuring the X, A, B, C and D Legs",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Pattern Basics",
+   "title": "The Potential Reversal Zone (PRZ)",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Patterns",
+   "title": "Gartley",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Patterns",
+   "title": "Bat",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Patterns",
+   "title": "Butterfly",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Patterns",
+   "title": "Crab",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Patterns",
+   "title": "Cypher",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Harmonic Patterns",
+   "title": "ABCD and Three Drives",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Harmonics",
+   "title": "Entry Confirmation",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Harmonics",
+   "title": "Stop-Loss Placement",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Harmonics",
+   "title": "Targets and Risk-Reward",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Trading Harmonics",
+   "title": "Drawing and Scanning in TradingView",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reality Check",
+   "title": "When Patterns Fail and the Subjectivity Problem",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Reality Check",
+   "title": "Backtesting Fibonacci and Harmonic Setups",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: From Swing to Trade",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
+ ],
+ "trading-plan-journal": [
+  {
+   "module": "Introduction",
+   "title": "Welcome and Course Roadmap",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": "Hello, and welcome to Building Your Trading Plan and Journal. A written plan and an honest journal are what turn scattered trades into a process you can improve. In this course you'll write your own plan, set up a journal and learn to review your results each week. Here's what's ahead and how to use the workbook."
+  },
+  {
+   "module": "Introduction",
+   "title": "Disclaimer and Setting Up Your Workbook",
+   "duration": "Video",
+   "free_preview": true,
+   "summary": ""
+  },
+  {
+   "module": "Why You Need a Plan",
+   "title": "Why Plans Beat Intuition",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Why You Need a Plan",
+   "title": "What a Trading Plan Contains",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Why You Need a Plan",
+   "title": "Defining Your Goals and Realistic Expectations",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Know Your Style",
+   "title": "Choosing Your Market and Timeframe",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Know Your Style",
+   "title": "Matching a Style to Your Schedule and Personality",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Know Your Style",
+   "title": "Picking One Strategy to Master",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Writing Your Plan",
+   "title": "Entry and Exit Rules",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Writing Your Plan",
+   "title": "Risk per Trade and Daily Limits",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Writing Your Plan",
+   "title": "Position Sizing Rules",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Writing Your Plan",
+   "title": "Your Pre-Trade Checklist",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Writing Your Plan",
+   "title": "No-Trade Conditions and Trading Hours",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Trade Journal",
+   "title": "What to Record: Setup, Risk and Result",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Trade Journal",
+   "title": "Screenshots and Emotions",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Trade Journal",
+   "title": "Journal Templates in Excel or Google Sheets",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Trade Journal",
+   "title": "Tagging Trades by Setup and Mistake",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "The Trade Journal",
+   "title": "Journaling Tools and Automation",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Review and Metrics",
+   "title": "Your Daily Review Routine",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Review and Metrics",
+   "title": "Weekly and Monthly Reviews",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Review and Metrics",
+   "title": "Key Metrics: Win Rate, Expectancy and Drawdown",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Review and Metrics",
+   "title": "Finding Your Edge and Your Leaks",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Improving the Plan",
+   "title": "When to Change Your Plan and When Not To",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Improving the Plan",
+   "title": "Testing Changes Safely",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Improving the Plan",
+   "title": "Scaling Up Your Account Size",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Complete Walkthrough: A Sample Plan and Journal",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  },
+  {
+   "module": "Walkthroughs and Wrap-Up",
+   "title": "Course Wrap-Up and Next Steps",
+   "duration": "Video",
+   "free_preview": false,
+   "summary": ""
+  }
  ]
 }

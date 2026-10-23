@@ -407,7 +407,7 @@ function learnScreen() {
   let lvl = "All", q = "";
   const box = view.querySelector("#courses");
   const draw = () => {
-    const list = COURSES.filter((c) => (lvl === "All" || c.lvl === lvl) && c.t.toLowerCase().includes(q));
+    const list = COURSES.filter((c) => (lvl === "All" || c.lvl.includes(lvl)) && c.t.toLowerCase().includes(q));
     box.innerHTML = list.length ? list.map((c) => courseCard(c, COURSES.indexOf(c))).join("") : `<div class="empty" style="grid-column:1/-1">No courses match.</div>`;
   };
   draw();
