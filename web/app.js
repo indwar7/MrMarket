@@ -310,6 +310,36 @@ function indArt(kind, seed) {
   return `<svg viewBox="0 0 300 ${kind === "hist" || kind === "osc" ? 125 : 110}" preserveAspectRatio="none">${over}${candles}</svg>`;
 }
 
+/* ---------------- team (shared by home and about) ---------------- */
+const TEAM = [
+  {
+    id: "vinayakk", name: "Vinayakk V Joshi", pronouns: "He/Him", role: "Coach & Trader", tag: "SEBI-registered Research Analyst", photo: "assets/team/vinayakk.jpg", loc: "Dubai, UAE",
+    intro: "Vinayakk brings 24+ years of professional experience in large business houses, including overseas roles in Dubai and Mauritius, and nine years of training and coaching traders across 18+ countries.",
+    bio: [
+      "Registered with the Securities & Exchange Board of India as a Research Analyst (2020) and certified by NISM as a Research Analyst. Member of The Association of Technical Analysts (ATA, India).",
+      "Wide knowledge of the stock market, fundamental and technical analysis including chart analysis and astro effects on markets. Studied numerology in 2019 and applies it in financial markets.",
+      "Commerce graduate from the University of Mumbai and Associate Member of The Institute of Company Secretaries of India (ICSI) since 1998. Associate (ACSI) Member of the Chartered Institute of Securities & Investment, London. First certification in Capital Markets and Derivatives from NSE Academy in 2000.",
+      "Currently based in Dubai, UAE, and part of Finivanta Group and Fortune Signals Group in the GCC countries.",
+    ],
+    stats: [["24+", "Years in industry"], ["9", "Years coaching"], ["300+", "Traders mentored"], ["18+", "Countries"]],
+    creds: ["SEBI Research Analyst (2020)", "NISM Research Analyst", "Member, ATA India", "ACS, ICSI (1998)", "ACSI, CISI London", "NSE Academy, Capital Markets & Derivatives (2000)", "B.Com, University of Mumbai"],
+    links: [["Website", "https://www.mrmarket.me"], ["Instagram", "https://www.instagram.com/mrmarket333"]],
+  },
+  {
+    id: "aseem", name: "Aseem Singhal", role: "Algorithmic Trader", tag: "Founder, Unfluke · Author of 51 Trading Strategies", photo: "assets/team/aseem.jpg", loc: "India",
+    intro: "Aseem is an algorithmic trader, author and financial educator who built his quantitative edge at JPMorgan and Deutsche Bank in Singapore.",
+    bio: [
+      "After graduating Magna Cum Laude he explored ventures in technology, fashion and franchising before returning to what he does best: price action analysis and quantitative market strategies.",
+      "Author of the best-selling book 51 Trading Strategies, and published researcher on theta decay and delta behaviour in Indian index options.",
+      "Founder of Unfluke, a backtesting and trading-analytics platform, and host of the widely followed Trading with Groww series. Visiting faculty at Chitkara University.",
+      "Today he mentors aspiring traders in Python-based algorithmic strategies, backtesting and systematic options trading. On MrMarket he leads strategy design, the EA catalogue and the algo desk.",
+    ],
+    stats: [["JPM · DB", "Quant background"], ["51", "Strategies, the book"], ["Groww", "Trading series host"], ["Unfluke", "Founder"]],
+    creds: ["Ex JPMorgan, Deutsche Bank (Singapore)", "Author, 51 Trading Strategies", "Host, Trading with Groww", "Visiting Faculty, Chitkara University", "Published research, index options"],
+    links: [["Unfluke", "https://unfluke.in"], ["Coursera", "https://www.coursera.org/instructor/~169872100"]],
+  },
+];
+
 /* ---------------- home ---------------- */
 const PILLARS = [
   ["Learning", "Recorded courses and live sessions, from first chart to first EA.", "#/learn"],
@@ -358,6 +388,25 @@ function homeScreen() {
     <div class="cards cards-4">
       ${[["Learn", "Pick a course or join a live session."], ["Subscribe", "Choose indicators and strategies that fit your style."], ["Connect", "Pick your broker and install MT5."], ["Run", "Turn strategies on and track them on the Algo dashboard."]]
         .map(([t, p], i) => `<article class="card"><span class="kicker">Step ${i + 1}</span><h3 class="h3">${t}</h3><p class="muted">${p}</p></article>`).join("")}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="title">Meet the <em>people</em></h2>
+      <p class="lede">Two traders with very different roads to the same desk: one from boardrooms and research, one from quant floors and code.</p></div>
+    <div class="team-intro">
+      ${TEAM.map((m) => `<article class="intro-card">
+        <a class="intro-photo" href="#/about#${m.id}"><img src="${m.photo}" alt="${esc(m.name)}" loading="lazy"></a>
+        <div class="intro-body">
+          <span class="kicker">${esc(m.role)}</span>
+          <h3 class="h2">${esc(m.name)}</h3>
+          <p class="small muted">${esc(m.tag)} · ${esc(m.loc)}</p>
+          <p class="muted">${esc(m.intro)}</p>
+          <p class="muted">${esc(m.bio[0])}</p>
+          <div class="tags">${m.creds.slice(0, 4).map((c) => `<span class="tag">${esc(c)}</span>`).join("")}</div>
+          <a class="btn btn-small btn-quiet" href="#/about">Full profile →</a>
+        </div>
+      </article>`).join("")}
     </div>
   </section>
 
@@ -713,34 +762,6 @@ function drawCourse(d, currentId) {
 }
 
 /* ---------------- about us ---------------- */
-const TEAM = [
-  {
-    id: "vinayakk", name: "Vinayakk V Joshi", pronouns: "He/Him", role: "Coach & Trader", tag: "SEBI-registered Research Analyst", photo: "assets/team/vinayakk.jpg", loc: "Dubai, UAE",
-    intro: "Vinayakk brings 24+ years of professional experience in large business houses, including overseas roles in Dubai and Mauritius, and nine years of training and coaching traders across 18+ countries.",
-    bio: [
-      "Registered with the Securities & Exchange Board of India as a Research Analyst (2020) and certified by NISM as a Research Analyst. Member of The Association of Technical Analysts (ATA, India).",
-      "Wide knowledge of the stock market, fundamental and technical analysis including chart analysis and astro effects on markets. Studied numerology in 2019 and applies it in financial markets.",
-      "Commerce graduate from the University of Mumbai and Associate Member of The Institute of Company Secretaries of India (ICSI) since 1998. Associate (ACSI) Member of the Chartered Institute of Securities & Investment, London. First certification in Capital Markets and Derivatives from NSE Academy in 2000.",
-      "Currently based in Dubai, UAE, and part of Finivanta Group and Fortune Signals Group in the GCC countries.",
-    ],
-    stats: [["24+", "Years in industry"], ["9", "Years coaching"], ["300+", "Traders mentored"], ["18+", "Countries"]],
-    creds: ["SEBI Research Analyst (2020)", "NISM Research Analyst", "Member, ATA India", "ACS, ICSI (1998)", "ACSI, CISI London", "NSE Academy, Capital Markets & Derivatives (2000)", "B.Com, University of Mumbai"],
-    links: [["Website", "https://www.mrmarket.me"], ["Instagram", "https://www.instagram.com/mrmarket333"]],
-  },
-  {
-    id: "aseem", name: "Aseem Singhal", role: "Algorithmic Trader", tag: "Founder, Unfluke · Author of 51 Trading Strategies", photo: "assets/team/aseem.jpg", loc: "India",
-    intro: "Aseem is an algorithmic trader, author and financial educator who built his quantitative edge at JPMorgan and Deutsche Bank in Singapore.",
-    bio: [
-      "After graduating Magna Cum Laude he explored ventures in technology, fashion and franchising before returning to what he does best: price action analysis and quantitative market strategies.",
-      "Author of the best-selling book 51 Trading Strategies, and published researcher on theta decay and delta behaviour in Indian index options.",
-      "Founder of Unfluke, a backtesting and trading-analytics platform, and host of the widely followed Trading with Groww series. Visiting faculty at Chitkara University.",
-      "Today he mentors aspiring traders in Python-based algorithmic strategies, backtesting and systematic options trading. On MrMarket he leads strategy design, the EA catalogue and the algo desk.",
-    ],
-    stats: [["JPM · DB", "Quant background"], ["51", "Strategies, the book"], ["Groww", "Trading series host"], ["Unfluke", "Founder"]],
-    creds: ["Ex JPMorgan, Deutsche Bank (Singapore)", "Author, 51 Trading Strategies", "Host, Trading with Groww", "Visiting Faculty, Chitkara University", "Published research, index options"],
-    links: [["Unfluke", "https://unfluke.in"], ["Coursera", "https://www.coursera.org/instructor/~169872100"]],
-  },
-];
 function aboutScreen() {
   view.innerHTML = `
   <section class="page-head">

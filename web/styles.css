@@ -508,3 +508,13 @@ details.sheet[open] summary::after { content: "–"; }
 .resource { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; }
 .xls-badge { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: #1d6f42; color: #fff; font-weight: 800; font-size: 12px; letter-spacing: .04em; }
 @media (max-width: 640px) { .resource { grid-template-columns: 44px minmax(0, 1fr); } .resource .btn { grid-column: 1 / -1; } }
+/* ---------- team intro on home ---------- */
+.team-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.intro-card { display: grid; grid-template-columns: minmax(150px, 190px) minmax(0, 1fr); gap: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(135deg, #ffffff, #f7f7f7); padding: 22px; align-items: start; }
+.intro-photo { display: block; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; background: #111; }
+.intro-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 400ms; }
+.intro-card:hover .intro-photo img { transform: scale(1.03); }
+.intro-body { display: grid; gap: 10px; min-width: 0; }
+.intro-body .btn { justify-self: start; margin-top: 4px; }
+@media (max-width: 1100px) { .team-intro { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .intro-card { grid-template-columns: 1fr; } .intro-photo { max-width: 240px; } }
