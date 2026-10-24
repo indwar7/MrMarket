@@ -99,12 +99,12 @@ function chartSVG(data, { h = 300, labels = [], prefix = "$" } = {}) {
 
 /* ---------------- data ---------------- */
 let COURSES = [
-  { id: "price-action", t: "Price Action Mastery", by: "Aseem Singhal", lvl: "Beginner", lessons: 42, dur: "9h 20m", price: 49, rating: 4.9, students: 12840, prog: 64, hue: 24 },
-  { id: "mt5-basics", t: "MT5 from Zero to Live", by: "Rohit Mehra", lvl: "Beginner", lessons: 28, dur: "5h 10m", price: 0, rating: 4.8, students: 20113, prog: 100, hue: 210 },
-  { id: "risk", t: "Risk Management & Position Sizing", by: "Aseem Singhal", lvl: "Intermediate", lessons: 18, dur: "3h 45m", price: 39, rating: 4.9, students: 8402, prog: 20, hue: 150 },
-  { id: "smc", t: "Smart Money Concepts", by: "Kavya Iyer", lvl: "Intermediate", lessons: 36, dur: "8h 05m", price: 79, rating: 4.7, students: 6120, prog: 0, hue: 280 },
-  { id: "algo-mql5", t: "Build Your First EA in MQL5", by: "Neel Shah", lvl: "Advanced", lessons: 51, dur: "12h 30m", price: 129, rating: 4.8, students: 3390, prog: 0, hue: 340 },
-  { id: "psychology", t: "Trading Psychology", by: "Dr. Meera Rao", lvl: "All levels", lessons: 14, dur: "2h 50m", price: 29, rating: 4.9, students: 9870, prog: 0, hue: 45 },
+  { id: "price-action", t: "Price Action Mastery", by: "Aseem Singhal", lvl: "Beginner", lessons: 42, dur: "9h 20m", price: 49, rating: 4.9, students: 0, prog: 64, hue: 24 },
+  { id: "mt5-basics", t: "MT5 from Zero to Live", by: "Rohit Mehra", lvl: "Beginner", lessons: 28, dur: "5h 10m", price: 0, rating: 4.8, students: 0, prog: 100, hue: 210 },
+  { id: "risk", t: "Risk Management & Position Sizing", by: "Aseem Singhal", lvl: "Intermediate", lessons: 18, dur: "3h 45m", price: 39, rating: 4.9, students: 0, prog: 20, hue: 150 },
+  { id: "smc", t: "Smart Money Concepts", by: "Kavya Iyer", lvl: "Intermediate", lessons: 36, dur: "8h 05m", price: 79, rating: 4.7, students: 0, prog: 0, hue: 280 },
+  { id: "algo-mql5", t: "Build Your First EA in MQL5", by: "Neel Shah", lvl: "Advanced", lessons: 51, dur: "12h 30m", price: 129, rating: 4.8, students: 0, prog: 0, hue: 340 },
+  { id: "psychology", t: "Trading Psychology", by: "Dr. Meera Rao", lvl: "All levels", lessons: 14, dur: "2h 50m", price: 29, rating: 4.9, students: 0, prog: 0, hue: 45 },
 ];
 let LIVE = [
   { id: 1, d: 4, m: "Oct", t: "Gold (XAUUSD) Live Market Session", by: "Aseem Singhal", time: "7:00 PM IST", len: "90 min", seats: 38, kind: "Live trading", live: true },
@@ -353,6 +353,69 @@ const TEAM = [
   },
 ];
 
+
+/* ---------------- course artwork: one illustration per topic ---------------- */
+const ART_THEME = { candlesticks: [28, "#2a1608"], "price-action": [210, "#0b1a2e"], risk: [150, "#0c2318"], smc: [275, "#1a1030"], "mt5-basics": [200, "#0e1a26"], "algo-mql5": [320, "#1f0f1f"],
+  psychology: [40, "#241a08"], "technical-indicators": [190, "#0a2024"], "chart-patterns": [10, "#2a1010"], backtesting: [255, "#10142c"], "swing-trading": [120, "#0d2412"],
+  "intraday-scalping": [340, "#2a0c18"], "forex-fundamentals": [205, "#0a1c2c"], "fibonacci-harmonic": [45, "#2a1c06"], "trading-plan-journal": [60, "#22200a"] };
+function candles(d, { x0 = 10, x1 = 310, yTop = 30, yBot = 150, w = 5, up = "#5fd68d", dn = "#ff6b6b", op = 1 } = {}) {
+  const min = Math.min(...d), max = Math.max(...d), Y = (v) => yBot - ((v - min) / (max - min || 1)) * (yBot - yTop), X = (i) => x0 + (i / (d.length - 1)) * (x1 - x0);
+  return d.map((v, i) => { const o = d[i - 1] ?? v, c = v, u = c >= o, hi = Math.max(o, c) + Math.abs(c - o) * 0.6 + 1.5, lo = Math.min(o, c) - Math.abs(c - o) * 0.5 - 1.5;
+    return `<line x1="${X(i)}" x2="${X(i)}" y1="${Y(hi)}" y2="${Y(lo)}" stroke="${u ? up : dn}" stroke-width="1" opacity="${op}"/><rect x="${X(i) - w / 2}" y="${Y(Math.max(o, c))}" width="${w}" height="${Math.max(1.5, Math.abs(Y(o) - Y(c)))}" fill="${u ? up : dn}" opacity="${op}"/>`; }).join("");
+}
+const artBg = (hue, base) => `<rect width="320" height="180" fill="${base}"/><radialGradient id="ag${hue}" cx=".85" cy=".1" r=".9"><stop offset="0" stop-color="hsl(${hue} 90% 60%)" stop-opacity=".45"/><stop offset="1" stop-color="hsl(${hue} 90% 55%)" stop-opacity="0"/></radialGradient><rect width="320" height="180" fill="url(#ag${hue})"/><g stroke="#fff" stroke-opacity=".06">${[36, 72, 108, 144].map((y) => `<line x1="0" x2="320" y1="${y}" y2="${y}"/>`).join("")}${[64, 128, 192, 256].map((x) => `<line y1="0" y2="180" x1="${x}" x2="${x}"/>`).join("")}</g>`;
+const lbl = (x, y, t, c = "#fff", size = 11, anchor = "start", w = 600) => `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w}" fill="${c}" text-anchor="${anchor}" font-family="Urbanist, system-ui, sans-serif">${esc(t)}</text>`;
+const tag = (x, y, t, c = "#ffb066") => `<rect x="${x}" y="${y - 11}" width="${t.length * 6.4 + 12}" height="16" rx="8" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-opacity=".6"/>${lbl(x + 6, y + 1, t, c, 10, "start", 700)}`;
+function courseArt(id, seedBase = 7) {
+  const [hue, base] = ART_THEME[id] ?? [200, "#101820"];
+  const r = rng(seedBase + 101), d = curve(seedBase, 40, 0.5, 2.6);
+  let g = "";
+  switch (id) {
+    case "candlesticks": { const big = [[40, 60, 30, 110, true], [80, 95, 85, 100, false], [120, 130, 30, 45, true], [160, 40, 80, 130, false], [200, 70, 65, 72, true], [240, 50, 50, 120, true]];
+      g = big.map(([x, o, c, len, up]) => `<line x1="${x}" x2="${x}" y1="${Math.min(o, c) - 14}" y2="${Math.max(o, c) + len * 0.25}" stroke="${up ? "#5fd68d" : "#ff6b6b"}" stroke-width="2"/><rect x="${x - 11}" y="${Math.min(o, c)}" width="22" height="${Math.max(3, Math.abs(c - o))}" rx="2" fill="${up ? "#5fd68d" : "#ff6b6b"}"/>`).join("")
+        + tag(26, 160, "Hammer") + tag(108, 160, "Doji") + tag(186, 160, "Engulfing"); break; }
+    case "price-action": { const pts = [[10, 148], [50, 108], [80, 128], [125, 84], [155, 108], [200, 62], [230, 90], [275, 44], [310, 70]];
+      g = `<rect x="0" y="104" width="320" height="10" fill="#1f6fd1" fill-opacity=".35"/><rect x="0" y="58" width="320" height="10" fill="#ff6b6b" fill-opacity=".3"/><polyline points="${pts.map((p) => p.join(",")).join(" ")}" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>`
+        + pts.filter((_, i) => i % 2 === 1).map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4" fill="#ffb066"/>`).join("") + lbl(128, 76, "HH", "#ffb066", 11, "middle", 800) + lbl(203, 54, "HH", "#ffb066", 11, "middle", 800) + lbl(158, 124, "HL", "#5fd68d", 11, "middle", 800) + lbl(232, 106, "HL", "#5fd68d", 11, "middle", 800) + tag(14, 160, "Structure") + tag(96, 160, "S/R zones") + tag(188, 160, "Break & retest"); break; }
+    case "risk": { g = [["Account", 10000, "#fff", 1], ["Risk 1%", 100, "#ffb066", 0.01], ["Stop 25 pts", 0, "#ff6b6b", 0], ["Lots", 0.4, "#5fd68d", 0.04]].map(([t, v, c, f], i) => `<rect x="90" y="${48 + i * 26}" width="${Math.max(6, 200 * (f === 0 ? 0.25 : f ** 0.35))}" height="16" rx="8" fill="${c}" fill-opacity=".85"/>${lbl(84, 61 + i * 26, t, "#fff", 11, "end", 600)}${lbl(298, 61 + i * 26, v === 0 ? "" : String(v), "#fff", 11, "end", 700)}`).join("")
+        + lbl(16, 165, "lots = balance × risk% ÷ (stop × point value)", "#ffd9b5", 10, "start", 600); break; }
+    case "smc": { g = `<rect x="30" y="60" width="150" height="46" fill="#a98bff" fill-opacity=".22" stroke="#a98bff" stroke-dasharray="4 3"/><line x1="30" x2="180" y1="60" y2="60" stroke="#a98bff"/><line x1="30" x2="180" y1="106" y2="106" stroke="#a98bff"/>`
+        + candles(d.slice(0, 28), { x0: 36, x1: 300, yTop: 44, yBot: 150, w: 5 }) + `<rect x="196" y="112" width="34" height="18" fill="#ffb066" fill-opacity=".5"/><rect x="236" y="70" width="40" height="12" fill="#5fd68d" fill-opacity=".45"/>`
+        + lbl(105, 54, "Range · liquidity", "#d9ccff", 10, "middle", 700) + tag(188, 160, "Order block", "#ffb066") + tag(14, 160, "Sweep") + tag(80, 160, "CHoCH", "#5fd68d") + lbl(256, 66, "FVG", "#5fd68d", 10, "middle", 800); break; }
+    case "mt5-basics": { g = `<rect x="18" y="18" width="284" height="146" rx="6" fill="#0b1422" stroke="#3a4a60"/><rect x="18" y="18" width="284" height="18" rx="6" fill="#1b2738"/><circle cx="30" cy="27" r="3" fill="#ff6b6b"/><circle cx="40" cy="27" r="3" fill="#ffd166"/><circle cx="50" cy="27" r="3" fill="#5fd68d"/>${lbl(160, 31, "MetaTrader 5 · EURUSD, H1", "#cfd8e3", 9, "middle", 600)}`
+        + `<rect x="24" y="42" width="64" height="116" fill="#111c2b"/>${["Market Watch", "EURUSD", "XAUUSD", "GBPUSD", "Navigator", "Experts", "Indicators"].map((t, i) => lbl(28, 55 + i * 15, t, i === 0 || i === 4 ? "#ffb066" : "#b7c3d1", 8, "start", i === 0 || i === 4 ? 700 : 500)).join("")}`
+        + candles(d.slice(0, 30), { x0: 98, x1: 292, yTop: 50, yBot: 130, w: 4 }) + `<rect x="210" y="134" width="84" height="22" rx="4" fill="#5fd68d"/>${lbl(252, 149, "BUY 0.10", "#062", 11, "middle", 800)}<rect x="120" y="134" width="84" height="22" rx="4" fill="#ff6b6b"/>${lbl(162, 149, "SELL 0.10", "#500", 11, "middle", 800)}`; break; }
+    case "algo-mql5": { const lines = [["int", " OnInit()", "#c792ea"], ["  ", "handle = iMA(_Symbol, PERIOD_H1, 20, 0, MODE_EMA, PRICE_CLOSE);", "#89ddff"], ["void", " OnTick()", "#c792ea"], ["  ", "if(fast > slow && !PositionSelect(_Symbol))", "#ffcb6b"], ["    ", "trade.Buy(Lots(risk), _Symbol, 0, sl, tp);", "#5fd68d"], ["  ", "TrailStop(atr * 1.5);", "#89ddff"]];
+      g = `<rect x="18" y="18" width="284" height="146" rx="6" fill="#0d0b14" stroke="#3b2f4a"/>` + lines.map(([k, t, c], i) => `${lbl(28, 42 + i * 20, String(i + 1), "#5b4b6b", 9, "start", 500)}<text x="42" y="${42 + i * 20}" font-size="9.5" font-family="ui-monospace, Menlo, monospace"><tspan fill="#c792ea" font-weight="700">${esc(k)}</tspan><tspan fill="${c}">${esc(t)}</tspan></text>`).join("") + tag(224, 158, "Compiled .ex5", "#5fd68d"); break; }
+    case "psychology": { const e = curve(seedBase + 3, 40, 0.9, 5); g = `<path d="${e.map((v, i) => `${i ? "L" : "M"}${10 + i * 7.7},${150 - (v - Math.min(...e)) / (Math.max(...e) - Math.min(...e)) * 100}`).join("")}" fill="none" stroke="#fff" stroke-width="2.2"/>`
+        + tag(40, 48, "Greed", "#ff6b6b") + tag(150, 128, "Fear", "#89ddff") + tag(228, 60, "Process", "#5fd68d") + lbl(16, 168, "Same chart. Different trader.", "#ffd9b5", 10, "start", 600); break; }
+    case "technical-indicators": { const ma = d.map((_, i) => d.slice(Math.max(0, i - 6), i + 1).reduce((a, b) => a + b) / Math.min(i + 1, 7)); const min = Math.min(...d), max = Math.max(...d);
+      g = candles(d, { x0: 12, x1: 308, yTop: 24, yBot: 104, w: 4 }) + `<polyline points="${ma.map((v, i) => `${12 + i * 7.6},${104 - (v - min) / (max - min) * 80 + 4}`).join(" ")}" fill="none" stroke="#ffb066" stroke-width="2"/>`
+        + `<rect x="12" y="116" width="296" height="48" fill="#000" fill-opacity=".25"/><line x1="12" x2="308" y1="128" y2="128" stroke="#fff" stroke-opacity=".25" stroke-dasharray="3 3"/><line x1="12" x2="308" y1="152" y2="152" stroke="#fff" stroke-opacity=".25" stroke-dasharray="3 3"/><polyline points="${d.map((v, i) => `${12 + i * 7.6},${140 + Math.sin(i / 3.2) * 13 + (r() - 0.5) * 5}`).join(" ")}" fill="none" stroke="#89ddff" stroke-width="1.8"/>`
+        + lbl(16, 126, "RSI 14", "#89ddff", 9, "start", 700) + lbl(300, 34, "EMA 20", "#ffb066", 9, "end", 700); break; }
+    case "chart-patterns": { g = `<polyline points="20,140 50,95 75,120 110,45 145,120 170,95 200,140" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><line x1="20" x2="200" y1="122" y2="122" stroke="#ff6b6b" stroke-dasharray="4 3"/>`
+        + `<polyline points="215,60 305,60" stroke="#ffb066" stroke-dasharray="4 3" fill="none"/><polyline points="215,140 300,70" stroke="#ffb066" fill="none" stroke-width="1.5"/><polyline points="218,135 232,70 246,122 260,76 274,110 288,82 300,100" fill="none" stroke="#fff" stroke-width="1.8"/>`
+        + lbl(110, 162, "Head & Shoulders", "#fff", 10, "middle", 700) + lbl(260, 52, "Triangle", "#ffb066", 10, "middle", 700) + lbl(60, 136, "neckline", "#ff6b6b", 9, "middle", 600); break; }
+    case "backtesting": { const e = curve(seedBase + 9, 50, 1.4, 4); const min = Math.min(...e), max = Math.max(...e); const P = e.map((v, i) => [14 + i * 6, 120 - (v - min) / (max - min) * 90]);
+      g = `<path d="${P.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join("")}L${P.at(-1)[0]},124L14,124Z" fill="#a98bff" fill-opacity=".25"/><path d="${P.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join("")}" fill="none" stroke="#a98bff" stroke-width="2.2"/>`
+        + [["+38.4%", "Return"], ["1.92", "Profit factor"], ["-9.8%", "Max DD"], ["412", "Trades"]].map(([v, t], i) => `<rect x="${14 + i * 74}" y="132" width="68" height="34" rx="6" fill="#000" fill-opacity=".3"/>${lbl(48 + i * 74, 148, v, i === 2 ? "#ff6b6b" : "#5fd68d", 12, "middle", 800)}${lbl(48 + i * 74, 161, t, "#cfd8e3", 8, "middle", 500)}`).join(""); break; }
+    case "swing-trading": { g = candles(d.slice(0, 22), { x0: 20, x1: 300, yTop: 36, yBot: 140, w: 8 }) + `<path d="M60 128 L60 112" stroke="#5fd68d" stroke-width="2" marker-end="url(#arr)"/><rect x="58" y="40" width="150" height="10" rx="5" fill="#5fd68d" fill-opacity=".35"/>`
+        + lbl(133, 32, "hold 5–15 days", "#5fd68d", 10, "middle", 700) + tag(14, 164, "Daily / H4") + tag(100, 164, "Pullback entry", "#5fd68d") + tag(212, 164, "Swing target", "#89ddff"); break; }
+    case "intraday-scalping": { const f = curve(seedBase + 5, 70, 0.1, 1.6); g = `<rect x="60" y="18" width="110" height="140" fill="#ffb066" fill-opacity=".12"/>${lbl(115, 30, "London", "#ffb066", 9, "middle", 700)}<rect x="190" y="18" width="110" height="140" fill="#89ddff" fill-opacity=".1"/>${lbl(245, 30, "New York", "#89ddff", 9, "middle", 700)}`
+        + candles(f, { x0: 14, x1: 306, yTop: 46, yBot: 134, w: 2.6 }) + `<polyline points="${f.map((_, i) => `${14 + i * 4.2},${95 + Math.sin(i / 12) * 8}`).join(" ")}" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3 2"/>` + lbl(300, 92, "VWAP", "#fff", 9, "end", 700) + tag(14, 164, "M1 · M5") + tag(90, 164, "Spread filter", "#ff6b6b") + tag(194, 164, "Session breakout"); break; }
+    case "forex-fundamentals": { const pairs = [["EUR/USD", "1.0852", "+0.21%", true], ["GBP/USD", "1.3094", "-0.08%", false], ["USD/JPY", "149.42", "+0.35%", true], ["XAU/USD", "2,661.9", "+0.62%", true], ["AUD/USD", "0.6712", "-0.14%", false]];
+      g = pairs.map(([p, v, ch, up], i) => `<rect x="18" y="${44 + i * 25}" width="284" height="21" rx="5" fill="#000" fill-opacity=".28"/>${lbl(28, 59 + i * 25, p, "#fff", 11, "start", 800)}${lbl(190, 59 + i * 25, v, "#cfd8e3", 11, "end", 600)}${lbl(292, 59 + i * 25, ch, up ? "#5fd68d" : "#ff6b6b", 11, "end", 800)}<polyline points="${Array.from({ length: 12 }, (_, k) => `${206 + k * 5},${60 + i * 25 - (up ? k : 12 - k) * 0.7 - (r() * 4)}`).join(" ")}" fill="none" stroke="${up ? "#5fd68d" : "#ff6b6b"}" stroke-width="1.2"/>`).join(""); break; }
+    case "fibonacci-harmonic": { const lv = [[0, "0%"], [23.6, "23.6"], [38.2, "38.2"], [50, "50"], [61.8, "61.8"], [100, "100%"]];
+      g = lv.map(([p, t]) => `<line x1="20" x2="300" y1="${30 + p}" y2="${30 + p}" stroke="${p === 61.8 || p === 50 ? "#ffb066" : "#fff"}" stroke-opacity="${p === 61.8 || p === 50 ? 1 : 0.35}" stroke-dasharray="4 3"/>${lbl(298, 27 + p, t, p === 61.8 || p === 50 ? "#ffb066" : "#cfd8e3", 9, "end", 700)}`).join("")
+        + `<rect x="20" y="80" width="280" height="12" fill="#ffb066" fill-opacity=".18"/><polyline points="30,130 90,30 140,92 200,56 260,126" fill="none" stroke="#fff" stroke-width="2.2"/>` + ["X", "A", "B", "C", "D"].map((t, i) => lbl([30, 90, 140, 200, 260][i], [144, 24, 106, 50, 140][i], t, "#ffb066", 11, "middle", 800)).join("") + lbl(160, 172, "Gartley · Bat · Butterfly", "#ffd9b5", 9, "middle", 600); break; }
+    case "trading-plan-journal": { const rows = [["Setup", "Pin bar @ S/R", true], ["Risk", "1% · 0.4 lots", true], ["Entry", "break of high", true], ["Stop", "below wick", true], ["Target", "2R · prior high", false]];
+      g = `<rect x="18" y="40" width="180" height="128" rx="6" fill="#fff" fill-opacity=".92"/>${lbl(28, 56, "Trade plan", "#111", 11, "start", 800)}` + rows.map(([k, v, ok], i) => `<rect x="28" y="${64 + i * 20}" width="12" height="12" rx="3" fill="${ok ? "#1f9d55" : "#fff"}" stroke="#1f9d55"/>${ok ? `<path d="M31 ${70 + i * 20} l3 3 5-6" stroke="#fff" stroke-width="1.8" fill="none"/>` : ""}${lbl(46, 74 + i * 20, k, "#555", 9, "start", 600)}${lbl(92, 74 + i * 20, v, "#111", 9, "start", 700)}`).join("")
+        + `<rect x="208" y="40" width="94" height="128" rx="6" fill="#000" fill-opacity=".3"/>${lbl(255, 56, "Journal", "#fff", 10, "middle", 800)}` + [["+1.8R", "#5fd68d"], ["-1.0R", "#ff6b6b"], ["+2.1R", "#5fd68d"], ["+0.4R", "#5fd68d"], ["-1.0R", "#ff6b6b"]].map(([t, c], i) => `${lbl(218, 76 + i * 19, `#${i + 1}`, "#cfd8e3", 9, "start", 500)}${lbl(294, 76 + i * 19, t, c, 10, "end", 800)}`).join(""); break; }
+    default: g = candles(d, { x0: 10, x1: 310, yTop: 40, yBot: 150 });
+  }
+  return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 6 L3 0 L6 6z" fill="#5fd68d"/></marker></defs>${artBg(hue, base)}${g}</svg>`;
+}
+
 /* ---------------- home ---------------- */
 const PILLARS = [
   ["Learning", "Video courses with practice workbooks, from your first candle to your first EA.", "#/learn"],
@@ -476,7 +539,7 @@ function homeScreen() {
 function courseCard(c, i) {
   const mine = acct.courses[c.id], enrolled = Boolean(mine), prog = mine?.prog ?? 0;
   return `<article class="card hover">
-    <div class="thumb">${thumbSVG(c.hue, i + 3)}<span class="lvl tag">${c.lvl}</span><span class="play" aria-hidden="true"></span><span class="dur">${c.dur}</span></div>
+    <div class="thumb">${courseArt(c.id, i + 3)}<span class="lvl tag">${c.lvl}</span><span class="play" aria-hidden="true"></span><span class="dur">${c.dur}</span></div>
     <h3 class="h3">${esc(c.t)}</h3>
     <p class="muted small">${esc(c.by)} · ${c.lessons} lessons · ${c.students ? `<span class="rating"><b>★ ${c.rating}</b> (${c.students.toLocaleString()})</span>` : `<span class="tag tag-amber">New</span>`}</p>
     ${enrolled ? `<div class="progress" style="--v:${prog}%"><i></i></div><p class="small muted">${prog === 100 ? "Completed" : prog ? `${prog}% complete` : "Enrolled · not started"}</p>` : ""}
@@ -760,7 +823,7 @@ function drawCourse(d, currentId) {
   const playerBody = !cur ? `<div class="player-msg"><b>No lessons yet</b></div>`
     : cur.locked ? `<div class="player-msg"><span class="tag tag-amber">Members only</span><b>“${esc(cur.title)}” is part of the full course</b><p class="muted small">The first lessons are open to everyone. Members get every lesson, workbook and progress tracking.</p>${buyBtn("course", c.id, c.price ? `Get the course · $${c.price}` : "Join free", "Enrolled ✓")}</div>`
     : cur.video_url ? videoEmbed(cur.video_url)
-    : `<div class="player-cover">${thumbSVG(c.hue ?? 30, (c.id || "x").length * 3 + 5)}<div class="player-msg"><span class="tag">Lesson ${cur.idx} · Notes</span><b>${esc(cur.title)}</b><p class="muted small">${esc(cur.module || c.t)}</p></div></div>`;
+    : `<div class="player-cover">${courseArt(c.id, 7)}<div class="player-msg"><span class="tag">Lesson ${cur.idx} · Notes</span><b>${esc(cur.title)}</b><p class="muted small">${esc(cur.module || c.t)}</p></div></div>`;
   view.innerHTML = `
   <section class="page-head" style="padding-bottom:22px">
     <a class="small muted" href="#/learn">← All courses</a>
@@ -1270,7 +1333,7 @@ function accountScreen() {
       </tbody></table></div>` : `<div class="empty"><b style="color:var(--text)">No subscriptions yet</b><a class="btn btn-small" href="#/strategies">Browse strategies</a></div>`}</div>
 
     <div data-pane="a-courses" hidden>${courses.length ? `<div class="cards cards-3">${courses.map(({ c, prog, since }) => `<article class="card">
-      <div class="thumb">${thumbSVG(c.hue, COURSES.indexOf(c) + 3)}<span class="play" aria-hidden="true"></span><span class="dur">${c.dur}</span></div>
+      <div class="thumb">${courseArt(c.id, COURSES.indexOf(c) + 3)}<span class="play" aria-hidden="true"></span><span class="dur">${c.dur}</span></div>
       <h3 class="h3">${esc(c.t)}</h3><p class="small muted">${esc(c.by)} · Enrolled ${since}</p>
       <div class="progress" style="--v:${prog}%"><i></i></div>
       <div class="card-foot"><span class="small muted">${prog === 100 ? "Completed" : prog ? `${prog}% complete` : "Not started"}</span><a class="btn btn-small" href="#/course/${c.id}">${prog === 100 ? "Review" : prog ? "Continue" : "Start"}</a></div>
